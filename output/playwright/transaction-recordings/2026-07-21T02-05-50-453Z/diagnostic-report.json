@@ -1,0 +1,175 @@
+{
+  "generated_at": "2026-07-21T02:09:25.902Z",
+  "base_url": "http://127.0.0.1:3299",
+  "isolated_database": "C:\\Users\\user\\Documents\\Codex\\2026-06-18\\tarangini-job-order-integration\\fresh-merged-billing-workflow\\output\\playwright\\transaction-recordings\\2026-07-21T02-05-50-453Z\\isolated-test-data",
+  "total": 20,
+  "passed": 20,
+  "failed": 0,
+  "results": [
+    {
+      "name": "01-sale-invoice",
+      "title": "Sale Invoice",
+      "status": "PASS",
+      "duration_ms": 18397,
+      "issues": [],
+      "failed_requests": []
+    },
+    {
+      "name": "02-quotation",
+      "title": "Quotation",
+      "status": "PASS",
+      "duration_ms": 17085,
+      "issues": [],
+      "failed_requests": []
+    },
+    {
+      "name": "03-delivery-challan",
+      "title": "Delivery Challan with Internal Prices",
+      "status": "PASS",
+      "duration_ms": 14988,
+      "issues": [],
+      "failed_requests": []
+    },
+    {
+      "name": "04-proforma-invoice",
+      "title": "Proforma Invoice",
+      "status": "PASS",
+      "duration_ms": 17610,
+      "issues": [],
+      "failed_requests": []
+    },
+    {
+      "name": "05-project-printing",
+      "title": "Project Printing Invoice",
+      "status": "PASS",
+      "duration_ms": 8923,
+      "issues": [],
+      "failed_requests": []
+    },
+    {
+      "name": "06-payment-received",
+      "title": "Payment Received",
+      "status": "PASS",
+      "duration_ms": 7960,
+      "issues": [],
+      "failed_requests": []
+    },
+    {
+      "name": "07-payment-voucher",
+      "title": "Payment Voucher",
+      "status": "PASS",
+      "duration_ms": 8023,
+      "issues": [],
+      "failed_requests": []
+    },
+    {
+      "name": "08-purchase-order",
+      "title": "Purchase Order",
+      "status": "PASS",
+      "duration_ms": 7080,
+      "issues": [
+        "Console warning: The specified value \"undefined\" cannot be parsed, or is out of range.",
+        "Console warning: The specified value \"undefined\" cannot be parsed, or is out of range.",
+        "Console warning: The specified value \"undefined\" cannot be parsed, or is out of range.",
+        "Console warning: The specified value \"undefined\" cannot be parsed, or is out of range."
+      ],
+      "failed_requests": []
+    },
+    {
+      "name": "09-purchase-bill",
+      "title": "Purchase Bill",
+      "status": "PASS",
+      "duration_ms": 7645,
+      "issues": [],
+      "failed_requests": []
+    },
+    {
+      "name": "10-expense-voucher",
+      "title": "Expense Voucher",
+      "status": "PASS",
+      "duration_ms": 6923,
+      "issues": [],
+      "failed_requests": []
+    },
+    {
+      "name": "11-credit-note",
+      "title": "Credit Note",
+      "status": "PASS",
+      "duration_ms": 7021,
+      "issues": [],
+      "failed_requests": []
+    },
+    {
+      "name": "12-debit-note",
+      "title": "Debit Note",
+      "status": "PASS",
+      "duration_ms": 7132,
+      "issues": [],
+      "failed_requests": []
+    },
+    {
+      "name": "13-return-refund",
+      "title": "Return and Refund",
+      "status": "PASS",
+      "duration_ms": 6731,
+      "issues": [],
+      "failed_requests": []
+    },
+    {
+      "name": "14-journal-entry",
+      "title": "Journal Entry",
+      "status": "PASS",
+      "duration_ms": 7126,
+      "issues": [],
+      "failed_requests": []
+    },
+    {
+      "name": "15-fast-pos",
+      "title": "Fast POS Sale",
+      "status": "PASS",
+      "duration_ms": 4586,
+      "issues": [],
+      "failed_requests": []
+    },
+    {
+      "name": "16-job-order",
+      "title": "Job Order",
+      "status": "PASS",
+      "duration_ms": 11136,
+      "issues": [],
+      "failed_requests": []
+    },
+    {
+      "name": "17-warranty-replacement",
+      "title": "Warranty Replacement",
+      "status": "PASS",
+      "duration_ms": 11646,
+      "issues": [],
+      "failed_requests": []
+    },
+    {
+      "name": "18-customer-intake",
+      "title": "Customer Intake and PDF Analysis",
+      "status": "PASS",
+      "duration_ms": 16222,
+      "issues": [],
+      "failed_requests": []
+    },
+    {
+      "name": "19-customer-order-tracking",
+      "title": "Customer Order Tracking",
+      "status": "PASS",
+      "duration_ms": 4300,
+      "issues": [],
+      "failed_requests": []
+    },
+    {
+      "name": "20-owner-daily-log",
+      "title": "Owner Daily Log",
+      "status": "PASS",
+      "duration_ms": 9929,
+      "issues": [],
+      "failed_requests": []
+    }
+  ]
+}

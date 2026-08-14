@@ -1,0 +1,35 @@
+Tarangini Workflow Suite 1.1.1 Release SHA-256
+Generated: 2026-07-13 +05:30
+
+Modern Windows 10/11 hotfix adds offline Quotation/DC/Proforma visibility and synchronization, fast cached client screens, real Retry Connection health checks, changed-IP Main System rediscovery, the Operator Daily Work Log and the latest tested workflow and security upgrades.
+Win7 legacy packages are kept aside and are not upgraded further.
+
+Tarangini Workflow Suite Setup 1.1.1.exe
+  Size: 112043517 bytes
+  Built: 2026-07-13 06:20:02 +05:30
+  SHA256: 5DDDAC952D348C04B843B1FC08D4BF748F432119C7E126BC74F5AFA7B26B3BFB
+
+Tarangini Workflow Suite Setup 1.1.1.exe.blockmap
+  Size: 119078 bytes
+  Built: 2026-07-13 06:20:06 +05:30
+  SHA256: 76EBF40F91123CBDA8335F61F68E685FAECB6CA88307DF3702BC98E904028A6F
+
+Tarangini Workflow Suite-1.1.1-win.zip
+  Size: 153762625 bytes
+  Built: 2026-07-13 06:18:47 +05:30
+  SHA256: 4BFE59EA01A6D7EC0401C69754FEC9196D4C850F7DB11FB66859ED0DEF2A0292
+
+Tarangini Workflow Suite Setup 1.1.0 Win7 Legacy.exe
+  Size: 148203925 bytes
+  Built: 2026-07-04 00:43:47 +05:30
+  SHA256: E8E697408A61B32843286DF2EB4E68E359D66BD62BC4826D90870E37BA446082
+
+Tarangini Workflow Suite-1.1.0-win7-x64.zip
+  Size: 104429149 bytes
+  Built: 2026-07-04 00:42:37 +05:30
+  SHA256: 2BCC5CD4940DDC8EF02873BD253A0BE0928F8A9C50A27FF75D0269DD549FB651
+
+Tarangini Workflow Suite-1.1.0-win7-ia32.zip
+  Size: 98912657 bytes
+  Built: 2026-07-04 00:42:47 +05:30
+  SHA256: 5FFA2ED84C2A1C523EA9FFED4387B2CF1D965CF27EC7EB82FD24B6BDE4607B2E

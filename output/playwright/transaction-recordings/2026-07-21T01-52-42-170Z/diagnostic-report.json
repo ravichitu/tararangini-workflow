@@ -1,0 +1,18 @@
+{
+  "generated_at": "2026-07-21T01:53:06.267Z",
+  "base_url": "http://127.0.0.1:3299",
+  "isolated_database": "C:\\Users\\user\\Documents\\Codex\\2026-06-18\\tarangini-job-order-integration\\fresh-merged-billing-workflow\\output\\playwright\\transaction-recordings\\2026-07-21T01-52-42-170Z\\isolated-test-data",
+  "total": 1,
+  "passed": 1,
+  "failed": 0,
+  "results": [
+    {
+      "name": "04-proforma-invoice",
+      "title": "Proforma Invoice",
+      "status": "PASS",
+      "duration_ms": 20526,
+      "issues": [],
+      "failed_requests": []
+    }
+  ]
+}

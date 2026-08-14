@@ -1,0 +1,114 @@
+{
+  "name": "tarangini-workflow-suite",
+  "version": "1.1.23",
+  "description": "Tarangini Workflow Suite with billing, production workflow, and customer portal",
+  "author": "Tarangini",
+  "main": "electron/main.js",
+  "scripts": {
+    "start": "electron .",
+    "start:server": "node server.js",
+    "dist": "electron-builder --win nsis zip",
+    "test:capacity": "node tests/capacity-100k.js",
+    "test:customer-portal-300": "node tests/customer-portal-300-upload.js",
+    "test:customer-portal-300-5mb": "node tests/customer-portal-300-5mb.js",
+    "test:soak-smoke": "node tools/production-soak-runner.js",
+    "audit:operations": "node tools/run-operational-audit-agent.js",
+    "test:capacity-million": "node --max-old-space-size=12288 tests/capacity-million-each.js",
+    "test:release-agent": "node tests/release-test-agent.js --full",
+    "test:offline-sync": "node tests/offline-sync.integration.js",
+    "test:local-portal": "node tests/local-portal-mode.integration.js",
+    "test:device-identity": "node tests/device-identity.integration.js",
+    "test:device-registration": "node tests/device-registration.integration.js",
+    "test:fixed-document-notes": "node tests/fixed-document-notes.integration.js",
+    "test:duplicate-exact": "node tests/duplicate-exact.integration.js",
+    "test:offline-financial-drafts": "node tests/offline-financial-drafts.integration.js",
+    "test:offline-storage-integrity": "node tests/offline-storage-integrity.integration.js",
+    "test:offline-replica": "node tests/offline-replica.integration.js",
+    "test:jobs": "node tests/job-workflow.integration.js",
+    "test:internal-notes": "node tests/internal-job-notes.integration.js",
+    "test:pagination": "node tests/pagination.integration.js",
+    "test:job-intake": "node tests/job-intake.integration.js",
+    "test:v2.3": "node tests/v2.3-upgrade.integration.js",
+    "test:user-admin": "node tests/user-administration.integration.js",
+    "test:responsive": "node tests/responsive-ui.integration.js",
+    "test:responsive-web": "node tests/responsive-chrome.integration.js",
+    "test:security": "node tests/security.integration.js",
+    "test:transaction-profiles": "node tests/transaction-control-profile.integration.js",
+    "test:security-hardening": "node tests/security-hardening.integration.js",
+    "test:backup": "node tests/backup-roundtrip.integration.js",
+    "test:deployment": "node tests/deployment-maintenance.integration.js",
+    "test:attachments": "node tests/attachment-pipeline.integration.js",
+    "test:advanced-upgrades": "node tests/advanced-upgrades.integration.js",
+    "test:quotation-flow": "node tests/quotation-dc-invoice.integration.js",
+    "test:tax-inclusive": "node tests/tax-inclusive-transactions.integration.js",
+    "test:operator-log": "node tests/operator-daily-log.integration.js",
+    "test:transaction-reset": "node tests/transaction-reset-regression.integration.js",
+    "test:dashboard-ui": "node tests/dashboard-ui.integration.js",
+    "record:transactions": "node tools/record-transaction-demos.js",
+  "test:review": "npm run test:security && npm run test:security-hardening && npm run test:operator-log && npm run test:transaction-reset && npm run test:dashboard-ui && npm run test:internal-notes && npm run test:pagination && npm run test:backup && npm run test:deployment && npm run test:attachments && npm run test:tax-inclusive && npm run test:device-identity && npm run test:device-registration && npm run test:fixed-document-notes && npm run test:duplicate-exact && npm run test:offline-storage-integrity && npm run test:offline-replica && npm run test:offline-financial-drafts && npm run test:local-portal && node tests/new-features.integration.js && npm run test:transaction-profiles && npm run test:advanced-upgrades && npm run test:user-admin && npm run test:jobs && npm run test:offline-sync && npm run test:v2.3 && npm run test:responsive-web && npm run test:responsive"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "busboy": "^1.6.0",
+    "compression": "^1.7.4",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "express-rate-limit": "^7.1.5",
+    "image-size": "^2.0.2",
+    "jsonwebtoken": "^9.0.2",
+    "nodemailer": "^9.0.1",
+    "pdf-lib": "^1.17.1",
+    "qrcode": "^1.5.4",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
+  },
+  "devDependencies": {
+    "electron": "^42.3.3",
+    "electron-builder": "^26.0.12",
+    "playwright": "^1.61.1"
+  },
+  "build": {
+    "appId": "in.tarangini.workflow",
+    "productName": "Tarangini Workflow Suite",
+    "asar": true,
+    "files": [
+      "electron/**/*",
+      "public/**/*",
+      "src/**/*",
+      "assets/**/*",
+      "tools/**/*",
+      "server.js",
+      "package.json",
+      "node_modules/**/*"
+    ],
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "icon": "assets/tarangini.ico",
+      "signAndEditExecutable": false,
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "include": "build/installer.nsh",
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Tarangini Workflow Suite",
+      "deleteAppDataOnUninstall": false
+    }
+  }
+}

@@ -1,0 +1,11 @@
+01-dashboard.png
+02-sale-bill.png
+03-payment-received.png
+04-pos-counter.png
+05-invoice-status.png
+06-invoice-corrections.png
+07-shifts.png
+08-backup-restore.png
+11-update-manager.png
+09-automatic-backup-settings.png
+12-main-client-setup.png

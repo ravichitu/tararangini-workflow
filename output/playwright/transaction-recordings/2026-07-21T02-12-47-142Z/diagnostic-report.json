@@ -1,0 +1,18 @@
+{
+  "generated_at": "2026-07-21T02:12:58.742Z",
+  "base_url": "http://127.0.0.1:3299",
+  "isolated_database": "C:\\Users\\user\\Documents\\Codex\\2026-06-18\\tarangini-job-order-integration\\fresh-merged-billing-workflow\\output\\playwright\\transaction-recordings\\2026-07-21T02-12-47-142Z\\isolated-test-data",
+  "total": 1,
+  "passed": 1,
+  "failed": 0,
+  "results": [
+    {
+      "name": "08-purchase-order",
+      "title": "Purchase Order",
+      "status": "PASS",
+      "duration_ms": 7855,
+      "issues": [],
+      "failed_requests": []
+    }
+  ]
+}

@@ -1,0 +1,107 @@
+[
+  {
+    "file": "01-sale-invoice.wav",
+    "title": "Sale Invoice",
+    "text": "This is the Sale Invoice entry. First select the customer and confirm the billing and delivery details. Add each item or service, then enter the quantity, rate, HSN code, and GST rate. Review the totals before saving. When the invoice is saved, stock, customer ledger, tax, and accounting entries are posted automatically."
+  },
+  {
+    "file": "02-quotation.wav",
+    "title": "Quotation",
+    "text": "This is the Quotation entry. Select the customer, add the required products or services, and enter the quantity, rate, tax, validity, and any customer instructions. A quotation is a price offer. It does not post stock, payment, or accounting entries. After customer approval, it can be used to create a Delivery Challan or final Sale Invoice."
+  },
+  {
+    "file": "03-delivery-challan.wav",
+    "title": "Delivery Challan",
+    "text": "This is the Delivery Challan entry. Select the customer and delivery address, then enter the items and quantities being delivered or sent for service. Internal rates may be recorded for later billing, but they are not shown to the customer on the challan. Link the challan to a quotation or invoice whenever possible for complete document tracking."
+  },
+  {
+    "file": "04-proforma-invoice.wav",
+    "title": "Proforma Invoice",
+    "text": "This is the Proforma Invoice entry. It is used to show an estimated tax invoice before the final sale is posted. Select the customer, add items or services, check the tax calculation, and save. A proforma invoice is useful for advance approval or payment requests. It does not create final stock or accounting postings."
+  },
+  {
+    "file": "05-project-printing.wav",
+    "title": "Project Printing Invoice",
+    "text": "This is the Project Printing Invoice entry. Select the customer, set the black and white, colour, and binding rates, then enter each project file name. Record the black and white pages, colour pages, and number of books. Review the calculated total carefully before saving, so the customer and operator see the correct printing charges."
+  },
+  {
+    "file": "06-payment-received.wav",
+    "title": "Payment Received",
+    "text": "This is the Payment Received voucher. Select the customer, enter the amount, payment mode, reference number, and narration. If the payment belongs to an invoice, select that invoice for allocation. Any excess amount is recorded as customer advance or credit, so it can be adjusted against a future bill. Only authorized users can edit a saved financial voucher."
+  },
+  {
+    "file": "07-payment-voucher.wav",
+    "title": "Payment Voucher",
+    "text": "This is the Payment Voucher entry for money paid to a supplier, vendor, or other party. Select the party, enter the payment amount, mode, bank or UPI reference, and narration. Save only after checking the amount and related purchase or expense. The voucher updates the party ledger and the selected cash or bank account."
+  },
+  {
+    "file": "08-purchase-order.wav",
+    "title": "Purchase Order",
+    "text": "This is the Purchase Order entry. Select the supplier, set the expected delivery date, and add the required items with quantity, rate, and GST. A purchase order is a request to buy goods. It does not add stock or create a payable until the supplier bill is entered. The saved preview shows the purchase order number, supplier, date, and total."
+  },
+  {
+    "file": "09-purchase-bill.wav",
+    "title": "Purchase Bill",
+    "text": "This is the Purchase Bill entry. Select the supplier, enter the supplier invoice number, and add the received stock items with quantity, rate, and input GST. Save after matching the supplier document. This transaction increases stock, creates the supplier payable, and posts the related accounting entries."
+  },
+  {
+    "file": "10-expense-voucher.wav",
+    "title": "Expense Voucher",
+    "text": "This is the Expense Voucher entry. Select the expense account and, if needed, the payee. Enter the amount, payment reference, and a clear narration describing the expense. Save after checking the date and payment source. The system posts the expense to the selected account and records the cash or bank movement."
+  },
+  {
+    "file": "11-credit-note.wav",
+    "title": "Credit Note",
+    "text": "This is the Credit Note entry. Use it when a customer return, discount, or invoice correction reduces the amount the customer owes. Select the customer, add the affected items or amount, and enter a clear reason. Saving the note adjusts the customer ledger, tax records, and stock where applicable."
+  },
+  {
+    "file": "12-debit-note.wav",
+    "title": "Debit Note",
+    "text": "This is the Debit Note entry. Use it when a purchase return, supplier correction, or adjustment changes the amount payable to a supplier. Select the supplier, enter the relevant items or amount, and record the reason. Confirm the tax treatment before saving because this affects supplier balances and accounting records."
+  },
+  {
+    "file": "13-return-refund.wav",
+    "title": "Return and Refund",
+    "text": "This is the Return and Refund entry. Find the original sale when available, select the item being returned, and record the reason, quantity, and refund method. The system keeps the link to the original transaction. Review stock and payment impact before saving, because returns can change both inventory and the customer balance."
+  },
+  {
+    "file": "14-journal-entry.wav",
+    "title": "Journal Entry",
+    "text": "This is the Manual Journal Entry. Select the debit account and credit account, then enter equal debit and credit amounts. Add a meaningful narration that explains why this accounting adjustment is needed. The entry cannot be saved unless both sides are balanced. This page is restricted to authorized accounting users."
+  },
+  {
+    "file": "15-fast-pos.wav",
+    "title": "Fast POS Sale",
+    "text": "This is the Fast POS Counter. Open the counter shift, scan or search items, select the customer when required, and confirm quantities and rates. Enter the split payment amounts for cash, card, UPI, or credit. The payment total must match the invoice total. Save to post the sale and show the thermal receipt."
+  },
+  {
+    "file": "16-job-order.wav",
+    "title": "Job Order",
+    "text": "This is the New Job Order entry. Select the customer, choose the service category and service, then record the work description, customer requirement, specifications, estimated value, and commitment. Save to create a unique job token. The owner can later assign staff, track work stages, add notes, materials, estimates, and delivery status."
+  },
+  {
+    "file": "17-warranty-replacement.wav",
+    "title": "Warranty Replacement",
+    "text": "This is the Warranty Replacement entry. Select the customer and linked delivery challan, then link the original sale invoice if available. Select the product, enter its serial number, quantity, and customer complaint. Add service-centre, courier, tracking, RMA, expected return, and follow-up details as they become available. Save the case to create a unique warranty reference."
+  },
+  {
+    "file": "18-customer-intake.wav",
+    "title": "Customer Intake and PDF Analysis",
+    "text": "This is the customer self-service intake page. The customer selects a service, enters contact and request details, then uploads files. For a PDF printing request, the system analyses page count and identifies black and white and colour pages for customer confirmation. The customer gives consent and submits the request. The portal creates a unique Order ID for staff review."
+  },
+  {
+    "file": "19-customer-order-tracking.wav",
+    "title": "Customer Order Tracking",
+    "text": "This is the customer order-tracking page. The customer enters the unique Order ID and the phone number used during submission. The portal displays the latest request stage, company, request details, quotation or approval status when available, and job progress. This view is read-only and does not expose internal staff notes or financial controls."
+  },
+  {
+    "file": "20-owner-daily-log.wav",
+    "title": "Owner Daily Log",
+    "text": "This is the Owner and Operator Daily Log. Enter the work title, work type, completed work, pending work or blockers, and the time spent. A job can be linked when the work belongs to a specific customer request. Operators can record their own activity, while owners can review, return, or reopen submitted reports with an audit reason."
+  },
+  {
+    "file": "21-service-category-and-subcategory.wav",
+    "title": "Service Category and Subcategory Creation",
+    "text": "To create service categories, open Service Catalog from the Job Workflow menu. First create a main category for the organization, for example Computer Services, Printing, or Mobile Repair. Select that category and add a subcategory, such as Laptop Repair under Computer Services. Then add the individual service, such as SSD Installation, with its description, rate, department, and workflow stages. Categories are organization-specific, so each company keeps its own service list."
+  }
+]

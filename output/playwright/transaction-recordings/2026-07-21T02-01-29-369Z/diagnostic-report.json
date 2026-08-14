@@ -1,0 +1,78 @@
+{
+  "generated_at": "2026-07-21T02:04:03.701Z",
+  "base_url": "http://127.0.0.1:3299",
+  "isolated_database": "C:\\Users\\user\\Documents\\Codex\\2026-06-18\\tarangini-job-order-integration\\fresh-merged-billing-workflow\\output\\playwright\\transaction-recordings\\2026-07-21T02-01-29-369Z\\isolated-test-data",
+  "total": 8,
+  "passed": 6,
+  "failed": 2,
+  "results": [
+    {
+      "name": "01-sale-invoice",
+      "title": "Sale Invoice",
+      "status": "PASS",
+      "duration_ms": 16863,
+      "issues": [],
+      "failed_requests": []
+    },
+    {
+      "name": "03-delivery-challan",
+      "title": "Delivery Challan with Internal Prices",
+      "status": "PASS",
+      "duration_ms": 13674,
+      "issues": [],
+      "failed_requests": []
+    },
+    {
+      "name": "15-fast-pos",
+      "title": "Fast POS Sale",
+      "status": "FAIL",
+      "duration_ms": 32541,
+      "issues": [
+        "page.waitForResponse: Timeout 30000ms exceeded while waiting for event \"response\"\n    at clickAndWaitForResponse (C:\\Users\\user\\Documents\\Codex\\2026-06-18\\tarangini-job-order-integration\\fresh-merged-billing-workflow\\tools\\record-transaction-demos.js:168:10)\n    at Object.run (C:\\Users\\user\\Documents\\Codex\\2026-06-18\\tarangini-job-order-integration\\fresh-merged-billing-workflow\\tools\\record-transaction-demos.js:417:29)\n    at async run (C:\\Users\\user\\Documents\\Codex\\2026-06-18\\tarangini-job-order-integration\\fresh-merged-billing-workflow\\tools\\record-transaction-demos.js:575:7)"
+      ],
+      "failed_requests": []
+    },
+    {
+      "name": "16-job-order",
+      "title": "Job Order",
+      "status": "PASS",
+      "duration_ms": 9297,
+      "issues": [],
+      "failed_requests": []
+    },
+    {
+      "name": "17-warranty-replacement",
+      "title": "Warranty Replacement",
+      "status": "PASS",
+      "duration_ms": 9978,
+      "issues": [],
+      "failed_requests": []
+    },
+    {
+      "name": "18-customer-intake",
+      "title": "Customer Intake and PDF Analysis",
+      "status": "PASS",
+      "duration_ms": 15537,
+      "issues": [],
+      "failed_requests": []
+    },
+    {
+      "name": "19-customer-order-tracking",
+      "title": "Customer Order Tracking",
+      "status": "FAIL",
+      "duration_ms": 32993,
+      "issues": [
+        "page.waitForResponse: Timeout 30000ms exceeded while waiting for event \"response\"\n    at clickAndWaitForResponse (C:\\Users\\user\\Documents\\Codex\\2026-06-18\\tarangini-job-order-integration\\fresh-merged-billing-workflow\\tools\\record-transaction-demos.js:168:10)\n    at Object.run (C:\\Users\\user\\Documents\\Codex\\2026-06-18\\tarangini-job-order-integration\\fresh-merged-billing-workflow\\tools\\record-transaction-demos.js:512:31)\n    at async run (C:\\Users\\user\\Documents\\Codex\\2026-06-18\\tarangini-job-order-integration\\fresh-merged-billing-workflow\\tools\\record-transaction-demos.js:575:7)"
+      ],
+      "failed_requests": []
+    },
+    {
+      "name": "20-owner-daily-log",
+      "title": "Owner Daily Log",
+      "status": "PASS",
+      "duration_ms": 10177,
+      "issues": [],
+      "failed_requests": []
+    }
+  ]
+}

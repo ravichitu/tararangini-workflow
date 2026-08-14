@@ -1,0 +1,34 @@
+{
+  "generated_at": "2026-07-21T02:05:38.000Z",
+  "base_url": "http://127.0.0.1:3299",
+  "isolated_database": "C:\\Users\\user\\Documents\\Codex\\2026-06-18\\tarangini-job-order-integration\\fresh-merged-billing-workflow\\output\\playwright\\transaction-recordings\\2026-07-21T02-05-07-682Z\\isolated-test-data",
+  "total": 3,
+  "passed": 3,
+  "failed": 0,
+  "results": [
+    {
+      "name": "15-fast-pos",
+      "title": "Fast POS Sale",
+      "status": "PASS",
+      "duration_ms": 4212,
+      "issues": [],
+      "failed_requests": []
+    },
+    {
+      "name": "18-customer-intake",
+      "title": "Customer Intake and PDF Analysis",
+      "status": "PASS",
+      "duration_ms": 16093,
+      "issues": [],
+      "failed_requests": []
+    },
+    {
+      "name": "19-customer-order-tracking",
+      "title": "Customer Order Tracking",
+      "status": "PASS",
+      "duration_ms": 4090,
+      "issues": [],
+      "failed_requests": []
+    }
+  ]
+}

@@ -1,0 +1,375 @@
+{
+  "generated_at": "2026-08-03T18:53:43.602Z",
+  "application_version": "1.1.21",
+  "mode": "isolated-live-api-financial-and-database-audit",
+  "horizon": {
+    "years": 12,
+    "first_fy": "2015-16",
+    "last_fy": "2026-27"
+  },
+  "fixture": {
+    "retained": false,
+    "path": null,
+    "production_data_touched": false
+  },
+  "health": {
+    "status": "ok",
+    "version": "1.1.21",
+    "frontend_asset": "app-2.4.0.js",
+    "transport": "http",
+    "secure": false,
+    "require_https": false,
+    "remote_http_blocked": false,
+    "internet_mode": false,
+    "public_base_url": "http://127.0.0.1:51793",
+    "request_ip": "127.0.0.1",
+    "deployment_profile": {
+      "profile_name": "store",
+      "request_body_limit_mb": 60,
+      "customer_upload_limit_mb": 20,
+      "staff_upload_limit_mb": 15,
+      "auth_rate_limit_max": 15,
+      "customer_portal_rate_limit_max": 600,
+      "target_concurrent_customers": 200,
+      "attachment_storage_mode": "filesystem",
+      "attachment_analysis_mode": "async",
+      "attachment_retention_days": 7,
+      "channels_ready": {
+        "desktop": true,
+        "pwa": true,
+        "android_pwa": true,
+        "website_api": true
+      }
+    },
+    "service_mode": false,
+    "storage_locations": {
+      "app_data_dir": "C:\\Users\\user\\Documents\\Codex\\2026-06-18\\tarangini-job-order-integration\\fresh-merged-billing-workflow\\tmp\\operational-audit\\2026-08-03T18-53-36-589Z\\data",
+      "database_path": "C:\\Users\\user\\Documents\\Codex\\2026-06-18\\tarangini-job-order-integration\\fresh-merged-billing-workflow\\tmp\\operational-audit\\2026-08-03T18-53-36-589Z\\data\\tarangini.db",
+      "attachment_dir": "C:\\Users\\user\\Documents\\Codex\\2026-06-18\\tarangini-job-order-integration\\fresh-merged-billing-workflow\\tmp\\operational-audit\\2026-08-03T18-53-36-589Z\\attachments",
+      "backup_dir": "C:\\Users\\user\\Documents\\Codex\\2026-06-18\\tarangini-job-order-integration\\fresh-merged-billing-workflow\\tmp\\operational-audit\\2026-08-03T18-53-36-589Z\\backups"
+    },
+    "revision": 1785783218002,
+    "time": "2026-08-03T18:53:39.528Z"
+  },
+  "checks": [
+    {
+      "id": "financial_year_trial_balance",
+      "status": "pass",
+      "title": "All simulated financial years have balanced journals and balance sheets",
+      "evidence": "[{\"fy\":\"2015-16\",\"trial_difference\":0,\"balance_sheet_difference\":0,\"can_close\":true},{\"fy\":\"2016-17\",\"trial_difference\":0,\"balance_sheet_difference\":0,\"can_close\":true},{\"fy\":\"2017-18\",\"trial_difference\":0,\"balance_sheet_difference\":0,\"can_close\":true},{\"fy\":\"2018-19\",\"trial_difference\":0,\"balance_sheet_difference\":0,\"can_close\":true},{\"fy\":\"2019-20\",\"trial_difference\":0,\"balance_sheet_difference\":0,\"can_close\":true},{\"fy\":\"2020-21\",\"trial_difference\":0,\"balance_sheet_difference\":0,\"can_close\":true},{\"fy\":\"2021-22\",\"trial_difference\":0,\"balance_sheet_difference\":0,\"can_close\":true},{\"fy\":\"2022-23\",\"trial_difference\":0,\"balance_sheet_difference\":0,\"can_close\":true},{\"fy\":\"2023-24\",\"trial_difference\":0,\"balance_sheet_difference\":0,\"can_close\":true},{\"fy\":\"2024-25\",\"trial_difference\":0,\"balance_sheet_difference\":0,\"can_close\":true},{\"fy\":\"2025-26\",\"trial_difference\":0,\"balance_sheet_difference\":0,\"can_close\":true},{\"fy\":\"2026-27\",\"trial_difference\":0,\"balance_sheet_difference\":0,\"can_close\":true}]",
+      "upgrade": "Block financial-year closing when a trial balance or balance-sheet difference exceeds the configured tolerance, and add owner-facing reconciliation details."
+    },
+    {
+      "id": "financial_year_close_lock",
+      "status": "pass",
+      "title": "Closed financial year blocks new financial posting",
+      "evidence": "Close year 2016-17; post attempt returned HTTP 423.",
+      "upgrade": "Ensure every future posting endpoint uses the same closed-financial-year guard and add release coverage for each transaction type."
+    },
+    {
+      "id": "stock_movement_reconciliation",
+      "status": "pass",
+      "title": "Stock balance equals opening stock plus source-linked movements across all tested years",
+      "evidence": "Opening stock 100; qty out 13; current stock 87; expected 87.",
+      "upgrade": "Add a scheduled stock-movement reconciliation report that compares item balances, movement sources, returns, and job-material consumption."
+    },
+    {
+      "id": "aging_and_settlement",
+      "status": "pass",
+      "title": "Historic receivable remains visible to ageing and settlement reports",
+      "evidence": "Dashboard receivable 118; historic invoice status overdue.",
+      "upgrade": "Add ageing buckets, period-opening receivable balance, and owner alerts for invoices that remain unpaid after their due date."
+    },
+    {
+      "id": "party_statement_payment_fy_scope",
+      "status": "fail",
+      "title": "Party statement includes only payments from the requested financial year",
+      "evidence": "Requested 2026-27; statement closing balance -1298; expected 0.00 for the settled in-year invoice.",
+      "upgrade": "Filter party-statement payments by FY and calculate an explicit opening balance from transactions before the requested period; add a multi-year regression test."
+    },
+    {
+      "id": "company_data_isolation",
+      "status": "pass",
+      "title": "Another company cannot post an invoice using this company's party or item",
+      "evidence": "Cross-company transaction attempt returned HTTP 400.",
+      "upgrade": "Keep organization checks mandatory on every transaction, report, stock movement, party lookup, and future API endpoint."
+    },
+    {
+      "id": "backup_core_financial_data",
+      "status": "pass",
+      "title": "Organization backup contains the audited billing, payment, and stock movement records",
+      "evidence": "Backup rows: bills 13, payments 12, stock movements 13.",
+      "upgrade": "Run a periodic restore drill that verifies financial-year locks, payment allocations, journals, stock movements, and organization boundaries after restore."
+    },
+    {
+      "id": "multi_year_reporting_latency",
+      "status": "pass",
+      "title": "Multi-year report endpoints remain responsive on the isolated audit database",
+      "evidence": "15 API samples; p50 17.29 ms; p95 45.02 ms; max 45.02 ms.",
+      "upgrade": "Add production telemetry for slow report queries, WAL checkpoint duration, database lock waits, RAM, disk latency, and queue depth."
+    },
+    {
+      "id": "database_integrity_and_indexes",
+      "status": "pass",
+      "title": "SQLite integrity, foreign keys, and audited query plans are healthy",
+      "evidence": "Integrity ok; foreign-key violations 0; query plans SEARCH bills USING COVERING INDEX idx_bills_org_fy_date (org_id=? AND fy=?) | SEARCH payments USING COVERING INDEX idx_payments_org_fy_date (org_id=? AND fy=?) | SEARCH stock_movements USING COVERING INDEX idx_stock_org_item_date (org_id=? AND item_id=?).",
+      "upgrade": "Before deployment, block automatic backup success when SQLite integrity or foreign-key checks fail, and retain the diagnostic report for the owner."
+    }
+  ],
+  "summary": {
+    "pass": 8,
+    "fail": 1,
+    "warning": 0,
+    "info": 0
+  },
+  "database": {
+    "integrity": [
+      "ok"
+    ],
+    "foreign_keys": [],
+    "table_counts": {
+      "bills": 13,
+      "payments": 12,
+      "payment_allocations": 12,
+      "stock_movements": 13,
+      "journal_entries": 25,
+      "journal_lines": 76,
+      "financial_year_locks": 1,
+      "audit_log": 16
+    },
+    "plans": {
+      "bills_by_year": [
+        {
+          "id": 3,
+          "parent": 0,
+          "notused": 53,
+          "detail": "SEARCH bills USING COVERING INDEX idx_bills_org_fy_date (org_id=? AND fy=?)"
+        }
+      ],
+      "payments_by_year": [
+        {
+          "id": 3,
+          "parent": 0,
+          "notused": 53,
+          "detail": "SEARCH payments USING COVERING INDEX idx_payments_org_fy_date (org_id=? AND fy=?)"
+        }
+      ],
+      "stock_by_item": [
+        {
+          "id": 3,
+          "parent": 0,
+          "notused": 54,
+          "detail": "SEARCH stock_movements USING COVERING INDEX idx_stock_org_item_date (org_id=? AND item_id=?)"
+        }
+      ]
+    }
+  },
+  "capacity_evidence": [
+    {
+      "file": "capacity-100k-results.json",
+      "status": "available",
+      "data": {
+        "tested_at": "2026-07-23T19:56:12.708Z",
+        "isolated_database": "C:\\Users\\user\\Documents\\Codex\\2026-06-18\\tarangini-job-order-integration\\fresh-merged-billing-workflow\\.capacity-test\\tarangini.db",
+        "records": 100000,
+        "insertion_and_save_seconds": 4.02,
+        "database_size_mb": 37.13,
+        "integrity": "ok",
+        "queries": {
+          "invoice_search": {
+            "milliseconds": 5.59,
+            "rows": 1
+          },
+          "monthly_sales": {
+            "milliseconds": 17.09,
+            "rows": 9
+          },
+          "party_balance_inputs": {
+            "milliseconds": 7.52,
+            "rows": 5000
+          },
+          "stock_inputs": {
+            "milliseconds": 1.33,
+            "rows": 1
+          },
+          "bank_search": {
+            "milliseconds": 0.12,
+            "rows": 1
+          }
+        }
+      }
+    },
+    {
+      "file": "capacity-million-each-results.json",
+      "status": "available",
+      "data": {
+        "tested_at": "2026-07-15T20:59:18.313Z",
+        "scope": "10 lakh records in each of 8 primary transaction categories, simultaneously",
+        "primary_transactions": 8000000,
+        "journal_lines": 2000000,
+        "total_transaction_rows": 10000000,
+        "counts": {
+          "bills": 1000000,
+          "payments": 1000000,
+          "purchases": 1000000,
+          "expenses": 1000000,
+          "notes": 1000000,
+          "purchase_orders": 1000000,
+          "bank_rows": 1000000,
+          "journals": 1000000
+        },
+        "insertion_seconds_by_type": {
+          "bills": 123.17,
+          "payments": 19.61,
+          "purchases": 13.91,
+          "expenses": 12.92,
+          "notes": 12.98,
+          "purchase_orders": 13.13,
+          "bank_rows": 12.11,
+          "journals": 14.27,
+          "journal_lines": 12.16,
+          "database_save": 0
+        },
+        "total_seconds": 357.83,
+        "database_size_mb": 1974.45,
+        "integrity": "ok",
+        "integrity_check_seconds": 80.48,
+        "memory_mb": {
+          "rss": 135.31,
+          "heapTotal": 71.98,
+          "heapUsed": 18.55,
+          "external": 2.1,
+          "arrayBuffers": 0.14
+        },
+        "queries": {
+          "invoice_exact_search": {
+            "milliseconds": 0.13,
+            "rows": 1,
+            "first": {
+              "id": 1000000,
+              "bill_number": "MIL/SB/2026-27/999999"
+            }
+          },
+          "invoice_text_search": {
+            "milliseconds": 150.51,
+            "rows": 1,
+            "first": {
+              "id": 1000000,
+              "bill_number": "MIL/SB/2026-27/999999"
+            }
+          },
+          "monthly_sales": {
+            "milliseconds": 10343.24,
+            "rows": 9,
+            "first": {
+              "substr(bill_date,1,7)": "2026-04",
+              "SUM(grand_total)": 13111098
+            }
+          },
+          "party_balance_inputs": {
+            "milliseconds": 9518.22,
+            "rows": 1,
+            "first": {
+              "party_id": 2,
+              "SUM(grand_total)": 118000000
+            }
+          },
+          "payment_summary": {
+            "milliseconds": 1432.14,
+            "rows": 4,
+            "first": {
+              "type": "paid",
+              "mode": "account",
+              "COUNT(*)": 166666,
+              "SUM(amount)": 19666588
+            }
+          },
+          "expense_summary": {
+            "milliseconds": 1328.03,
+            "rows": 1,
+            "first": {
+              "account_id": 749,
+              "COUNT(*)": 1000000,
+              "SUM(amount)": 50000000
+            }
+          },
+          "journal_trial_input": {
+            "milliseconds": 2444.51,
+            "rows": 2,
+            "first": {
+              "account_id": 736,
+              "SUM(jl.debit)": 50000000,
+              "SUM(jl.credit)": 0
+            }
+          },
+          "bank_exact_search": {
+            "milliseconds": 0.17,
+            "rows": 1,
+            "first": {
+              "id": 999999
+            }
+          }
+        }
+      }
+    }
+  ],
+  "upgrades": [
+    {
+      "priority": "P0",
+      "title": "Filter party-statement payments by FY and calculate an explicit opening balance from transactions before the requested period; add a multi-year regression test.",
+      "source": "party_statement_payment_fy_scope"
+    },
+    {
+      "priority": "P0",
+      "title": "Restrict the global integrity repair so it cannot rebuild accounting journals or stock movements inside a closed financial year without an explicit owner-approved recovery workflow.",
+      "source": "architecture-audit: closed-year-repair"
+    },
+    {
+      "priority": "P1",
+      "title": "Make financial-year backup exports complete and explicit: include purchases, expenses, notes, stock, audit, jobs, bank rows, and GSTR data, or clearly label the export as organization-wide rather than FY-scoped.",
+      "source": "architecture-audit: fy-backup-completeness"
+    },
+    {
+      "priority": "P1",
+      "title": "Add backup retention, off-device replication, restore drills, disk-space alarms, and verification reporting; daily full backups otherwise grow without a defined retention limit.",
+      "source": "architecture-audit: backup-retention"
+    },
+    {
+      "priority": "P1",
+      "title": "Paginate and set-optimize stock, ageing, invoice-status, party-statement, account-ledger, and bank-report endpoints before long-lived databases grow beyond normal operating volume.",
+      "source": "architecture-audit: report-scaling"
+    },
+    {
+      "priority": "P1",
+      "title": "Strengthen financial-year close with immutable signed snapshots, carry-forward records, controlled reopen approval, and an auditable forced-close workflow.",
+      "source": "architecture-audit: close-immutability"
+    },
+    {
+      "priority": "P2",
+      "title": "Move accounting amounts from floating-point REAL/Number values to integer paise or validated decimal arithmetic before repeated multi-year aggregation and reposting can accumulate rounding drift.",
+      "source": "architecture-audit: monetary-precision"
+    },
+    {
+      "priority": "P2",
+      "title": "Replace silent additive migration failures with versioned transactional migrations and post-migration validation for long-lived customer databases.",
+      "source": "architecture-audit: migration-safety"
+    },
+    {
+      "priority": "P1",
+      "title": "Schedule this isolated audit weekly and retain only its JSON/Markdown reports; alert the owner when a reconciliation or integrity check fails.",
+      "source": "operational-audit-agent"
+    },
+    {
+      "priority": "P2",
+      "title": "Add a financial-year archive and reporting policy before real data exceeds the operational query limits; keep all statutory records and backups intact.",
+      "source": "long-horizon-capacity"
+    },
+    {
+      "priority": "P2",
+      "title": "Run the existing 100k/million-row benchmarks and a 24-hour multi-device pilot on the target hardware before certifying throughput or concurrent upload capacity.",
+      "source": "capacity-evidence"
+    }
+  ],
+  "canonical_upgrade_roadmap": "UPGRADE_LIST.md",
+  "execution_error": null
+}

@@ -1,0 +1,855 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Job Request | Tarangini</title>
+  <style>
+    :root { color-scheme: light; --ink:#173143; --muted:#5b7180; --line:#d9e4e9; --accent:#0b7f75; --accent-2:#d67b2c; --accent-soft:#e7f6f2; --ok:#177245; --bad:#c9362b; --paper:#fff; --wash:#f5f8fa; --shadow:0 18px 45px rgba(23,49,67,.13); }
+    * { box-sizing:border-box; }
+    body { margin:0; background:
+      radial-gradient(circle at 12% -10%,rgba(214,123,44,.22),transparent 32%),
+      radial-gradient(circle at 88% 4%,rgba(11,127,117,.20),transparent 30%),
+      linear-gradient(180deg,#eef6f7 0%,#f9fbf7 100%); color:var(--ink); font:15px/1.5 "Trebuchet MS","Segoe UI",sans-serif; }
+    main { width:min(980px,100%); margin:auto; padding:20px; }
+    .card,.hero { background:rgba(255,255,255,.94); border:1px solid rgba(217,228,233,.9); border-radius:22px; padding:20px; margin-bottom:16px; box-shadow:0 10px 28px rgba(23,49,67,.07); }
+    .hero { position:relative; overflow:hidden; border:0; color:#fff; background:linear-gradient(135deg,#0b5f59 0%,#0b7f75 48%,#d67b2c 100%); box-shadow:var(--shadow); }
+    .hero::after { content:""; position:absolute; width:260px; height:260px; border-radius:50%; right:-90px; top:-90px; background:rgba(255,255,255,.15); }
+    .hero .muted,.hero small { color:rgba(255,255,255,.82); }
+    h1,h2,h3,p { margin-top:0; }
+    h1 { font-size:clamp(30px,5vw,52px); line-height:1.02; margin-bottom:10px; letter-spacing:-1.4px; }
+    h2 { letter-spacing:-.4px; }
+    .muted,small { color:var(--muted); }
+    .grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+    .full { grid-column:1 / -1; }
+    label { display:block; font-weight:700; margin:10px 0 5px; }
+    input,select,textarea,button { width:100%; font:inherit; border:1px solid var(--line); border-radius:10px; padding:11px; }
+    textarea { min-height:92px; resize:vertical; }
+    button { border:0; background:linear-gradient(135deg,var(--accent),#09645d); color:#fff; font-weight:800; cursor:pointer; box-shadow:0 8px 20px rgba(11,127,117,.18); transition:transform .18s ease, box-shadow .18s ease; }
+    button:hover { transform:translateY(-1px); box-shadow:0 12px 24px rgba(11,127,117,.23); }
+    button:disabled { opacity:.62; cursor:not-allowed; }
+    button.secondary { background:#edf5f6; color:var(--ink); }
+    button.warm { background:linear-gradient(135deg,var(--accent-2),#b65e1e); }
+    .message { padding:12px; border-radius:10px; background:#ebf8ef; color:var(--ok); margin-bottom:12px; }
+    .message.error { background:#fff0ef; color:var(--bad); }
+    .facts { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; margin-top:14px; }
+    .facts div { background:var(--accent-soft); border-radius:14px; padding:12px; }
+    .hero .facts div { background:rgba(255,255,255,.16); backdrop-filter:blur(4px); }
+    .facts strong,.facts span { display:block; }
+    .file-row { padding:10px 0; border-bottom:1px solid var(--line); }
+    .file-row:last-child { border-bottom:0; }
+    .tag { display:inline-block; margin:4px 6px 0 0; padding:5px 10px; border-radius:999px; background:var(--accent-soft); color:var(--accent); font-size:12px; font-weight:700; }
+    .actions { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px; }
+    .landing-actions { display:grid; grid-template-columns:1.15fr .85fr; gap:12px; margin-top:18px; }
+    .page-tabs { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+    .page-tabs button { width:auto; padding:9px 13px; border-radius:999px; box-shadow:none; }
+    .service-picker-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:10px; margin-top:10px; }
+    .service-picker-card { border:1px solid var(--line); border-radius:18px; padding:16px; background:linear-gradient(180deg,#fff,var(--wash)); cursor:pointer; display:grid; gap:7px; min-height:135px; transition:transform .18s ease, border-color .18s ease, box-shadow .18s ease; }
+    .service-picker-card:hover { transform:translateY(-3px); border-color:rgba(11,127,117,.55); box-shadow:var(--shadow); }
+    .service-picker-card.active { border-color:var(--accent); background:var(--accent-soft); box-shadow:0 0 0 1px rgba(11,127,117,.12); }
+    .service-picker-card strong { display:block; }
+    .service-picker-card span { color:var(--muted); font-size:13px; }
+    .service-helper { margin-top:10px; padding:12px; border-radius:12px; background:var(--accent-soft); color:var(--ink); }
+    .top-track { border:2px solid var(--accent); box-shadow:var(--shadow); }
+    .small-actions { display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
+    .small-actions button { width:auto; padding:7px 10px; border-radius:8px; font-size:13px; }
+    .customer-lookup-control { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:8px; align-items:center; }
+    .customer-lookup-control button { width:auto; padding:11px 13px; white-space:nowrap; }
+    .customer-lookup-status { display:block; margin-top:6px; font-size:12px; color:var(--muted); }
+    .customer-lookup-status.found { color:var(--ok); font-weight:700; }
+    .customer-lookup-status.warning { color:#9a5b00; }
+    .view-shell { animation:riseIn .28s ease both; }
+    @keyframes riseIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:none; } }
+    @media (max-width:640px) {
+      main { padding:10px; }
+      .grid,.facts,.actions,.landing-actions { grid-template-columns:1fr; }
+      .customer-lookup-control { grid-template-columns:1fr; }
+      .customer-lookup-control button { width:100%; }
+    }
+  </style>
+</head>
+<body>
+  <main id="app"><div class="card">Loading request form...</div></main>
+  <script>
+    const app = document.getElementById('app');
+    const orgId = Number(new URLSearchParams(location.search).get('org') || 0);
+    let clientRequestId = '';
+    let formConfig = null;
+    let intakeSelectedFiles = [];
+    let selectedServiceGroupKey = '';
+    let selectedServiceId = '';
+    let portalDetailsVisible = false;
+    let portalView = 'home';
+    let intakeSubmitInProgress = false;
+    let customerLookupTimer = null;
+    let customerLookupRequest = 0;
+
+    const esc = value => String(value ?? '').replace(/[&<>"']/g, char =>
+      ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+    const formatBytes = value => {
+      const bytes = Number(value || 0);
+      if (bytes < 1024) return `${bytes} B`;
+      if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+      return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
+    };
+    const pageSizeSummary = metadata => metadata?.page_size_summary || '';
+    const fileKey = (file, index) => String(index) + '-' + String(file.name || 'file')
+      .replace(/[^a-z0-9]+/gi, '-').toLowerCase();
+    const money = paise => new Intl.NumberFormat('en-IN', {
+      style: 'currency', currency: 'INR'
+    }).format(Number(paise || 0) / 100);
+
+    function nextClientRequestId() {
+      clientRequestId = localStorage.getItem(`tarangini-intake-${orgId}`) ||
+        (crypto?.randomUUID ? crypto.randomUUID() : `req-${Date.now()}-${Math.random().toString(16).slice(2)}`);
+      localStorage.setItem(`tarangini-intake-${orgId}`, clientRequestId);
+    }
+
+    function serviceLabel(service) {
+      const parts = [service.category_name, service.subcategory_name, service.name].filter(Boolean);
+      return parts.join(' / ');
+    }
+
+    function portalServiceGroups() {
+      if (Array.isArray(formConfig?.service_groups) && formConfig.service_groups.length) return formConfig.service_groups;
+      const services = Array.isArray(formConfig?.services) ? formConfig.services : [];
+      return services.length ? [{
+        key: 'other',
+        label: 'All Services',
+        description: 'Select the service that matches your work.',
+        portal_note: 'Select the service that best matches your order.',
+        suggested_item_type: 'Custom Work',
+        suggested_summary: 'Service requirement',
+        instruction_hint: 'Size, quantity, files, issue, and special instructions',
+        services
+      }] : [];
+    }
+
+    function ensureSelectedServiceGroup() {
+      const groups = portalServiceGroups();
+      if (!groups.length) return null;
+      if (!selectedServiceGroupKey || !groups.some(group => group.key === selectedServiceGroupKey)) {
+        selectedServiceGroupKey = groups[0].key;
+      }
+      return groups.find(group => group.key === selectedServiceGroupKey) || groups[0];
+    }
+
+    function selectedPortalGroup() {
+      return ensureSelectedServiceGroup();
+    }
+
+    function selectedGroupServices() {
+      return selectedPortalGroup()?.services || [];
+    }
+
+    function selectedPortalService() {
+      const serviceId = Number(document.getElementById('intake-service')?.value || selectedServiceId || 0);
+      return (formConfig?.services || []).find(service => Number(service.id) === serviceId) || null;
+    }
+
+    function groupIsComputerShop(group = selectedPortalGroup()) {
+      return String(group?.key || group?.label || '').toLowerCase().includes('computer');
+    }
+
+    function applySelectedServiceDefaults() {
+      const group = selectedPortalGroup();
+      const itemType = document.getElementById('intake-item-type');
+      const itemName = document.getElementById('intake-item-name');
+      const summary = document.getElementById('intake-summary');
+      const details = document.getElementById('intake-details');
+      const serviceHint = document.getElementById('intake-service-hint');
+      if (serviceHint && group) {
+        serviceHint.innerHTML = `<strong>${esc(group.label)}</strong><br><small>${esc(group.portal_note || group.description || '')}</small>`;
+      }
+      if (itemType && group) itemType.placeholder = group.suggested_item_type || 'Item / Device Type';
+      if (itemName && group) itemName.placeholder = group.key === 'computer-service'
+        ? 'HP laptop, Epson printer, desktop CPU'
+        : group.key === 'photo-frames'
+          ? 'Wedding frame, wall frame, gift frame'
+          : 'Project file, wedding frame, HP laptop';
+      if (summary && group && !summary.value) summary.placeholder = group.suggested_summary || 'What should Tarangini do?';
+      if (details && group && !details.value) details.placeholder = group.instruction_hint || 'Dimensions, color, fault, accessories, printing notes, urgency, special instructions';
+    }
+
+    function refreshPortalServiceOptions() {
+      const group = selectedPortalGroup();
+      const serviceSelect = document.getElementById('intake-service');
+      if (!serviceSelect) return;
+      const services = selectedGroupServices();
+      serviceSelect.innerHTML = `
+        <option value="">Select exact service</option>
+        ${services.map(service => `<option value="${service.id}">${esc(serviceLabel(service))}</option>`).join('')}`;
+      if (services.some(service => String(service.id) === String(selectedServiceId))) {
+        serviceSelect.value = String(selectedServiceId);
+      }
+      applySelectedServiceDefaults();
+    }
+
+    function selectIntakeServiceGroup(groupKey) {
+      selectedServiceGroupKey = groupKey;
+      selectedServiceId = '';
+      portalDetailsVisible = false;
+      renderForm();
+    }
+
+    function chooseIntakeService(serviceId) {
+      selectedServiceId = String(serviceId || '');
+      portalDetailsVisible = Boolean(selectedServiceId);
+      portalView = 'service';
+      renderForm();
+    }
+
+    function openPortalHome() {
+      portalView = 'home';
+      renderForm();
+    }
+
+    function openTrackingPage() {
+      portalView = 'track';
+      renderForm();
+    }
+
+    function openServicePage(groupKey = selectedServiceGroupKey) {
+      selectedServiceGroupKey = groupKey;
+      selectedServiceId = '';
+      portalDetailsVisible = false;
+      portalView = 'service';
+      renderForm();
+    }
+
+    function infoMessage(text, error = false) {
+      return `<div class="message ${error ? 'error' : ''}">${esc(text)}</div>`;
+    }
+
+    function renderPdfAnalyzerResult(analysis) {
+      const metadata = analysis?.metadata || {};
+      return `<div class="tag-row">
+        <span class="tag">PDF Analyzer ${esc(analysis.analysis_status || 'READY')}</span>
+        ${analysis.pdf_page_count ? `<span class="tag">${analysis.pdf_page_count} pages</span>` : ''}
+        ${pageSizeSummary(metadata) ? `<span class="tag">${esc(pageSizeSummary(metadata))}</span>` : ''}
+        ${metadata.uniform_page_size ? `<span class="tag">Uniform ${esc(metadata.uniform_page_size)}</span>` : ''}
+        ${metadata.has_mixed_page_sizes ? '<span class="tag">Mixed page sizes</span>' : ''}
+        ${metadata.portrait_pages ? `<span class="tag">Portrait ${metadata.portrait_pages}</span>` : ''}
+        ${metadata.landscape_pages ? `<span class="tag">Landscape ${metadata.landscape_pages}</span>` : ''}
+        ${metadata.colour_detection?.detected ? `<span class="tag">Colour content detected</span>` : ''}
+        ${metadata.auto_detected_colour_pages ? `<span class="tag">Estimated colour ${metadata.auto_detected_colour_pages}</span>` : ''}
+        ${metadata.auto_detected_bw_pages ? `<span class="tag">Estimated B/W ${metadata.auto_detected_bw_pages}</span>` : ''}
+      </div>
+      <p class="muted">${esc(analysis.analysis_error || metadata.colour_detection?.note || 'PDF structure looks readable. The original file bytes will be stored unchanged on submit.')}</p>`;
+    }
+
+    function renderIntakePdfAnalyzerCard(key, file, analysis) {
+      const totalPages = Number(analysis?.pdf_page_count || 0) || 0;
+      const metadata = analysis?.metadata || {};
+      const suggestedColorPages = Math.min(totalPages || 1, Number(metadata.auto_detected_colour_pages || metadata.colour_detection?.estimated_colour_pages || 0));
+      const suggestedBwPages = Math.max(0, (totalPages || 1) - suggestedColorPages);
+      return `<div class="card" style="margin-top:12px">
+        <h3 style="margin-bottom:8px">${esc(file.name)}</h3>
+        ${renderPdfAnalyzerResult(analysis)}
+        <label><input id="intake-pdf-print-${key}" type="checkbox" style="width:auto;margin-right:8px" onchange="toggleIntakePdfPrintRequest('${key}')" ${suggestedColorPages ? 'checked' : ''}>Colour Print Active</label>
+        <div class="grid" style="margin-top:8px">
+          <div><label>Confirmed Total Pages</label><input id="intake-pdf-total-${key}" type="number" min="1" step="1" value="${esc(totalPages || 1)}" onchange="syncIntakePdfCounts('${key}')"></div>
+          <div><label>Colour Pages</label><input id="intake-pdf-color-${key}" type="number" min="0" step="1" value="${esc(suggestedColorPages || 0)}" onchange="syncIntakePdfCounts('${key}')" ${suggestedColorPages ? '' : 'disabled'}></div>
+          <div><label>B/W Pages</label><input id="intake-pdf-bw-${key}" type="number" min="0" step="1" value="${esc(suggestedBwPages)}" readonly></div>
+          <div><label>Page Confirmation</label><label><input id="intake-pdf-confirm-${key}" type="checkbox" style="width:auto;margin-right:8px">I confirm these page counts</label></div>
+          <div class="full"><label>Notes for Operator</label><textarea id="intake-pdf-notes-${key}" placeholder="Optional note about color pages, cover pages, duplex, or special print instructions"></textarea></div>
+        </div>
+      </div>`;
+    }
+
+    function statusCard(result) {
+      const quotation = result.quotation;
+      return `<section class="card">
+        <h2>Check Order Status</h2>
+        <div class="facts" style="margin-top:0">
+          <div><span>Order ID</span><strong>${esc(result.order_id)}</strong></div>
+          <div><span>Request Stage</span><strong>${esc(result.intake_stage_label)}</strong></div>
+          <div><span>Company</span><strong>${esc(result.company_name)}</strong></div>
+        </div>
+        <p style="margin-top:14px"><strong>Customer:</strong> ${esc(result.customer_name)}</p>
+        <p><strong>Billing Record:</strong> ${result.billing_party_linked ? `Linked to customer account #${esc(result.party_id)}` : 'Will be linked during review'}</p>
+        <p><strong>Submitted:</strong> ${esc(result.submitted_at ? new Date(result.submitted_at).toLocaleString('en-IN') : '-')}</p>
+        <p><strong>Requested Delivery:</strong> ${esc(result.requested_delivery_at ? new Date(result.requested_delivery_at).toLocaleString('en-IN') : '-')}</p>
+        <p><strong>Request:</strong> ${esc(result.issue_summary || '-')}</p>
+        ${result.job ? `<div class="file-row">
+          <strong>Production Job</strong><br>
+          <small>Job Token: ${esc(result.job.token)} | Status: ${esc(String(result.job.current_status || '').replaceAll('_', ' '))}</small><br>
+          <small>Promised Delivery: ${esc(result.job.promised_delivery_at ? new Date(result.job.promised_delivery_at).toLocaleString('en-IN') : '-')}</small>
+          ${result.job.final_bill_number ? `<br><small>Billing Invoice: ${esc(result.job.final_bill_number)} | Payment Status: ${esc(String(result.job.financial_status || 'OPEN').replaceAll('_', ' '))}</small>` : ''}
+        </div>` : '<p class="muted">Counter staff has not converted this request into a production job yet.</p>'}
+        ${quotation ? `<div class="file-row">
+          <strong>Accepted Quotation</strong><br>
+          <small>Total: ${esc(money(quotation.total_paise))} | Revision: ${esc(quotation.revision_no)}${quotation.tax_inclusive ? ' | Tax inclusive' : ''}</small>
+          ${quotation.lines?.length ? quotation.lines.map(line => `<div style="margin-top:8px">
+            <small>${esc(line.description || '-')} | ${esc(line.quantity)} ${esc(line.unit || '')} | ${esc(money(line.line_total_paise))}</small>
+          </div>`).join('') : ''}
+        </div>` : ''}
+      </section>`;
+    }
+
+    async function loadConfig() {
+      if (!orgId) {
+        app.innerHTML = infoMessage('This QR link is missing organization information.', true);
+        return;
+      }
+      try {
+        const response = await fetch(`/api/job-intake/config?org_id=${encodeURIComponent(orgId)}`);
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Unable to load form');
+        formConfig = data;
+        renderForm();
+      } catch (error) {
+        app.innerHTML = infoMessage(error.message, true);
+      }
+    }
+
+    function renderForm(message = '') {
+      const selectedGroup = ensureSelectedServiceGroup();
+      const showDetails = portalDetailsVisible && Boolean(selectedServiceId);
+      const computerFields = groupIsComputerShop(selectedGroup) ? `
+            <div><label>Brand</label><input id="intake-device-brand"></div>
+            <div><label>Model</label><input id="intake-device-model"></div>
+            <div><label>Serial / ID</label><input id="intake-device-serial"></div>
+            <div><label>Quantity</label><input id="intake-quantity" type="number" min="0.001" step="0.001" value="1"></div>` : '';
+      const tabs = `<nav class="page-tabs">
+        <button type="button" class="${portalView === 'home' ? '' : 'secondary'}" onclick="openPortalHome()">Home</button>
+        <button type="button" class="${portalView === 'track' ? '' : 'secondary'}" onclick="openTrackingPage()">Track Order</button>
+        <button type="button" class="${portalView === 'service' ? '' : 'secondary'}" onclick="openServicePage()">New Request</button>
+      </nav>`;
+      const trackingPanel = `<section class="card top-track">
+        <h2>Track Existing Order</h2>
+        <p class="muted">Enter your Order ID and phone number to check the latest status on this network.</p>
+        <div class="grid">
+          <div><label>Order ID</label><input id="lookup-order-id" placeholder="INQ-... or JOB-..."></div>
+          <div><label>Phone Number</label><input id="lookup-phone" inputmode="tel" placeholder="Customer phone"></div>
+        </div>
+        <div class="actions">
+          <button type="button" class="secondary" onclick="openPortalHome()">Back Home</button>
+          <button type="button" onclick="checkExistingOrderStatus()">Check Status</button>
+        </div>
+        <div id="lookup-result" style="margin-top:12px"></div>
+      </section>`;
+      const servicePicker = `<section class="card">
+        <h2>Select Service</h2>
+        <p class="muted">Choose a service family. Each service opens its own request page with only the fields needed for that work.</p>
+        <div class="service-picker-grid">
+          ${portalServiceGroups().map(group => `<div class="service-picker-card ${group.key === selectedGroup?.key ? 'active' : ''}" data-group-key="${group.key}" onclick="openServicePage('${group.key}')">
+            <strong>${esc(group.label)}</strong>
+            <span>${esc(group.portal_note || group.description || '')}</span>
+            <small>${esc(group.services.length)} service options</small>
+          </div>`).join('')}
+        </div>
+      </section>`;
+      const serviceForm = `<section class="card">
+          <h2>${esc(selectedGroup?.label || 'Select Service')} Request Page</h2>
+          <p class="muted">${esc(selectedGroup?.portal_note || selectedGroup?.description || 'Select the exact service to continue.')}</p>
+          <div id="intake-service-hint" class="service-helper"></div>
+          <label>Exact Service</label>
+          <select id="intake-service" onchange="chooseIntakeService(this.value)"></select>
+          ${!showDetails ? '<p class="muted" style="margin-top:12px">Select an exact service to open customer details, file upload and confirmation.</p>' : ''}
+        </section>
+        ${showDetails ? `
+        <section class="card">
+          <h2>Customer Details</h2>
+          <div class="grid">
+            <div class="full"><label>Phone <span>*</span></label><div class="customer-lookup-control">
+              <input id="intake-phone" inputmode="tel" autocomplete="tel" placeholder="Enter your registered mobile number">
+              <button id="customer-lookup-button" type="button" class="secondary" onclick="lookupExistingCustomer()">Use Saved Details</button>
+            </div><small id="customer-lookup-status" class="customer-lookup-status">Enter the phone number used earlier to reuse saved customer details.</small></div>
+            <div><label>Name <span>*</span></label><input id="intake-name" autocomplete="name"></div>
+            <div><label>Email</label><input id="intake-email" type="email" autocomplete="email"></div>
+            <div><label>Preferred Contact</label><select id="intake-contact">
+              <option value="PHONE">Phone Call</option>
+              <option value="WHATSAPP">WhatsApp</option>
+              <option value="EMAIL">Email</option>
+            </select></div>
+            <div class="full"><label>Address</label><textarea id="intake-address" placeholder="Address or area"></textarea></div>
+          </div>
+        </section>
+        <section class="card">
+          <h2>Job Details</h2>
+          <div class="grid">
+            <div><label>Item / Device Type</label><input id="intake-item-type" placeholder="Book, frame, laptop, printer"></div>
+            <div><label>Item / Device Name</label><input id="intake-item-name" placeholder="Project file, wedding frame, HP laptop"></div>
+            ${computerFields}
+            <div><label>Requested Delivery</label><input id="intake-delivery" type="datetime-local"></div>
+            <div class="full"><label>Short Summary <span>*</span></label>
+              <input id="intake-summary" placeholder="What should Tarangini do?"></div>
+            <div class="full"><label>Full Instructions</label>
+              <textarea id="intake-details" placeholder="Dimensions, color, fault, accessories, printing notes, urgency, special instructions"></textarea></div>
+          </div>
+        </section>
+        <section class="card">
+          <h2>Files / Proof</h2>
+          <p class="muted">Preview or delete selected files before submitting. PDF files are analyzed before staff review.</p>
+          <label>Select files</label>
+          <input id="intake-files" type="file" multiple accept=".pdf,image/jpeg,image/png,image/webp">
+          <div id="intake-file-preview" class="muted" style="margin-top:10px">No files selected yet.</div>
+        </section>
+        <section class="card">
+          <h2>PDF Analyzer</h2>
+          <p class="muted">PDF files are analyzed for page count, page size and best-effort colour content before submit.</p>
+          <div id="intake-pdf-analysis" class="muted">No PDF selected yet.</div>
+        </section>
+        <section class="card">
+          <h2>Consent</h2>
+          <label><input id="intake-consent" type="checkbox" style="width:auto;margin-right:8px">I confirm the details and files are correct for Tarangini staff review.</label>
+          <div class="actions">
+            <button type="button" class="secondary" onclick="resetIntakeForm()">Clear Form</button>
+            <button id="intake-submit-button" type="button" onclick="submitIntake()">Submit Request</button>
+          </div>
+          <p id="intake-status" class="muted" style="margin-top:10px"></p>
+        </section>` : ''}`;
+      const viewBody = portalView === 'track'
+        ? trackingPanel
+        : portalView === 'service'
+          ? serviceForm
+          : `<section class="hero">
+              <small>Tarangini Customer Portal</small>
+              <h1>Track your order or start a new job request</h1>
+              <p class="muted">A cleaner portal for service selection, file upload, PDF checking and live order status.</p>
+              <div class="facts">
+                <div><span>Company</span><strong>${esc(formConfig.org.name)}</strong></div>
+                <div><span>Start</span><strong>Select Service</strong></div>
+                <div><span>Track</span><strong>Order ID + Phone</strong></div>
+              </div>
+              <div class="landing-actions">
+                <button type="button" class="warm" onclick="openTrackingPage()">Track Existing Order</button>
+                <button type="button" onclick="openServicePage()">Create New Request</button>
+              </div>
+            </section>
+            ${servicePicker}`;
+      app.innerHTML = `
+        ${message ? infoMessage(message) : ''}
+        ${tabs}
+        <div class="view-shell">${viewBody}</div>`;
+      if (portalView === 'service') refreshPortalServiceOptions();
+      if (showDetails) {
+        bindCustomerLookup();
+        bindFilePreview();
+        renderSelectedFiles();
+      }
+    }
+
+    function bindFilePreview() {
+      const input = document.getElementById('intake-files');
+      if (!input || input.dataset.bound === '1') return;
+      input.dataset.bound = '1';
+      input.addEventListener('change', () => {
+        const nextFiles = [...(input.files || [])].map((file, index) => ({
+          id: crypto?.randomUUID ? crypto.randomUUID() : `file-${Date.now()}-${index}`,
+          key: fileKey(file, intakeSelectedFiles.length + index),
+          file,
+          previewUrl: ''
+        }));
+        intakeSelectedFiles.push(...nextFiles);
+        input.value = '';
+        renderSelectedFiles();
+      });
+    }
+
+    async function renderSelectedFiles() {
+      const target = document.getElementById('intake-file-preview');
+      const analysisTarget = document.getElementById('intake-pdf-analysis');
+      if (!target) return;
+      if (!intakeSelectedFiles.length) {
+        target.textContent = 'No files selected yet.';
+        if (analysisTarget) analysisTarget.textContent = 'No PDF selected yet.';
+        return;
+      }
+      const details = [];
+      const pdfCards = [];
+      if (analysisTarget) analysisTarget.innerHTML = '<span class="tag">Analyzing selected files...</span>';
+      for (const item of intakeSelectedFiles) {
+        const file = item.file;
+        let extra = '';
+        if ((file.type || '').startsWith('image/') && !item.dimensions) {
+          try { item.dimensions = await imageDimensions(file); } catch (_) {}
+        }
+        if (item.dimensions) extra += ` | ${item.dimensions.width} x ${item.dimensions.height}`;
+        if (file.type === 'application/pdf' || /\.pdf$/i.test(file.name || '')) {
+          extra += ' | PDF Analyzer active';
+          if (!item.analysis && !item.analysisError) {
+            try { item.analysis = await analyzeSelectedIntakePdf(file); }
+            catch (error) { item.analysisError = error.message; }
+          }
+          pdfCards.push(item.analysis
+            ? renderIntakePdfAnalyzerCard(item.key, file, item.analysis)
+            : `<div class="card" style="margin-top:12px">
+                <h3 style="margin-bottom:8px">${esc(file.name)}</h3>
+                <p class="message error">${esc(item.analysisError || 'PDF analysis failed')}</p>
+              </div>`);
+        }
+        details.push(`<div class="file-row">
+          <strong>${esc(file.name)}</strong><br>
+          <small>${esc(file.type || 'application/octet-stream')} | ${esc(formatBytes(file.size))}${esc(extra)}</small>
+          <div class="small-actions">
+            <button type="button" class="secondary" onclick="previewSelectedIntakeFile('${item.id}')">Preview</button>
+            <button type="button" class="secondary" onclick="removeSelectedIntakeFile('${item.id}')">Delete File</button>
+          </div>
+        </div>`);
+      }
+      target.innerHTML = details.join('');
+      if (analysisTarget) {
+        analysisTarget.innerHTML = pdfCards.length ? pdfCards.join('') : 'No PDF selected yet.';
+      }
+    }
+
+    function removeSelectedIntakeFile(id) {
+      const file = intakeSelectedFiles.find(item => item.id === id);
+      if (file?.previewUrl) URL.revokeObjectURL(file.previewUrl);
+      intakeSelectedFiles = intakeSelectedFiles.filter(item => item.id !== id);
+      renderSelectedFiles();
+    }
+
+    function previewSelectedIntakeFile(id) {
+      const item = intakeSelectedFiles.find(file => file.id === id);
+      if (!item) return;
+      item.previewUrl = item.previewUrl || URL.createObjectURL(item.file);
+      window.open(item.previewUrl, '_blank', 'noopener');
+    }
+
+    function imageDimensions(file) {
+      return new Promise((resolve, reject) => {
+        const url = URL.createObjectURL(file);
+        const image = new Image();
+        image.onload = () => {
+          resolve({ width: image.naturalWidth, height: image.naturalHeight });
+          URL.revokeObjectURL(url);
+        };
+        image.onerror = () => {
+          URL.revokeObjectURL(url);
+          reject(new Error('Unable to inspect image'));
+        };
+        image.src = url;
+      });
+    }
+
+    function fileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(String(reader.result || '').split(',')[1] || '');
+        reader.onerror = () => reject(new Error(`Unable to read ${file.name}`));
+        reader.readAsDataURL(file);
+      });
+    }
+
+    async function analyzeSelectedIntakePdf(file) {
+      const contentBase64 = await fileToBase64(file);
+      const response = await fetch('/api/job-intake/analyze-file', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          file_name: file.name,
+          mime_type: file.type || 'application/octet-stream',
+          content_base64: contentBase64
+        })
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'PDF analysis failed');
+      return result.analysis || {};
+    }
+
+    function toggleIntakePdfPrintRequest(key) {
+      const enabled = document.getElementById(`intake-pdf-print-${key}`)?.checked;
+      const colorInput = document.getElementById(`intake-pdf-color-${key}`);
+      if (colorInput) colorInput.disabled = !enabled;
+      syncIntakePdfCounts(key);
+    }
+
+    function syncIntakePdfCounts(key) {
+      const enabled = document.getElementById(`intake-pdf-print-${key}`)?.checked;
+      const totalInput = document.getElementById(`intake-pdf-total-${key}`);
+      const colorInput = document.getElementById(`intake-pdf-color-${key}`);
+      const bwInput = document.getElementById(`intake-pdf-bw-${key}`);
+      if (!totalInput || !colorInput || !bwInput) return;
+      let total = Math.max(1, Number(totalInput.value || 1));
+      let color = Math.max(0, Number(colorInput.value || 0));
+      if (!enabled) {
+        color = 0;
+        colorInput.value = '0';
+        bwInput.value = String(total);
+        return;
+      }
+      if (color > total) {
+        color = total;
+        colorInput.value = String(color);
+      }
+      bwInput.value = String(Math.max(0, total - color));
+    }
+
+    function intakePdfPrintRequestFor(item) {
+      const file = item.file;
+      if (!(file.type === 'application/pdf' || /\.pdf$/i.test(file.name || ''))) return null;
+      const key = item.key;
+      const totalInput = document.getElementById(`intake-pdf-total-${key}`);
+      const colorInput = document.getElementById(`intake-pdf-color-${key}`);
+      const bwInput = document.getElementById(`intake-pdf-bw-${key}`);
+      const confirmInput = document.getElementById(`intake-pdf-confirm-${key}`);
+      const printInput = document.getElementById(`intake-pdf-print-${key}`);
+      const notesInput = document.getElementById(`intake-pdf-notes-${key}`);
+      if (!totalInput || !colorInput || !bwInput || !confirmInput || !printInput) return null;
+      return {
+        colour_print_active: Boolean(printInput.checked),
+        customer_confirmed_total_pages: Number(totalInput.value || 0),
+        customer_confirmed_color_pages: Number(colorInput.value || 0),
+        customer_confirmed_bw_pages: Number(bwInput.value || 0),
+        customer_page_confirmation: Boolean(confirmInput.checked),
+        confirmation_notes: notesInput?.value?.trim() || ''
+      };
+    }
+
+    async function attachmentPayloads() {
+      return intakeSelectedFiles.map(item => ({
+        file_name: item.file.name,
+        mime_type: item.file.type || 'application/octet-stream',
+        customer_pdf_print_request: intakePdfPrintRequestFor(item)
+      }));
+    }
+
+    function valueOf(id, fallback = '') {
+      return document.getElementById(id)?.value?.trim?.() ?? fallback;
+    }
+
+    function portalPhoneDigits(value) {
+      return String(value || '').replace(/\D/g, '');
+    }
+
+    function setCustomerLookupStatus(message, state = '') {
+      const target = document.getElementById('customer-lookup-status');
+      if (!target) return;
+      target.textContent = message;
+      target.className = `customer-lookup-status ${state}`.trim();
+    }
+
+    function bindCustomerLookup() {
+      const phoneInput = document.getElementById('intake-phone');
+      if (!phoneInput || phoneInput.dataset.lookupBound === '1') return;
+      phoneInput.dataset.lookupBound = '1';
+      phoneInput.addEventListener('input', () => {
+        const digits = portalPhoneDigits(phoneInput.value);
+        if (digits.length < 10) {
+          clearTimeout(customerLookupTimer);
+          setCustomerLookupStatus('Enter the phone number used earlier to reuse saved customer details.');
+          return;
+        }
+        clearTimeout(customerLookupTimer);
+        customerLookupTimer = setTimeout(() => lookupExistingCustomer(), 450);
+      });
+      phoneInput.addEventListener('blur', () => {
+        if (portalPhoneDigits(phoneInput.value).length >= 10) lookupExistingCustomer();
+      });
+    }
+
+    async function lookupExistingCustomer() {
+      const phoneInput = document.getElementById('intake-phone');
+      const button = document.getElementById('customer-lookup-button');
+      const digits = portalPhoneDigits(phoneInput?.value);
+      if (!phoneInput) return;
+      if (digits.length < 10) {
+        setCustomerLookupStatus('Enter a valid 10-digit customer phone number first.', 'warning');
+        phoneInput.focus();
+        return;
+      }
+      if (phoneInput.dataset.lookupPhone === digits.slice(-10)) return;
+      const requestId = ++customerLookupRequest;
+      if (button) button.disabled = true;
+      setCustomerLookupStatus('Checking saved customer details...');
+      try {
+        const response = await fetch(`/api/job-intake/customer-profile?org_id=${encodeURIComponent(orgId)}&phone=${encodeURIComponent(phoneInput.value)}`);
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || 'Unable to check saved customer details');
+        if (requestId !== customerLookupRequest || document.getElementById('intake-phone') !== phoneInput || portalPhoneDigits(phoneInput.value).slice(-10) !== digits.slice(-10)) return;
+        if (!result.found) {
+          phoneInput.dataset.lookupPhone = '';
+          setCustomerLookupStatus(result.ambiguous
+            ? (result.message || 'Several saved customer records use this number. Staff will confirm the correct record.')
+            : 'No saved customer record was found. Please enter your details for this request.', result.ambiguous ? 'warning' : '');
+          return;
+        }
+        const customer = result.customer || {};
+        const nameInput = document.getElementById('intake-name');
+        const emailInput = document.getElementById('intake-email');
+        const addressInput = document.getElementById('intake-address');
+        if (!nameInput || !emailInput || !addressInput) return;
+        nameInput.value = customer.name || '';
+        emailInput.value = customer.email || '';
+        addressInput.value = customer.address || '';
+        phoneInput.dataset.lookupPhone = digits.slice(-10);
+        setCustomerLookupStatus('Saved customer found. Your name, email and address were filled for this request.', 'found');
+      } catch (error) {
+        setCustomerLookupStatus(`${error.message}. You can still enter your details manually.`, 'warning');
+      } finally {
+        if (requestId === customerLookupRequest && button) button.disabled = false;
+      }
+    }
+
+    function showValidationError(message, fieldId) {
+      const status = document.getElementById('intake-status');
+      if (status) status.textContent = message;
+      alert(message);
+      const field = fieldId ? document.getElementById(fieldId) : null;
+      if (field?.focus) {
+        field.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        field.focus();
+      }
+    }
+
+    function resetIntakeForm() {
+      intakeSelectedFiles.forEach(item => {
+        if (item.previewUrl) URL.revokeObjectURL(item.previewUrl);
+      });
+      intakeSelectedFiles = [];
+      selectedServiceId = '';
+      portalDetailsVisible = false;
+      nextClientRequestId();
+      renderForm('Form cleared. Select a service to start again.');
+    }
+
+    async function submitIntake() {
+      if (intakeSubmitInProgress) return;
+      const status = document.getElementById('intake-status');
+      const submitButton = document.getElementById('intake-submit-button');
+      const submittedPhone = valueOf('intake-phone');
+      const consentAccepted = Boolean(document.getElementById('intake-consent')?.checked);
+      const quantityField = document.getElementById('intake-quantity');
+      const payload = {
+        org_id: orgId,
+        client_request_id: clientRequestId,
+        source_channel: 'QR',
+        customer_name: valueOf('intake-name'),
+        customer_phone: submittedPhone,
+        customer_email: valueOf('intake-email'),
+        customer_address: valueOf('intake-address'),
+        preferred_contact: document.getElementById('intake-contact')?.value || 'PHONE',
+        service_id: Number(selectedServiceId || document.getElementById('intake-service')?.value || 0) || null,
+        item_type: valueOf('intake-item-type'),
+        item_name: valueOf('intake-item-name'),
+        device_brand: valueOf('intake-device-brand'),
+        device_model: valueOf('intake-device-model'),
+        device_serial: valueOf('intake-device-serial'),
+        quantity: quantityField ? Number(quantityField.value || 1) : 1,
+        requested_delivery_at: valueOf('intake-delivery'),
+        issue_summary: valueOf('intake-summary'),
+        issue_details: valueOf('intake-details'),
+        consent_status: consentAccepted,
+        consent_text: consentAccepted
+          ? 'Customer confirmed QR intake details.'
+          : '',
+        attachments: []
+      };
+      if (!payload.service_id) {
+        showValidationError('Select an exact service before submitting.', 'intake-service');
+        return;
+      }
+      if (!payload.customer_name) {
+        showValidationError('Enter customer name before submitting.', 'intake-name');
+        return;
+      }
+      if (!payload.customer_phone) {
+        showValidationError('Enter customer phone number before submitting.', 'intake-phone');
+        return;
+      }
+      if (!payload.issue_summary) {
+        showValidationError('Enter a short summary of the job before submitting.', 'intake-summary');
+        return;
+      }
+      if (!consentAccepted) {
+        showValidationError('Please confirm the details and files before submitting.', 'intake-consent');
+        return;
+      }
+      intakeSubmitInProgress = true;
+      if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.textContent = 'Submitting...';
+      }
+      status.textContent = 'Preparing files and submitting request...';
+      try {
+        payload.attachments = await attachmentPayloads();
+        const form = new FormData();
+        form.append('payload', JSON.stringify(payload));
+        intakeSelectedFiles.forEach(item => form.append('attachment', item.file, item.file.name));
+        const response = await fetch('/api/job-intake/submit-multipart', {
+          method: 'POST',
+          body: form
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || 'Unable to submit request');
+        app.innerHTML = `
+          ${infoMessage(result.duplicate
+            ? `This request was already submitted. Order ID: ${result.order_id || result.request_number}.`
+            : `Request submitted successfully. Your Order ID is ${result.order_id || result.request_number}.`)}
+          <section class="hero">
+            <small>Tarangini Customer Portal</small>
+            <h1>Your Unique Order ID: ${esc(result.order_id || result.request_number)}</h1>
+            <p class="muted">Keep this Order ID safe. If you are on the same network, you can use it with your phone number to check the order status anytime.</p>
+            <div class="facts">
+              <div><span>Request Status</span><strong>${esc(result.status)}</strong></div>
+              <div><span>Files received</span><strong>${esc(result.attachment_count)}</strong></div>
+              <div><span>Billing Link</span><strong>${result.billing_party_linked ? `Customer #${esc(result.party_id)}` : 'Pending'}</strong></div>
+            </div>
+          </section>
+          <section class="card">
+            <h2>Check This Order Status</h2>
+            <p class="muted">Use your Order ID and phone number while connected to the same network.</p>
+            <div class="grid">
+              <div><label>Order ID</label><input id="lookup-order-id" value="${esc(result.order_id || result.request_number)}"></div>
+              <div><label>Phone Number</label><input id="lookup-phone" value="${esc(submittedPhone)}"></div>
+            </div>
+            <div class="actions">
+              <button type="button" class="secondary" onclick="resetIntakeForm()">Submit Another Request</button>
+              <button type="button" onclick="checkExistingOrderStatus()">Check Status Now</button>
+            </div>
+            <div id="lookup-result" style="margin-top:12px"></div>
+          </section>
+          <section class="card">
+            <h2>What happens next?</h2>
+            <p class="muted">Staff reviews the request, checks file quality, links your customer record in Billing, and converts the request into a production job with a tracked job token.</p>
+            <p class="muted">After conversion, the same Order ID will show the linked production job status and the accepted quotation too.</p>
+          </section>`;
+          localStorage.removeItem(`tarangini-intake-${orgId}`);
+          nextClientRequestId();
+      } catch (error) {
+        status.textContent = error.message;
+      } finally {
+        intakeSubmitInProgress = false;
+        const currentSubmitButton = document.getElementById('intake-submit-button');
+        if (currentSubmitButton) {
+          currentSubmitButton.disabled = false;
+          currentSubmitButton.textContent = 'Submit Request';
+        }
+      }
+    }
+
+    async function checkExistingOrderStatus() {
+      const target = document.getElementById('lookup-result');
+      const orderId = document.getElementById('lookup-order-id')?.value.trim() || '';
+      const phone = document.getElementById('lookup-phone')?.value.trim() || '';
+      if (!target) return;
+      if (!orderId || !phone) {
+        target.innerHTML = infoMessage('Enter your Order ID and phone number to check status.', true);
+        return;
+      }
+      target.innerHTML = '<p class="muted">Checking order status...</p>';
+      try {
+        const response = await fetch(
+          `/api/job-intake/status?org_id=${encodeURIComponent(orgId)}&order_id=${encodeURIComponent(orderId)}&phone=${encodeURIComponent(phone)}`
+        );
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || 'Unable to load order status');
+        target.innerHTML = statusCard(result);
+      } catch (error) {
+        target.innerHTML = infoMessage(error.message, true);
+      }
+    }
+
+    nextClientRequestId();
+    loadConfig();
+  </script>
+  <script>
+    if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+      navigator.serviceWorker.register('/service-worker.js').catch(() => {});
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tarangini Billing System Setup</title>
+  <link rel="stylesheet" href="setup.css">
+</head>
+<body>
+  <main class="setup-card">
+    <img src="../assets/tarangini.png" alt="Tarangini Billing" class="logo">
+    <p class="eyebrow">SYSTEM CONNECTION SETUP</p>
+    <h1>Tarangini Billing</h1>
+    <p class="intro">Select this computer's role. Use exactly one Main System; the other computers must be Client Systems.</p>
+
+    <label class="choice">
+      <input type="radio" name="role" value="host">
+      <span>
+        <strong>MAIN SYSTEM</strong>
+        <small>Stores the single shared database. Keep this system switched on while any client is billing.</small>
+      </span>
+      <b class="choice-tag">SERVER</b>
+    </label>
+
+    <label class="choice">
+      <input type="radio" name="role" value="client" checked>
+      <span>
+        <strong>CLIENT SYSTEM</strong>
+        <small>Connects to the Main System through the same office LAN or Wi-Fi network.</small>
+      </span>
+      <b class="choice-tag">CLIENT</b>
+    </label>
+
+    <div id="host-fields" class="host-fields">
+      <label class="host-keepalive">
+        <input type="checkbox" id="host-keepalive" checked>
+        <span>
+          <strong>Keep Main System active when this window is closed</strong>
+          <small>Recommended. The app hides to the Windows tray so customer QR intake, customer portal and client systems keep working.</small>
+        </span>
+      </label>
+      <label class="host-keepalive">
+        <input type="checkbox" id="host-start-login">
+        <span>
+          <strong>Start Main System when Windows starts</strong>
+          <small>Useful for a dedicated server PC. Keep this PC on UPS so customer portal and client systems come back after restart.</small>
+        </span>
+      </label>
+      <section class="service-card">
+        <div>
+          <strong>Always-On Windows Service</strong>
+          <small id="service-status">Checking service status...</small>
+          <small>Runs only the Main System server, customer portal, backups and attachment workers in the background. The desktop window remains separate.</small>
+        </div>
+        <div class="service-actions">
+          <button type="button" class="secondary" data-service-action="install">Install / Enable</button>
+          <button type="button" class="secondary" data-service-action="restart">Restart</button>
+          <button type="button" class="secondary" data-service-action="stop">Stop</button>
+          <button type="button" class="secondary danger" data-service-action="uninstall">Uninstall</button>
+        </div>
+        <small class="service-note">Windows may ask for administrator permission. Use this only on the one Main System PC.</small>
+      </section>
+      <details class="host-storage">
+        <summary>Storage locations for Main System</summary>
+        <p>Keep the accounting/job database in one safe location. Put heavy uploads and second backups on another drive if available.</p>
+        <label for="host-data-dir">Database folder</label>
+        <input id="host-data-dir" placeholder="Default: Windows app data database folder">
+        <small>Contains the single linked accounting + job-order database. Change only before daily work starts, then restart Tarangini.</small>
+        <label for="host-attachment-dir">Attachment folder</label>
+        <input id="host-attachment-dir" placeholder="Example: D:\Tarangini\Attachments">
+        <small>Recommended for customer photos, PDFs and production files when upload volume is high.</small>
+        <label for="host-backup-dir">Second-drive backup folder</label>
+        <input id="host-backup-dir" placeholder="Example: E:\Tarangini Backups">
+        <small>Automatic encrypted database backups can be written here.</small>
+      </details>
+    </div>
+
+    <div id="server-fields">
+      <label for="server-url">Main System IP Address</label>
+      <input id="server-url" placeholder="Example: 192.168.1.10">
+      <div class="setup-actions">
+        <button id="find-main" type="button" class="secondary">Find Main System Automatically</button>
+        <button id="test-main" type="button" class="secondary">Test Connection</button>
+      </div>
+      <div id="discovery-results" class="discovery-results"></div>
+      <small>On the Main System, run <b>ipconfig</b> and enter its IPv4 Address here.</small>
+      <small><b>Security:</b> Public or internet server addresses must use HTTPS. Plain HTTP is accepted only for private LAN addresses.</small>
+      <div class="device-card" id="device-card">
+        <span>Automatic Client Identity</span>
+        <strong id="device-system-name">Detecting this computer...</strong>
+        <small id="device-code">Client code will be assigned automatically.</small>
+        <small id="device-macs"></small>
+      </div>
+      <small>The client code is generated from this PC identity and MAC reference. Do not type codes manually; this prevents duplicate client setup.</small>
+      <small><b>First-time setup must connect once to the Main System</b> so companies, customers, items and login details can be cached securely.</small>
+      <label class="host-keepalive" style="margin-top:16px">
+        <input type="checkbox" id="client-portal-lan">
+        <span><strong>Enable Customer Portal on this Client during Main outage</strong>
+          <small>Opt-in for same-LAN customers. Tarangini manages a Private-network firewall rule for TCP port 3001.</small>
+          <small id="firewall-status">Checking firewall status...</small></span>
+      </label>
+    </div>
+
+    <p id="saved-config" class="saved-config"></p>
+    <p id="error" class="error"></p>
+    <button id="save">Confirm Selection and Open Billing</button>
+  </main>
+  <script src="setup.js"></script>
+</body>
+</html>

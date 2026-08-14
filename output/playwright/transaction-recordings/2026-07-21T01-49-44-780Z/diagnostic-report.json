@@ -1,0 +1,223 @@
+{
+  "generated_at": "2026-07-21T01:51:55.319Z",
+  "base_url": "http://127.0.0.1:3299",
+  "isolated_database": "C:\\Users\\user\\Documents\\Codex\\2026-06-18\\tarangini-job-order-integration\\fresh-merged-billing-workflow\\output\\playwright\\transaction-recordings\\2026-07-21T01-49-44-780Z\\isolated-test-data",
+  "total": 20,
+  "passed": 3,
+  "failed": 17,
+  "results": [
+    {
+      "name": "01-sale-invoice",
+      "title": "Sale Invoice",
+      "status": "PASS",
+      "duration_ms": 28630,
+      "issues": [],
+      "failed_requests": []
+    },
+    {
+      "name": "02-quotation",
+      "title": "Quotation",
+      "status": "PASS",
+      "duration_ms": 27944,
+      "issues": [],
+      "failed_requests": []
+    },
+    {
+      "name": "03-delivery-challan",
+      "title": "Delivery Challan with Internal Prices",
+      "status": "PASS",
+      "duration_ms": 21124,
+      "issues": [],
+      "failed_requests": []
+    },
+    {
+      "name": "04-proforma-invoice",
+      "title": "Proforma Invoice",
+      "status": "FAIL",
+      "duration_ms": 37577,
+      "issues": [
+        "Console error: Failed to load resource: net::ERR_CONNECTION_RESET",
+        "Console error: Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "Console error: Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "Console error: Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "Console error: Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "Console error: Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "Console error: Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "Console error: Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "Console error: Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "Console error: Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "Console error: Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "Console error: Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "Console error: Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "Console error: Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "Console error: Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "Console error: Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "Console error: Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "page.waitForResponse: Timeout 15000ms exceeded while waiting for event \"response\"\n    at fillBill (C:\\Users\\user\\Documents\\Codex\\2026-06-18\\tarangini-job-order-integration\\fresh-merged-billing-workflow\\tools\\record-transaction-demos.js:202:32)\n    at async run (C:\\Users\\user\\Documents\\Codex\\2026-06-18\\tarangini-job-order-integration\\fresh-merged-billing-workflow\\tools\\record-transaction-demos.js:528:7)",
+        "Console error: Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "Console error: Failed to load resource: net::ERR_CONNECTION_REFUSED"
+      ],
+      "failed_requests": []
+    },
+    {
+      "name": "05-project-printing",
+      "title": "Project Printing Invoice",
+      "status": "FAIL",
+      "duration_ms": 20,
+      "issues": [
+        "TypeError: fetch failed"
+      ],
+      "failed_requests": []
+    },
+    {
+      "name": "06-payment-received",
+      "title": "Payment Received",
+      "status": "FAIL",
+      "duration_ms": 3,
+      "issues": [
+        "TypeError: fetch failed"
+      ],
+      "failed_requests": []
+    },
+    {
+      "name": "07-payment-voucher",
+      "title": "Payment Voucher",
+      "status": "FAIL",
+      "duration_ms": 4,
+      "issues": [
+        "TypeError: fetch failed"
+      ],
+      "failed_requests": []
+    },
+    {
+      "name": "08-purchase-order",
+      "title": "Purchase Order",
+      "status": "FAIL",
+      "duration_ms": 4,
+      "issues": [
+        "TypeError: fetch failed"
+      ],
+      "failed_requests": []
+    },
+    {
+      "name": "09-purchase-bill",
+      "title": "Purchase Bill",
+      "status": "FAIL",
+      "duration_ms": 8,
+      "issues": [
+        "TypeError: fetch failed"
+      ],
+      "failed_requests": []
+    },
+    {
+      "name": "10-expense-voucher",
+      "title": "Expense Voucher",
+      "status": "FAIL",
+      "duration_ms": 3,
+      "issues": [
+        "TypeError: fetch failed"
+      ],
+      "failed_requests": []
+    },
+    {
+      "name": "11-credit-note",
+      "title": "Credit Note",
+      "status": "FAIL",
+      "duration_ms": 4,
+      "issues": [
+        "TypeError: fetch failed"
+      ],
+      "failed_requests": []
+    },
+    {
+      "name": "12-debit-note",
+      "title": "Debit Note",
+      "status": "FAIL",
+      "duration_ms": 4,
+      "issues": [
+        "TypeError: fetch failed"
+      ],
+      "failed_requests": []
+    },
+    {
+      "name": "13-return-refund",
+      "title": "Return and Refund",
+      "status": "FAIL",
+      "duration_ms": 5,
+      "issues": [
+        "TypeError: fetch failed"
+      ],
+      "failed_requests": []
+    },
+    {
+      "name": "14-journal-entry",
+      "title": "Journal Entry",
+      "status": "FAIL",
+      "duration_ms": 4,
+      "issues": [
+        "TypeError: fetch failed"
+      ],
+      "failed_requests": []
+    },
+    {
+      "name": "15-fast-pos",
+      "title": "Fast POS Sale",
+      "status": "FAIL",
+      "duration_ms": 4,
+      "issues": [
+        "TypeError: fetch failed"
+      ],
+      "failed_requests": []
+    },
+    {
+      "name": "16-job-order",
+      "title": "Job Order",
+      "status": "FAIL",
+      "duration_ms": 4,
+      "issues": [
+        "TypeError: fetch failed"
+      ],
+      "failed_requests": []
+    },
+    {
+      "name": "17-warranty-replacement",
+      "title": "Warranty Replacement",
+      "status": "FAIL",
+      "duration_ms": 3,
+      "issues": [
+        "TypeError: fetch failed"
+      ],
+      "failed_requests": []
+    },
+    {
+      "name": "18-customer-intake",
+      "title": "Customer Intake and PDF Analysis",
+      "status": "FAIL",
+      "duration_ms": 3161,
+      "issues": [
+        "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3299/customer-intake.html?org=1\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:3299/customer-intake.html?org=1\", waiting until \"networkidle\"\u001b[22m\n\n    at Object.run (C:\\Users\\user\\Documents\\Codex\\2026-06-18\\tarangini-job-order-integration\\fresh-merged-billing-workflow\\tools\\record-transaction-demos.js:442:20)\n    at run (C:\\Users\\user\\Documents\\Codex\\2026-06-18\\tarangini-job-order-integration\\fresh-merged-billing-workflow\\tools\\record-transaction-demos.js:528:18)"
+      ],
+      "failed_requests": []
+    },
+    {
+      "name": "19-customer-order-tracking",
+      "title": "Customer Order Tracking",
+      "status": "FAIL",
+      "duration_ms": 859,
+      "issues": [
+        "AssertionError [ERR_ASSERTION]: Customer intake must succeed before tracking\n    at Object.run (C:\\Users\\user\\Documents\\Codex\\2026-06-18\\tarangini-job-order-integration\\fresh-merged-billing-workflow\\tools\\record-transaction-demos.js:475:16)\n    at run (C:\\Users\\user\\Documents\\Codex\\2026-06-18\\tarangini-job-order-integration\\fresh-merged-billing-workflow\\tools\\record-transaction-demos.js:528:18)"
+      ],
+      "failed_requests": []
+    },
+    {
+      "name": "20-owner-daily-log",
+      "title": "Owner Daily Log",
+      "status": "FAIL",
+      "duration_ms": 2,
+      "issues": [
+        "TypeError: fetch failed"
+      ],
+      "failed_requests": []
+    }
+  ]
+}

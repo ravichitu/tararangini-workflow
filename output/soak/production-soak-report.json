@@ -1,0 +1,24 @@
+{
+  "tested_at": "2026-07-23T19:23:25.756Z",
+  "duration_seconds": 5,
+  "virtual_clients": 2,
+  "operation_interval_ms": 200,
+  "scope": "Virtual-client mixed smoke: health, quotation draft, job creation and consented customer intake. This does not replace a physical multi-PC soak.",
+  "operations": 46,
+  "successful_operations": 46,
+  "failed_operations": 0,
+  "status_codes": {
+    "200": 46
+  },
+  "latency_ms": {
+    "p50": 15.11,
+    "p95": 29.21,
+    "max": 33.98
+  },
+  "server_memory_mb": {
+    "before": 77.73,
+    "after": 87.85,
+    "rss_delta": 10.12
+  },
+  "failures": []
+}

@@ -1,0 +1,295 @@
+{
+  "generated_at": "2026-08-06T20:04:52.963Z",
+  "started_at": "2026-08-06T20:01:01.348Z",
+  "application_version": "1.1.23",
+  "mode": "full-suite-plus-concurrency-smoke",
+  "suites": [
+    {
+      "name": "security",
+      "command": "npm run test:security",
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 10.851,
+      "output": "\n> tarangini-workflow-suite@1.1.23 test:security\n> node tests/security.integration.js\n\nSecurity integration tests passed\n"
+    },
+    {
+      "name": "security-hardening",
+      "command": "npm run test:security-hardening",
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 12.134,
+      "output": "\n> tarangini-workflow-suite@1.1.23 test:security-hardening\n> node tests/security-hardening.integration.js\n\nSecurity hardening integration tests passed\n"
+    },
+    {
+      "name": "operator-log",
+      "command": "npm run test:operator-log",
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 7.686,
+      "output": "\n> tarangini-workflow-suite@1.1.23 test:operator-log\n> node tests/operator-daily-log.integration.js\n\nOperator daily log integration tests passed\n"
+    },
+    {
+      "name": "backup",
+      "command": "npm run test:backup",
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 9.608,
+      "output": "\n> tarangini-workflow-suite@1.1.23 test:backup\n> node tests/backup-roundtrip.integration.js\n\nBackup round-trip integration tests passed\n"
+    },
+    {
+      "name": "deployment",
+      "command": "npm run test:deployment",
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 7.682,
+      "output": "\n> tarangini-workflow-suite@1.1.23 test:deployment\n> node tests/deployment-maintenance.integration.js\n\nHTTPS deployment and maintenance integration tests passed\n"
+    },
+    {
+      "name": "attachments",
+      "command": "npm run test:attachments",
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 7.221,
+      "output": "\n> tarangini-workflow-suite@1.1.23 test:attachments\n> node tests/attachment-pipeline.integration.js\n\nAttachment storage and async analysis integration tests passed\n"
+    },
+    {
+      "name": "tax-inclusive",
+      "command": "npm run test:tax-inclusive",
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 6.122,
+      "output": "\n> tarangini-workflow-suite@1.1.23 test:tax-inclusive\n> node tests/tax-inclusive-transactions.integration.js\n\nTax-inclusive and universal round-off integration tests passed\n"
+    },
+    {
+      "name": "device-identity",
+      "command": "npm run test:device-identity",
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 2.718,
+      "output": "\n> tarangini-workflow-suite@1.1.23 test:device-identity\n> node tests/device-identity.integration.js\n\nDevice identity integration tests passed\n"
+    },
+    {
+      "name": "new-features",
+      "command": "node tests/new-features.integration.js",
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 5.87,
+      "output": "New feature integration tests passed\n"
+    },
+    {
+      "name": "advanced-upgrades",
+      "command": "node tests/advanced-upgrades.integration.js",
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 4.938,
+      "output": "Advanced upgrade integration tests passed\n"
+    },
+    {
+      "name": "user-admin",
+      "command": "npm run test:user-admin",
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 9.25,
+      "output": "\n> tarangini-workflow-suite@1.1.23 test:user-admin\n> node tests/user-administration.integration.js\n\nUser administration integration tests passed\n"
+    },
+    {
+      "name": "jobs",
+      "command": "npm run test:jobs",
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 9.501,
+      "output": "\n> tarangini-workflow-suite@1.1.23 test:jobs\n> node tests/job-workflow.integration.js\n\nJob workflow integration tests passed\n"
+    },
+    {
+      "name": "offline-sync",
+      "command": "npm run test:offline-sync",
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 13.646,
+      "output": "\n> tarangini-workflow-suite@1.1.23 test:offline-sync\n> node tests/offline-sync.integration.js\n\nOffline synchronization integration tests passed\n"
+    },
+    {
+      "name": "v2.3",
+      "command": "npm run test:v2.3",
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 5.419,
+      "output": "\n> tarangini-workflow-suite@1.1.23 test:v2.3\n> node tests/v2.3-upgrade.integration.js\n\nVersion 2.3 upgrade integration tests passed\n"
+    },
+    {
+      "name": "responsive-web",
+      "command": "npm run test:responsive-web",
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 22.762,
+      "output": "\n> tarangini-workflow-suite@1.1.23 test:responsive-web\n> node tests/responsive-chrome.integration.js\n\nResponsive Chrome integration tests passed\n"
+    },
+    {
+      "name": "responsive-ui",
+      "command": "npm run test:responsive",
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 94.4,
+      "output": "\n> tarangini-workflow-suite@1.1.23 test:responsive\n> node tests/responsive-ui.integration.js\n\nResponsive UI integration tests passed\n"
+    }
+  ],
+  "concurrency_smoke": {
+    "status": "passed",
+    "requests": 200,
+    "successful": 200,
+    "p50_ms": 138.32,
+    "p95_ms": 182.33,
+    "max_ms": 185.19,
+    "note": "Health-endpoint smoke only; not a full customer upload or invoice-write benchmark."
+  },
+  "capacity_evidence": [
+    {
+      "file": "capacity-100k-results.json",
+      "status": "available",
+      "data": {
+        "tested_at": "2026-08-06T20:01:12.350Z",
+        "isolated_database": "C:\\Users\\user\\Documents\\Codex\\2026-06-18\\tarangini-job-order-integration\\fresh-merged-billing-workflow\\.capacity-test\\tarangini.db",
+        "records": 100000,
+        "insertion_and_save_seconds": 11,
+        "database_size_mb": 37.19,
+        "integrity": "ok",
+        "queries": {
+          "invoice_search": {
+            "milliseconds": 24.6,
+            "rows": 1
+          },
+          "monthly_sales": {
+            "milliseconds": 80.2,
+            "rows": 9
+          },
+          "party_balance_inputs": {
+            "milliseconds": 47.89,
+            "rows": 5000
+          },
+          "stock_inputs": {
+            "milliseconds": 6.92,
+            "rows": 1
+          },
+          "bank_search": {
+            "milliseconds": 0.45,
+            "rows": 1
+          }
+        }
+      }
+    },
+    {
+      "file": "capacity-million-each-results.json",
+      "status": "available",
+      "data": {
+        "tested_at": "2026-07-15T20:59:18.313Z",
+        "scope": "10 lakh records in each of 8 primary transaction categories, simultaneously",
+        "primary_transactions": 8000000,
+        "journal_lines": 2000000,
+        "total_transaction_rows": 10000000,
+        "counts": {
+          "bills": 1000000,
+          "payments": 1000000,
+          "purchases": 1000000,
+          "expenses": 1000000,
+          "notes": 1000000,
+          "purchase_orders": 1000000,
+          "bank_rows": 1000000,
+          "journals": 1000000
+        },
+        "insertion_seconds_by_type": {
+          "bills": 123.17,
+          "payments": 19.61,
+          "purchases": 13.91,
+          "expenses": 12.92,
+          "notes": 12.98,
+          "purchase_orders": 13.13,
+          "bank_rows": 12.11,
+          "journals": 14.27,
+          "journal_lines": 12.16,
+          "database_save": 0
+        },
+        "total_seconds": 357.83,
+        "database_size_mb": 1974.45,
+        "integrity": "ok",
+        "integrity_check_seconds": 80.48,
+        "memory_mb": {
+          "rss": 135.31,
+          "heapTotal": 71.98,
+          "heapUsed": 18.55,
+          "external": 2.1,
+          "arrayBuffers": 0.14
+        },
+        "queries": {
+          "invoice_exact_search": {
+            "milliseconds": 0.13,
+            "rows": 1,
+            "first": {
+              "id": 1000000,
+              "bill_number": "MIL/SB/2026-27/999999"
+            }
+          },
+          "invoice_text_search": {
+            "milliseconds": 150.51,
+            "rows": 1,
+            "first": {
+              "id": 1000000,
+              "bill_number": "MIL/SB/2026-27/999999"
+            }
+          },
+          "monthly_sales": {
+            "milliseconds": 10343.24,
+            "rows": 9,
+            "first": {
+              "substr(bill_date,1,7)": "2026-04",
+              "SUM(grand_total)": 13111098
+            }
+          },
+          "party_balance_inputs": {
+            "milliseconds": 9518.22,
+            "rows": 1,
+            "first": {
+              "party_id": 2,
+              "SUM(grand_total)": 118000000
+            }
+          },
+          "payment_summary": {
+            "milliseconds": 1432.14,
+            "rows": 4,
+            "first": {
+              "type": "paid",
+              "mode": "account",
+              "COUNT(*)": 166666,
+              "SUM(amount)": 19666588
+            }
+          },
+          "expense_summary": {
+            "milliseconds": 1328.03,
+            "rows": 1,
+            "first": {
+              "account_id": 749,
+              "COUNT(*)": 1000000,
+              "SUM(amount)": 50000000
+            }
+          },
+          "journal_trial_input": {
+            "milliseconds": 2444.51,
+            "rows": 2,
+            "first": {
+              "account_id": 736,
+              "SUM(jl.debit)": 50000000,
+              "SUM(jl.credit)": 0
+            }
+          },
+          "bank_exact_search": {
+            "milliseconds": 0.17,
+            "rows": 1,
+            "first": {
+              "id": 999999
+            }
+          }
+        }
+      }
+    }
+  ],
+  "recommendation": "Treat 200 as the configured target for customer sessions only after deployment uses HTTPS, sufficient RAM/SSD, controlled upload sizing, and a dedicated Main System. This smoke test does not certify 200 simultaneous heavy uploads or writes."
+}

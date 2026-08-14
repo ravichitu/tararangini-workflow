@@ -1,0 +1,30 @@
+{
+  "tested_at": "2026-08-06T20:01:12.350Z",
+  "isolated_database": "C:\\Users\\user\\Documents\\Codex\\2026-06-18\\tarangini-job-order-integration\\fresh-merged-billing-workflow\\.capacity-test\\tarangini.db",
+  "records": 100000,
+  "insertion_and_save_seconds": 11,
+  "database_size_mb": 37.19,
+  "integrity": "ok",
+  "queries": {
+    "invoice_search": {
+      "milliseconds": 24.6,
+      "rows": 1
+    },
+    "monthly_sales": {
+      "milliseconds": 80.2,
+      "rows": 9
+    },
+    "party_balance_inputs": {
+      "milliseconds": 47.89,
+      "rows": 5000
+    },
+    "stock_inputs": {
+      "milliseconds": 6.92,
+      "rows": 1
+    },
+    "bank_search": {
+      "milliseconds": 0.45,
+      "rows": 1
+    }
+  }
+}

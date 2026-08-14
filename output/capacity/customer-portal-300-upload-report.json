@@ -1,0 +1,64 @@
+{
+  "tested_at": "2026-08-06T20:10:34.756Z",
+  "profile": {
+    "profile_name": "public",
+    "request_body_limit_mb": 75,
+    "customer_upload_limit_mb": 20,
+    "staff_upload_limit_mb": 20,
+    "auth_rate_limit_max": 20,
+    "customer_portal_rate_limit_max": 5000,
+    "target_concurrent_customers": 300,
+    "attachment_storage_mode": "filesystem",
+    "attachment_analysis_mode": "async",
+    "attachment_retention_days": 7,
+    "channels_ready": {
+      "desktop": true,
+      "pwa": true,
+      "android_pwa": true,
+      "website_api": true
+    }
+  },
+  "customers": 300,
+  "simultaneous_upload_requests": 300,
+  "upload_mode": "multipart",
+  "unique_payloads": true,
+  "bytes_per_upload": 5242880,
+  "total_upload_bytes": 1572864000,
+  "successful_uploads": 300,
+  "failed_uploads": 0,
+  "elapsed_seconds": 59.11,
+  "latency_ms": {
+    "p50": 44237.98,
+    "p95": 56801.48,
+    "max": 58627.7
+  },
+  "memory_mb": {
+    "load_generator": {
+      "before": {
+        "rss": 103.98,
+        "heapTotal": 52.98,
+        "heapUsed": 26.45,
+        "external": 14.32,
+        "arrayBuffers": 10.59
+      },
+      "after": {
+        "rss": 1708.68,
+        "heapTotal": 22.11,
+        "heapUsed": 14.53,
+        "external": 109.07,
+        "arrayBuffers": 1605.33
+      },
+      "rss_delta": 1604.7
+    },
+    "server": {
+      "before": 77.7,
+      "after": 187.88,
+      "rss_delta": 110.18
+    }
+  },
+  "storage_mb": {
+    "attachment_files": 1500,
+    "database": 6.95
+  },
+  "failures": []
+}

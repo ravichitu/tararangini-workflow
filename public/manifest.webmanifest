@@ -1,0 +1,19 @@
+{
+  "name": "Tarangini Workflow Suite",
+  "short_name": "Tarangini",
+  "description": "Tarangini merged billing, job workflow, and customer portal suite",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f4f8fa",
+  "theme_color": "#087f86",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/tarangini.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

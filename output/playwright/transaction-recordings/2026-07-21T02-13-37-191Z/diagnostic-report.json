@@ -1,0 +1,170 @@
+{
+  "generated_at": "2026-07-21T02:16:59.996Z",
+  "base_url": "http://127.0.0.1:3299",
+  "isolated_database": "C:\\Users\\user\\Documents\\Codex\\2026-06-18\\tarangini-job-order-integration\\fresh-merged-billing-workflow\\output\\playwright\\transaction-recordings\\2026-07-21T02-13-37-191Z\\isolated-test-data",
+  "total": 20,
+  "passed": 20,
+  "failed": 0,
+  "results": [
+    {
+      "name": "01-sale-invoice",
+      "title": "Sale Invoice",
+      "status": "PASS",
+      "duration_ms": 16840,
+      "issues": [],
+      "failed_requests": []
+    },
+    {
+      "name": "02-quotation",
+      "title": "Quotation",
+      "status": "PASS",
+      "duration_ms": 16475,
+      "issues": [],
+      "failed_requests": []
+    },
+    {
+      "name": "03-delivery-challan",
+      "title": "Delivery Challan with Internal Prices",
+      "status": "PASS",
+      "duration_ms": 13759,
+      "issues": [],
+      "failed_requests": []
+    },
+    {
+      "name": "04-proforma-invoice",
+      "title": "Proforma Invoice",
+      "status": "PASS",
+      "duration_ms": 16136,
+      "issues": [],
+      "failed_requests": []
+    },
+    {
+      "name": "05-project-printing",
+      "title": "Project Printing Invoice",
+      "status": "PASS",
+      "duration_ms": 8843,
+      "issues": [],
+      "failed_requests": []
+    },
+    {
+      "name": "06-payment-received",
+      "title": "Payment Received",
+      "status": "PASS",
+      "duration_ms": 7776,
+      "issues": [],
+      "failed_requests": []
+    },
+    {
+      "name": "07-payment-voucher",
+      "title": "Payment Voucher",
+      "status": "PASS",
+      "duration_ms": 8242,
+      "issues": [],
+      "failed_requests": []
+    },
+    {
+      "name": "08-purchase-order",
+      "title": "Purchase Order",
+      "status": "PASS",
+      "duration_ms": 7001,
+      "issues": [],
+      "failed_requests": []
+    },
+    {
+      "name": "09-purchase-bill",
+      "title": "Purchase Bill",
+      "status": "PASS",
+      "duration_ms": 7171,
+      "issues": [],
+      "failed_requests": []
+    },
+    {
+      "name": "10-expense-voucher",
+      "title": "Expense Voucher",
+      "status": "PASS",
+      "duration_ms": 6056,
+      "issues": [],
+      "failed_requests": []
+    },
+    {
+      "name": "11-credit-note",
+      "title": "Credit Note",
+      "status": "PASS",
+      "duration_ms": 6437,
+      "issues": [],
+      "failed_requests": []
+    },
+    {
+      "name": "12-debit-note",
+      "title": "Debit Note",
+      "status": "PASS",
+      "duration_ms": 6423,
+      "issues": [],
+      "failed_requests": []
+    },
+    {
+      "name": "13-return-refund",
+      "title": "Return and Refund",
+      "status": "PASS",
+      "duration_ms": 5751,
+      "issues": [],
+      "failed_requests": []
+    },
+    {
+      "name": "14-journal-entry",
+      "title": "Journal Entry",
+      "status": "PASS",
+      "duration_ms": 6973,
+      "issues": [],
+      "failed_requests": []
+    },
+    {
+      "name": "15-fast-pos",
+      "title": "Fast POS Sale",
+      "status": "PASS",
+      "duration_ms": 3991,
+      "issues": [],
+      "failed_requests": []
+    },
+    {
+      "name": "16-job-order",
+      "title": "Job Order",
+      "status": "PASS",
+      "duration_ms": 10047,
+      "issues": [],
+      "failed_requests": []
+    },
+    {
+      "name": "17-warranty-replacement",
+      "title": "Warranty Replacement",
+      "status": "PASS",
+      "duration_ms": 10361,
+      "issues": [],
+      "failed_requests": []
+    },
+    {
+      "name": "18-customer-intake",
+      "title": "Customer Intake and PDF Analysis",
+      "status": "PASS",
+      "duration_ms": 15555,
+      "issues": [],
+      "failed_requests": []
+    },
+    {
+      "name": "19-customer-order-tracking",
+      "title": "Customer Order Tracking",
+      "status": "PASS",
+      "duration_ms": 4098,
+      "issues": [],
+      "failed_requests": []
+    },
+    {
+      "name": "20-owner-daily-log",
+      "title": "Owner Daily Log",
+      "status": "PASS",
+      "duration_ms": 9414,
+      "issues": [],
+      "failed_requests": []
+    }
+  ]
+}

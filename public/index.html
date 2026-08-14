@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tarangini Workflow Suite</title>
+<link rel="icon" type="image/png" href="tarangini.png">
+<meta name="theme-color" content="#087f86">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Tarangini">
+<link rel="manifest" href="/manifest.webmanifest">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=1.1.10-catalog-owner-log-2">
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">
+      <img class="login-icon" src="tarangini.png" alt="">
+      <h1>Tarangini Suite</h1>
+      <p>Multi-Org Accounting & Billing</p>
+    </div>
+    <div class="form-group">
+      <label>Username</label>
+      <input type="text" id="login-username" placeholder="Enter username" autocomplete="username">
+    </div>
+    <div class="form-group">
+      <label>PIN / Password</label>
+      <input type="password" id="login-password" placeholder="Enter PIN or recovery password" autocomplete="current-password">
+    </div>
+    <div id="login-error" class="error-msg" style="display:none"></div>
+    <button class="btn btn-primary btn-full" onclick="doLogin()">Sign In</button>
+    <p class="login-hint">Existing users may use their password until Owner1 assigns a PIN.</p>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app" style="display:none">
+  <!-- SIDEBAR -->
+  <div id="sidebar">
+    <div class="sidebar-logo">
+      <img class="logo-mark" src="tarangini.png" alt="">
+      <div class="shop-name-display" id="sidebar-org-name">Tarangini Suite</div>
+    </div>
+
+    <div class="shop-selector-wrap">
+      <select id="org-selector" onchange="switchOrg(this.value)">
+        <option value="">Loading...</option>
+      </select>
+    </div>
+
+    <div class="global-transaction-search">
+      <label>Search Transactions</label>
+      <div class="global-transaction-search-box">
+        <input id="global-transaction-search" type="search"
+          placeholder="Bill no, party, phone..."
+          autocomplete="off"
+          oninput="globalTransactionSearch(this.value)"
+          onkeydown="globalTransactionSearchKey(event)">
+        <button type="button" onclick="runGlobalTransactionSearch()">Search</button>
+      </div>
+      <div id="global-transaction-results" class="global-transaction-results" style="display:none"></div>
+    </div>
+
+    <div class="fy-selector-wrap">
+      <label>Financial Year</label>
+      <select id="fy-selector" onchange="switchFY(this.value)"></select>
+    </div>
+
+    <nav id="sidebar-nav">
+      <div class="nav-section">
+        <div class="nav-label">Overview</div>
+        <div class="nav-item active" onclick="navigate('dashboard')" data-page="dashboard">
+          <span class="icon">📊</span> Dashboard
+        </div>
+      </div>
+      <div class="nav-section">
+        <div class="nav-label">Billing</div>
+        <div class="nav-item" onclick="navigate('pos')" data-page="pos">
+          <span class="icon">POS</span> Fast POS Counter
+        </div>
+        <div class="nav-item" onclick="navigate('sale')" data-page="sale">
+          <span class="icon">🧾</span> Sale Bill
+        </div>
+        <div class="nav-item" onclick="navigate('project-printing')" data-page="project-printing">
+          <span class="icon">PP</span> Project Printing Invoice
+        </div>
+        <div class="nav-item" onclick="navigate('quotation')" data-page="quotation">
+          <span class="icon">📋</span> Quotation
+        </div>
+        <div class="nav-item" onclick="navigate('challan')" data-page="challan">
+          <span class="icon">🚚</span> Delivery Challan
+        </div>
+        <div class="nav-item" onclick="navigate('proforma')" data-page="proforma">
+          <span class="icon">📄</span> Proforma Invoice
+        </div>
+      </div>
+      <div class="nav-section">
+        <div class="nav-label">Payments</div>
+        <div class="nav-item" onclick="navigate('payment-received')" data-page="payment-received">
+          <span class="icon">💰</span> Payment Received
+        </div>
+        <div class="nav-item" onclick="navigate('payment-voucher')" data-page="payment-voucher">
+          <span class="icon">💸</span> Payment Voucher
+        </div>
+      </div>
+      <div class="nav-section" id="nav-job-workflow-section">
+        <div class="nav-label">Job Workflow</div>
+        <div class="nav-item" onclick="navigate('jobs')" data-page="jobs">
+          <span class="icon">J</span> Job Dashboard
+        </div>
+        <div class="nav-item" onclick="navigate('operator-log')" data-page="operator-log">
+          <span class="icon">DL</span> Owner & Operator Daily Log
+        </div>
+        <div class="nav-item" onclick="navigate('job-services')" data-page="job-services">
+          <span class="icon">SB</span> Service Boards
+        </div>
+        <div class="nav-item" onclick="navigate('warranty-replacements')" data-page="warranty-replacements">
+          <span class="icon">WR</span> Warranty Replacements
+        </div>
+        <div class="nav-item" onclick="navigate('job-new')" data-page="job-new">
+          <span class="icon">+</span> New Job Order
+        </div>
+        <div class="nav-item" onclick="navigate('job-catalog')" data-page="job-catalog">
+          <span class="icon">C</span> Service Catalog
+        </div>
+        <div class="nav-item" onclick="navigate('job-whatsapp')" data-page="job-whatsapp">
+          <span class="icon">W</span> Open WhatsApp
+        </div>
+      </div>
+      <div class="nav-section">
+        <div class="nav-label">Records</div>
+        <div class="nav-item" onclick="navigate('returns')" data-page="returns"><span class="icon">RT</span> Returns & Refunds</div>
+        <div class="nav-item" onclick="navigate('shifts')" data-page="shifts"><span class="icon">SH</span> Counter Shifts</div>
+        <div class="nav-item" onclick="navigate('purchase-orders')" data-page="purchase-orders"><span class="icon">PO</span> Purchase Orders</div>
+        <div class="nav-item" onclick="navigate('purchase')" data-page="purchase"><span class="icon">P</span> Purchase Bills</div>
+        <div class="nav-item" onclick="navigate('expense')" data-page="expense"><span class="icon">E</span> Expense Vouchers</div>
+        <div class="nav-item" onclick="navigate('notes')" data-page="notes"><span class="icon">N</span> Credit / Debit Notes</div>
+        <div class="nav-item" onclick="navigate('stock')" data-page="stock"><span class="icon">S</span> Inventory & Stock</div>
+        <div class="nav-item" onclick="navigate('bank-reconciliation')" data-page="bank-reconciliation"><span class="icon">B</span> Bank Reconciliation</div>
+        <div class="nav-item" onclick="navigate('bills-list')" data-page="bills-list">
+          <span class="icon">📑</span> All Bills
+        </div>
+        <div class="nav-item" onclick="navigate('invoice-corrections')" data-page="invoice-corrections">
+          <span class="icon">CR</span> Invoice Corrections
+        </div>
+        <div class="nav-item" onclick="navigate('parties')" data-page="parties">
+          <span class="icon">👥</span> Parties
+        </div>
+        <div class="nav-item" onclick="navigate('items')" data-page="items">
+          <span class="icon">📦</span> Items
+        </div>
+      </div>
+      <div class="nav-section">
+        <div class="nav-label">Reports</div>
+        <div class="nav-item" onclick="navigate('report-centre')" data-page="report-centre"><span class="icon">RC</span> Report Centre</div>
+        <div class="nav-item" onclick="navigate('collections')" data-page="collections"><span class="icon">AR</span> Collections &amp; Ageing</div>
+        <div class="nav-item" onclick="navigate('party-statement')" data-page="party-statement">
+          <span class="icon">📈</span> Party Statement
+        </div>
+        <div class="nav-item" onclick="navigate('sales-report')" data-page="sales-report">
+          <span class="icon">📉</span> Sales Report
+        </div>
+        <div class="nav-item" onclick="navigate('financial-reports')" data-page="financial-reports">
+          <span class="icon">&#9776;</span> Financial Reports
+        </div>
+        <div class="nav-item" onclick="navigate('invoice-status')" data-page="invoice-status"><span class="icon">R</span> Invoice Status</div>
+        <div class="nav-item" onclick="navigate('gst-reports')" data-page="gst-reports"><span class="icon">G</span> GST Reports</div>
+        <div class="nav-item" onclick="navigate('profitability')" data-page="profitability"><span class="icon">P</span> Profitability</div>
+        <div class="nav-item" onclick="navigate('journal-entry')" data-page="journal-entry" id="nav-journal">
+          <span class="icon">+</span> Journal Entry
+        </div>
+      </div>
+      <div class="nav-section">
+        <div class="nav-label">System</div>
+        <div class="nav-item" onclick="navigate('offline-sync')" data-page="offline-sync"><span class="icon">O</span> Offline Sync</div>
+        <div class="nav-item" onclick="navigate('backup')" data-page="backup" id="nav-backup">
+          <span class="icon">💾</span> Backup & Restore
+        </div>
+        <div class="nav-item" onclick="navigate('network-status')" data-page="network-status"><span class="icon">N</span> Network Status</div>
+        <div class="nav-item" onclick="navigate('scheduled-reports')" data-page="scheduled-reports"><span class="icon">M</span> Scheduled Reports</div>
+        <div class="nav-item" onclick="navigate('diagnostics')" data-page="diagnostics"><span class="icon">D</span> Data Diagnostics</div>
+        <div class="nav-item" onclick="navigate('update-manager')" data-page="update-manager"><span class="icon">U</span> Update Manager</div>
+        <div class="nav-item" onclick="navigate('help')" data-page="help"><span class="icon">?</span> Help & FAQ</div>
+        <div class="nav-item" onclick="navigate('settings')" data-page="settings" id="nav-owner-only">
+          <span class="icon">⚙️</span> Settings
+        </div>
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button class="system-setup-button" onclick="openDesktopNetworkSetup()" title="Select Main System or Client System">
+        Main / Client Setup
+      </button>
+      <div class="user-info">
+        <div class="user-avatar" id="user-avatar">O</div>
+        <div>
+          <div id="user-name-display">Owner</div>
+          <div id="user-role-display" class="user-role">owner</div>
+        </div>
+      </div>
+      <button class="btn-icon" onclick="doLogout()" title="Logout">⏻</button>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div id="main">
+    <div id="topbar">
+      <button class="mobile-menu-button" onclick="toggleMobileSidebar()" aria-label="Open navigation">&#9776;</button>
+      <div class="topbar-title" id="page-title">Dashboard</div>
+      <div class="topbar-chips">
+        <button id="install-mobile-app" class="chip install-app-chip" style="display:none" type="button">Install App</button>
+        <button class="chip status-chip-button" id="offline-status-chip" style="display:none" type="button" onclick="navigate('offline-sync')" title="Open offline synchronization details" aria-label="Open offline synchronization details">Online</button>
+        <span class="chip" id="topbar-org">—</span>
+        <span class="chip chip-fy" id="topbar-fy">FY 2025-26</span>
+      </div>
+      <div id="topbar-actions"></div>
+    </div>
+    <div id="content">
+      <!-- Dynamic page content loaded here -->
+    </div>
+  </div>
+</div>
+
+<!-- IDLE WARNING -->
+<div id="idle-warning" class="security-overlay" style="display:none">
+  <div class="security-card warning-card">
+    <div class="security-symbol">!</div>
+    <h2>Automatic Lock Warning</h2>
+    <p>No activity was detected. Tarangini Workflow Suite will lock in</p>
+    <div id="idle-countdown" class="idle-countdown">60</div>
+    <p class="security-muted">seconds</p>
+    <button class="btn btn-primary btn-full" onclick="continueSession()">Continue Working</button>
+    <button class="btn btn-secondary btn-full" onclick="lockApplication('manual')" style="margin-top:8px">Lock Now</button>
+  </div>
+</div>
+
+<!-- APPLICATION LOCK -->
+<div id="application-lock" class="security-overlay lock-overlay" style="display:none">
+  <div class="security-card">
+    <img src="tarangini.png" alt="" class="security-logo">
+    <div class="security-kicker">SECURITY LOCK</div>
+    <h2>Tarangini Workflow Suite is Locked</h2>
+    <p>Signed in as <strong id="lock-user-name">User</strong></p>
+    <div class="form-group" style="text-align:left;margin-top:20px">
+      <label>PIN</label>
+      <input type="password" id="unlock-password" placeholder="Enter your PIN" inputmode="numeric" autocomplete="current-password">
+    </div>
+    <div id="unlock-error" class="error-msg" style="display:none;text-align:left"></div>
+    <button id="unlock-button" class="btn btn-primary btn-full" onclick="unlockApplication()">Unlock</button>
+    <button class="btn btn-secondary btn-full" onclick="logoutFromLock()" style="margin-top:8px">Sign Out</button>
+  </div>
+</div>
+
+<!-- BILL PREVIEW MODAL -->
+<div id="preview-modal" class="modal-overlay" style="display:none">
+  <div class="modal-box modal-large preview-modal-box">
+    <div class="modal-header">
+      <h3 id="preview-title">Bill Preview</h3>
+      <div id="preview-action-bar" class="preview-action-bar">
+        <div id="preview-workflow-actions" class="preview-action-group"></div>
+        <div id="preview-share-actions" class="preview-action-group"></div>
+        <div class="preview-action-group preview-utility-actions">
+        <button class="btn btn-primary" onclick="printBill()">🖨️ Print</button>
+        <button class="btn btn-gold" onclick="downloadBillPDF()">⬇️ Save PDF</button>
+        <button class="btn btn-secondary" onclick="closePreview()">✕ Close</button>
+        </div>
+      </div>
+    </div>
+    <div id="preview-content" class="preview-scroll">
+      <!-- A4 bill renders here -->
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM MODAL -->
+<div id="confirm-modal" class="modal-overlay" style="display:none">
+  <div class="modal-box modal-small">
+    <h3 id="confirm-title">Confirm</h3>
+    <p id="confirm-msg" style="margin:12px 0;color:var(--text2)"></p>
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px">
+      <button class="btn btn-secondary" onclick="closeConfirm(false)">Cancel</button>
+      <button class="btn btn-danger" id="confirm-ok-btn" onclick="closeConfirm(true)">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast-container"></div>
+
+<script src="app-2.4.0.js?v=1.1.10-catalog-owner-log-2"></script>
+</body>
+</html>

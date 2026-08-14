@@ -1,0 +1,1272 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src 'unsafe-inline' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<title>Tarangini Complete Mind Map</title>
+<style>:root{color-scheme:light dark;background:light-dark(rgb(255 255 255), rgb(24 24 24))}html,body{margin:0}body{box-sizing:border-box;padding:1rem;background:inherit}iframe{display:block;width:100%;height:calc(100vh - 2rem);margin:0 auto;border:0}</style>
+</head>
+<body>
+<iframe sandbox="allow-scripts" referrerpolicy="no-referrer" title="Tarangini Complete Mind Map" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;meta name=&quot;referrer&quot; content=&quot;no-referrer&quot;&gt;
+&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;default-src &#x27;none&#x27;; script-src &#x27;unsafe-inline&#x27; &#x27;unsafe-eval&#x27; &#x27;wasm-unsafe-eval&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src &#x27;unsafe-inline&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src &#x27;none&#x27;; object-src &#x27;none&#x27;; base-uri &#x27;none&#x27;; form-action &#x27;none&#x27;&quot;&gt;
+&lt;title&gt;Tarangini Complete Mind Map&lt;/title&gt;
+&lt;style&gt;:root {
+  color-scheme: light dark;
+  background-color: var(--background) !important;
+
+  /* Agent-facing contract; keep in sync with SKILL.md. */
+  --background: light-dark(rgb(255 255 255), rgb(24 24 24));
+  --foreground: light-dark(rgb(26 28 31), rgb(255 255 255));
+  --card: color-mix(in oklab, var(--foreground) 5%, transparent);
+  --card-foreground: var(--foreground);
+  --popover: light-dark(rgb(255 255 255), rgb(45 45 45));
+  --popover-foreground: var(--foreground);
+  --primary: light-dark(rgb(51 156 255), rgb(131 195 255));
+  --primary-foreground: light-dark(rgb(255 255 255), rgb(13 13 13));
+  --secondary: light-dark(rgb(255 255 255 / 96%), rgb(54 54 54 / 96%));
+  --secondary-foreground: var(--foreground);
+  --muted: color-mix(in srgb, var(--foreground) 10%, transparent);
+  --muted-foreground: light-dark(
+    rgb(26 28 31 / 49.4%),
+    rgb(255 255 255 / 49.8%)
+  );
+  --accent: light-dark(rgb(229 242 255), rgb(13 39 63));
+  --accent-foreground: var(--primary);
+  --destructive: light-dark(rgb(226 85 7), rgb(255 133 73));
+  --border: light-dark(rgb(26 28 31 / 8%), rgb(255 255 255 / 8.2%));
+  --input: light-dark(
+    rgb(26 28 31 / 11.8%),
+    color-mix(in oklab, rgb(0 0 0) 10%, transparent)
+  );
+  --ring: light-dark(rgb(51 156 255), rgb(131 195 255 / 76%));
+  --font-size-base: 14px;
+  --viz-series-1: var(--primary);
+  --viz-series-2: light-dark(rgb(243 136 59), rgb(245 154 86));
+  --viz-series-3: light-dark(rgb(93 201 119), rgb(116 213 139));
+  --viz-series-4: light-dark(rgb(235 119 177), rgb(240 143 192));
+  --viz-series-5: light-dark(rgb(155 121 236), rgb(170 145 239));
+  --viz-series-6: light-dark(rgb(58 185 177), rgb(90 203 194));
+
+  /* Internal implementation variables; not part of the agent contract. */
+  --font-sans: -apple-system, system-ui, &quot;Segoe UI&quot;, sans-serif;
+  --font-mono:
+    ui-monospace, SFMono-Regular, &quot;SF Mono&quot;, Menlo, Consolas, &quot;Liberation Mono&quot;,
+    monospace;
+  --font-size-normal: max(11px, var(--font-size-base));
+  --font-size-tooltip: calc(var(--font-size-base) - 1px);
+  --font-size-small: max(11px, calc(var(--font-size-base) - 2px));
+  --font-size-h1: calc(var(--font-size-normal) * 1.7142857143);
+  --font-size-h2: calc(var(--font-size-normal) * 1.4285714286);
+  --font-size-h3: calc(var(--font-size-normal) * 1.2857142857);
+  --font-weight-normal: 430;
+  --font-weight-medium: 500;
+  --line-height-normal: calc(var(--font-size-normal) * 1.5);
+  --line-height-tooltip: calc(var(--font-size-tooltip) * 1.4285714286);
+  --line-height-small: calc(var(--font-size-small) + 4px);
+  --radius: 12.5px;
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-2xl: calc(var(--radius) * 1.6);
+  --radius-full: 9999px;
+  --shadow-sm: 0 1px 2px -1px rgb(0 0 0 / 8%);
+  --checkmark-image: url(&quot;data:image/svg+xml,%3Csvg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; viewBox=&#x27;0 0 17 17&#x27;%3E%3Cpath d=&#x27;M12.8961 3.64101C13.1297 3.41418 13.4984 3.37523 13.7779 3.56581C14.0571 3.75635 14.1554 4.11331 14.0299 4.41347L13.9615 4.53847L7.71151 13.7045C7.59411 13.8767 7.4063 13.9877 7.19881 14.0072C6.99136 14.0267 6.78564 13.9533 6.63826 13.806L2.88826 10.056L2.79842 9.9457C2.6192 9.67407 2.64927 9.30496 2.88826 9.06581C3.12738 8.82669 3.49647 8.79676 3.76815 8.97597L3.8785 9.06581L7.03084 12.2182L12.8053 3.74941L12.8961 3.64101Z&#x27;/%3E%3C/svg%3E&quot;);
+
+  /* Legacy aliases; not part of the current agent contract. */
+  --viz-bg: transparent;
+  --viz-panel: var(--card);
+  --viz-border: var(--border);
+  --viz-text: var(--foreground);
+  --viz-muted: var(--muted-foreground);
+  --viz-accent: var(--primary);
+  --viz-accent-text: var(--primary-foreground);
+  --viz-accent-bg: var(--accent);
+  --viz-font-size: var(--font-size-base);
+  --viz-warning: var(--destructive);
+  --color-background-primary: var(--background);
+  --color-text-primary: var(--foreground);
+  --color-border-secondary: var(--border);
+}
+
+:root[data-theme=&quot;light&quot;] {
+  color-scheme: light;
+}
+
+:root[data-theme=&quot;dark&quot;] {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html &gt; body {
+  margin: 0;
+  padding: 5px;
+  color: var(--foreground);
+  background: transparent !important;
+  font-family: var(--font-sans);
+  font-size: var(--font-size-normal);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-normal);
+}
+
+a {
+  color: color-mix(in srgb, var(--viz-accent) 80%, var(--viz-text) 20%);
+  cursor: pointer;
+  font-weight: var(--viz-font-weight-medium);
+  text-decoration: none;
+  text-underline-offset: 2px;
+}
+
+a:is(:hover, :focus-visible) {
+  text-decoration-line: underline;
+  text-decoration-style: dashed;
+  text-decoration-thickness: 0.5px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin-block: 0;
+}
+
+h1 {
+  font-size: var(--font-size-h1);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+h2 {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+h3,
+h4,
+h5,
+h6 {
+  font-size: var(--font-size-h3);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.3;
+}
+
+b,
+strong,
+th {
+  font-weight: var(--font-weight-medium);
+}
+
+code:not(pre code) {
+  display: inline;
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  corner-shape: superellipse(1.5);
+  background: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  overflow-wrap: anywhere;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  word-break: break-word;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--foreground);
+  font: inherit;
+  text-align: start;
+}
+
+.table :is(th, td) {
+  padding-block: 10px;
+  padding-inline: 0 24px;
+  overflow-wrap: anywhere;
+  border-bottom: 1px solid var(--border);
+  text-align: start;
+  vertical-align: top;
+}
+
+.table-responsive &gt; .table :is(th, td) {
+  overflow-wrap: break-word;
+}
+
+.table :is(th, td):last-child {
+  padding-inline-end: 0;
+}
+
+.table :is(caption, thead th) {
+  font-weight: 600;
+}
+
+.table thead th {
+  padding-block: 8px;
+  border-bottom-color: color-mix(in srgb, var(--foreground) 16%, transparent);
+}
+
+.table tbody tr:last-child :is(th, td) {
+  border-bottom: 0;
+}
+
+.table.table-sm :is(th, td) {
+  padding-block: 6px;
+}
+
+.table.table-sm :is(th, td):not(:last-child) {
+  padding-inline-end: 16px;
+}
+
+.table :is(.text-end, [align=&quot;right&quot;]) {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+.table :is(.text-center, [align=&quot;center&quot;]) {
+  text-align: center;
+}
+
+.table .text-nowrap {
+  white-space: nowrap;
+}
+
+#widget {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  padding: 0;
+  background: transparent !important;
+}
+
+.card {
+  min-width: 0;
+  padding: 12px;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  border-radius: var(--radius-2xl);
+  corner-shape: superellipse(1.5);
+  color: var(--card-foreground);
+  background: var(--card);
+}
+
+#widget &gt; :not(.card) {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.tooltip {
+  position: fixed;
+  z-index: 50;
+  top: 0;
+  left: 0;
+  width: max-content;
+  max-width: min(
+    20rem,
+    var(--tooltip-available-width, calc(100vw - 10px)),
+    calc(100vw - 10px)
+  );
+  max-height: min(
+    var(--tooltip-available-height, calc(100vh - 10px)),
+    calc(100vh - 10px)
+  );
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  corner-shape: superellipse(1.5);
+  color: var(--popover-foreground);
+  background: var(--popover);
+  box-shadow: none;
+  font-size: var(--font-size-tooltip);
+  line-height: var(--line-height-tooltip);
+  overflow-wrap: break-word;
+  white-space: normal;
+  pointer-events: none;
+  user-select: none;
+}
+
+.viz-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(max(180px, 24%), 1fr));
+  gap: 10px;
+}
+
+.viz-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.viz-stat-value {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+.viz-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.viz-badge {
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  color: var(--accent-foreground);
+  background: var(--accent);
+  font-weight: var(--font-weight-medium);
+}
+
+small,
+.text-small,
+.viz-badge {
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-small);
+}
+
+.text-muted {
+  color: var(--muted-foreground);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.viz-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.viz-controls &gt; .form-label {
+  display: grid;
+  min-width: min(100%, 260px);
+  flex: 1 1 280px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 2px 12px;
+  margin-bottom: 0;
+}
+
+.viz-controls &gt; .form-label &gt; :is(.form-control, .form-range, .form-select) {
+  grid-column: 1 / -1;
+}
+
+.btn,
+.form-check-input,
+.form-control,
+.form-range,
+.form-select {
+  font: inherit;
+}
+
+.btn {
+  appearance: button;
+  display: inline-flex;
+  inline-size: fit-content;
+  max-inline-size: 100%;
+  min-height: 28px;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin: 0;
+  padding: 0 8px;
+  -webkit-app-region: no-drag;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-lg);
+  corner-shape: superellipse(1.5);
+  color: var(--secondary-foreground);
+  background: var(--secondary);
+  cursor: var(--cursor-interaction, pointer);
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+.btn:is(.btn-block, .viz-tile) {
+  inline-size: 100%;
+}
+
+.btn.viz-tile {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+a.btn {
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn:not(:disabled):hover {
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.btn-primary {
+  border-color: transparent;
+  color: var(--primary-foreground);
+  background: var(--foreground);
+  background-clip: padding-box;
+}
+
+.btn-primary .text-muted {
+  color: color-mix(in srgb, var(--primary-foreground) 50%, transparent);
+}
+
+.btn-primary:not(:disabled):hover {
+  background: color-mix(in srgb, var(--foreground) 80%, transparent);
+  background-clip: padding-box;
+}
+
+.btn-ghost {
+  border-color: transparent;
+  color: var(--muted-foreground);
+  background: transparent;
+}
+
+.btn-ghost:not(:disabled):hover {
+  color: var(--foreground);
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+[data-lucide] {
+  stroke-width: 1.6;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--foreground);
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+  min-height: 28px;
+  padding: 0 8px;
+  outline: none;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-lg);
+  corner-shape: superellipse(1.5);
+  color: var(--foreground);
+  background: var(--secondary);
+}
+
+.form-control::placeholder {
+  color: var(--muted-foreground);
+}
+
+.form-control[type=&quot;file&quot;] {
+  padding: 0;
+  overflow: hidden;
+  cursor: var(--cursor-interaction, pointer);
+}
+
+.form-control[type=&quot;file&quot;]::file-selector-button {
+  min-height: 26px;
+  margin-right: 8px;
+  padding: 0 8px;
+  border: 0;
+  border-right: 1px solid var(--input);
+  color: var(--secondary-foreground);
+  background: var(--secondary);
+  cursor: inherit;
+  font: inherit;
+}
+
+.form-control[type=&quot;file&quot;]:not(:disabled):hover::file-selector-button {
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.form-control-color[type=&quot;color&quot;] {
+  width: 40px;
+  height: 28px;
+  padding: 3px;
+  cursor: var(--cursor-interaction, pointer);
+}
+
+.form-control-color[type=&quot;color&quot;]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.form-control-color[type=&quot;color&quot;]::-webkit-color-swatch {
+  border: 0;
+  border-radius: calc(var(--radius-lg) - 4px);
+  corner-shape: superellipse(1.5);
+}
+
+textarea.form-control {
+  height: auto;
+  min-height: 72px;
+  padding: 8px 10px;
+  resize: vertical;
+}
+
+.form-control:focus-visible {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-control:disabled,
+.form-select:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.form-select {
+  appearance: none;
+  display: block;
+  width: 100%;
+  min-height: 28px;
+  margin: 0;
+  padding: 0 32px 0 8px;
+  outline: none;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-lg);
+  corner-shape: superellipse(1.5);
+  color: var(--foreground);
+  background-color: var(--secondary);
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--muted-foreground) 50%),
+    linear-gradient(135deg, var(--muted-foreground) 50%, transparent 50%);
+  background-position:
+    calc(100% - 14px) 50%,
+    calc(100% - 10px) 50%;
+  background-repeat: no-repeat;
+  background-size: 4px 4px;
+  cursor: var(--cursor-interaction, default);
+}
+
+.form-select:not(:disabled):hover {
+  background-color: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.form-select:focus-visible {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-check {
+  display: flex;
+  min-height: 20px;
+  align-items: center;
+  gap: 6px;
+}
+
+.form-check-input {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  flex: 0 0 auto;
+  margin: 0;
+  border: 1px solid var(--input);
+  color: var(--primary-foreground);
+  background-color: transparent;
+  cursor: var(--cursor-interaction, default);
+  transition:
+    background-color 150ms,
+    border-color 150ms,
+    box-shadow 150ms;
+}
+
+.form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;] {
+  border-color: var(--input);
+  border-radius: var(--radius-sm);
+  corner-shape: superellipse(1.5);
+  background-color: var(--secondary);
+  box-shadow: var(--shadow-sm);
+}
+
+.form-check:not(.form-switch)
+  .form-check-input:not(:disabled):not(:checked):hover {
+  background-color: var(--card);
+}
+
+.form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;]:checked {
+  border-color: var(--primary);
+  background-color: var(--primary);
+}
+
+.form-check:not(.form-switch)
+  .form-check-input[type=&quot;checkbox&quot;]:checked::before {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--primary-foreground);
+  content: &quot;&quot;;
+  mask: var(--checkmark-image) center / 12px 12px no-repeat;
+}
+
+.form-check-input[type=&quot;radio&quot;] {
+  width: 14px;
+  height: 14px;
+  border-radius: var(--radius-full);
+}
+
+.form-check-input[type=&quot;radio&quot;]:checked {
+  border: 2px solid var(--primary);
+  background:
+    radial-gradient(circle, var(--primary-foreground) 0 2.5px, transparent 3px),
+    var(--primary);
+}
+
+.form-check:not(.form-switch) .form-check-input:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.form-check:not(.form-switch) .form-check-input:disabled {
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.form-check:not(.form-switch) .form-check-input:disabled + .form-check-label {
+  cursor: not-allowed;
+}
+
+.form-switch .form-check-input:disabled,
+.form-switch .form-check-input:disabled + .form-check-label {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.form-check-label {
+  color: var(--foreground);
+  cursor: var(--cursor-interaction, default);
+}
+
+.form-switch .form-check-input {
+  position: relative;
+  width: 32px;
+  height: 20px;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--muted);
+  box-shadow: none;
+  transition: background-color 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.form-switch .form-check-input::before {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 16px;
+  height: 16px;
+  box-sizing: border-box;
+  border: 1px solid light-dark(var(--primary-foreground), var(--foreground));
+  border-radius: var(--radius-full);
+  background: light-dark(var(--primary-foreground), var(--foreground));
+  box-shadow: var(--shadow-sm);
+  content: &quot;&quot;;
+  transform: translate(2px, -50%);
+  transition: transform 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.form-switch .form-check-input:checked {
+  background: var(--primary);
+}
+
+.form-switch .form-check-input:checked::before {
+  transform: translate(14px, -50%);
+}
+
+.form-switch .form-check-input:focus-visible {
+  box-shadow: 0 0 0 2px var(--ring);
+}
+
+.form-range {
+  appearance: none;
+  display: block;
+  width: 100%;
+  height: 28px;
+  flex: 1;
+  margin: 0;
+  padding: 0;
+  outline: none;
+  border: 0;
+  accent-color: var(--primary);
+  background: linear-gradient(
+      color-mix(in srgb, var(--foreground) 7%, transparent),
+      color-mix(in srgb, var(--foreground) 7%, transparent)
+    )
+    center / 100% 2px no-repeat;
+}
+
+.form-range::-webkit-slider-runnable-track {
+  height: 28px;
+  background: transparent;
+}
+
+.form-range::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  margin-top: 4px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background: light-dark(var(--primary-foreground), var(--foreground));
+}
+
+.form-range:focus-visible::-webkit-slider-thumb {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-range::-moz-range-track {
+  height: 28px;
+  background: transparent;
+}
+
+.form-range::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background: light-dark(var(--primary-foreground), var(--foreground));
+}
+
+.form-range:focus-visible::-moz-range-thumb {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-range:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.btn:not(.btn-primary, .viz-tile):is(
+    [aria-pressed=&quot;true&quot;],
+    [aria-selected=&quot;true&quot;],
+    .is-selected
+  ) {
+  border-color: var(--primary);
+  color: var(--primary-foreground);
+  background: var(--primary);
+}
+
+.btn.viz-tile:is([aria-pressed=&quot;true&quot;], [aria-selected=&quot;true&quot;], .is-selected) {
+  border-color: var(--primary);
+  box-shadow: inset 0 0 0 1px var(--primary);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+#widget &gt; svg {
+  width: 100%;
+}
+
+.text-warning,
+.text-destructive {
+  color: var(--destructive);
+}
+
+html&gt;body{padding:0}&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div id=&quot;tarangini-map&quot; class=&quot;tm-root&quot;&gt;
+  &lt;div class=&quot;tm-controls&quot;&gt;
+    &lt;input id=&quot;tm-search&quot; type=&quot;search&quot; placeholder=&quot;Search any feature, transaction, role, or process&quot; aria-label=&quot;Search mind map&quot;&gt;
+    &lt;select id=&quot;tm-domain&quot; aria-label=&quot;Select system domain&quot;&gt;&lt;option value=&quot;all&quot;&gt;All system domains&lt;/option&gt;&lt;/select&gt;
+    &lt;button id=&quot;tm-expand&quot; class=&quot;btn-secondary&quot; type=&quot;button&quot;&gt;Show all details&lt;/button&gt;
+    &lt;button id=&quot;tm-reset&quot; class=&quot;btn-secondary&quot; type=&quot;button&quot;&gt;Reset view&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;svg id=&quot;tm-overview&quot; viewBox=&quot;0 0 1200 500&quot; role=&quot;img&quot; aria-label=&quot;Tarangini Workflow Suite system domains&quot;&gt;&lt;/svg&gt;
+  &lt;div id=&quot;tm-selected&quot; class=&quot;tm-selected&quot; aria-live=&quot;polite&quot;&gt;&lt;/div&gt;
+  &lt;div id=&quot;tm-grid&quot; class=&quot;tm-grid&quot;&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;style&gt;
+#tarangini-map{--tm-line:color-mix(in srgb,var(--border) 72%,transparent);color:var(--foreground);font-family:&quot;Aptos Display&quot;,&quot;Trebuchet MS&quot;,sans-serif;perspective:1200px}
+#tarangini-map .tm-controls{display:grid;grid-template-columns:minmax(220px,2fr) minmax(170px,1fr) auto auto;gap:10px;align-items:center;margin-bottom:14px}
+#tarangini-map input,#tarangini-map select{width:100%;box-sizing:border-box}
+#tarangini-map svg{width:100%;height:auto;display:block;overflow:visible;background:radial-gradient(circle at 50% 48%,color-mix(in srgb,var(--viz-series-1) 14%,transparent),transparent 37%)}
+#tarangini-map .tm-link{fill:none;stroke:var(--tm-line);stroke-width:2}
+#tarangini-map .tm-link-shadow{fill:none;stroke:color-mix(in srgb,var(--foreground) 12%,transparent);stroke-width:7;transform:translate(4px,6px)}
+#tarangini-map .tm-hub-face{fill:var(--primary);stroke:color-mix(in srgb,var(--primary) 78%,var(--foreground));stroke-width:2}
+#tarangini-map .tm-hub-side{fill:color-mix(in srgb,var(--primary) 65%,var(--background));opacity:.72}
+#tarangini-map .tm-node{cursor:pointer}
+#tarangini-map .tm-node-face{fill:var(--card);stroke:var(--border);stroke-width:1.5}
+#tarangini-map .tm-node-side{fill:color-mix(in srgb,var(--card) 78%,var(--foreground));opacity:.45}
+#tarangini-map .tm-node.is-selected .tm-node-face{fill:var(--primary);stroke:var(--primary)}
+#tarangini-map .tm-node.is-selected text{fill:var(--primary-foreground)}
+#tarangini-map svg text{fill:var(--foreground);font-weight:500;pointer-events:none}
+#tarangini-map .tm-selected{margin:4px 0 16px;padding:14px 16px;border:1px solid var(--border);background:linear-gradient(135deg,color-mix(in srgb,var(--card) 94%,transparent),color-mix(in srgb,var(--viz-series-1) 8%,var(--card)));box-shadow:8px 10px 0 color-mix(in srgb,var(--foreground) 6%,transparent)}
+#tarangini-map .tm-selected strong{font-weight:500}
+#tarangini-map .tm-selected-path{color:var(--muted-foreground);margin-top:5px}
+#tarangini-map .tm-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;transform-style:preserve-3d}
+#tarangini-map .tm-card{position:relative;border:1px solid var(--border);background:var(--card);color:var(--card-foreground);padding:14px;box-shadow:6px 7px 0 color-mix(in srgb,var(--foreground) 7%,transparent);transform:rotateX(1deg) rotateY(-1deg);transition:transform .18s ease,opacity .18s ease}
+#tarangini-map .tm-card:hover{transform:translateY(-3px) rotateX(0) rotateY(0)}
+#tarangini-map .tm-card h3{margin:0 0 9px;color:var(--card-foreground)}
+#tarangini-map .tm-group{border-top:1px solid var(--border);padding-top:9px;margin-top:9px}
+#tarangini-map .tm-group-title{display:flex;align-items:center;gap:7px;font-weight:500;margin-bottom:6px}
+#tarangini-map .tm-dot{width:9px;height:9px;border-radius:50%;background:var(--viz-series-1);box-shadow:2px 2px 0 color-mix(in srgb,var(--foreground) 15%,transparent);flex:none}
+#tarangini-map .tm-leaves{display:flex;flex-wrap:wrap;gap:5px}
+#tarangini-map .tm-leaf{display:inline-flex;padding:4px 7px;border:1px solid var(--border);background:color-mix(in srgb,var(--muted) 65%,transparent);color:var(--foreground)}
+#tarangini-map .tm-flow{margin-top:10px;color:var(--muted-foreground)}
+#tarangini-map mark{background:color-mix(in srgb,var(--viz-series-3) 32%,transparent);color:var(--foreground)}
+#tarangini-map .tm-empty{grid-column:1/-1;text-align:center;padding:28px;border:1px dashed var(--border);color:var(--muted-foreground)}
+@media(max-width:900px){#tarangini-map .tm-controls{grid-template-columns:1fr 1fr}#tarangini-map .tm-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){#tarangini-map .tm-controls,#tarangini-map .tm-grid{grid-template-columns:1fr}#tarangini-map .tm-card{transform:none}#tarangini-map #tm-overview{min-height:310px}}
+&lt;/style&gt;
+
+&lt;script&gt;
+(() =&gt; {
+  const root = document.getElementById(&#x27;tarangini-map&#x27;);
+  const domains = [
+    {id:&#x27;identity&#x27;,name:&#x27;Companies &amp; Identity&#x27;,flow:&#x27;Company setup -&gt; financial year -&gt; numbering -&gt; transaction controls -&gt; reports&#x27;,groups:[
+      [&#x27;Organization master&#x27;,[&#x27;Multiple organizations&#x27;,&#x27;Registered and display names&#x27;,&#x27;GST type and GSTIN&#x27;,&#x27;Address and bank details&#x27;,&#x27;Logo and print identity&#x27;,&#x27;Organization-specific settings&#x27;]],
+      [&#x27;Financial identity&#x27;,[&#x27;Financial years&#x27;,&#x27;Company-specific sequences&#x27;,&#x27;Immutable voucher numbers&#x27;,&#x27;Prefix configuration&#x27;,&#x27;Year locks and closing&#x27;,&#x27;Opening balances&#x27;]],
+      [&#x27;Party identity&#x27;,[&#x27;Customers, suppliers, both&#x27;,&#x27;Same-name parties by address&#x27;,&#x27;Multiple billing addresses&#x27;,&#x27;Multiple delivery addresses&#x27;,&#x27;Shared-across-company parties&#x27;,&#x27;GST details&#x27;,&#x27;Common cash customers&#x27;]],
+      [&#x27;Item identity&#x27;,[&#x27;Products and services&#x27;,&#x27;HSN/SAC&#x27;,&#x27;Units&#x27;,&#x27;GST rates&#x27;,&#x27;Sales and purchase rates&#x27;,&#x27;Serial/model details&#x27;,&#x27;Opening and reorder stock&#x27;]]
+    ]},
+    {id:&#x27;access&#x27;,name:&#x27;Users, Roles &amp; Permissions&#x27;,flow:&#x27;Owner creates user -&gt; organization access -&gt; permissions -&gt; PIN login -&gt; activity audit&#x27;,groups:[
+      [&#x27;Owner&#x27;,[&#x27;All organizations&#x27;,&#x27;All service boards&#x27;,&#x27;Create/edit/delete transactions&#x27;,&#x27;Approve corrections&#x27;,&#x27;Manage users and settings&#x27;,&#x27;Backups and diagnostics&#x27;]],
+      [&#x27;Operator&#x27;,[&#x27;Assigned organizations&#x27;,&#x27;Own permitted bills/jobs&#x27;,&#x27;No owner-only deletion&#x27;,&#x27;Reason-required edits&#x27;,&#x27;Daily work log&#x27;,&#x27;Production updates&#x27;]],
+      [&#x27;Engineer and senior operator&#x27;,[&#x27;Assigned technical jobs&#x27;,&#x27;Stage updates&#x27;,&#x27;Notes and file names&#x27;,&#x27;Completion responsibility&#x27;,&#x27;Payment collection when permitted&#x27;]],
+      [&#x27;Authentication&#x27;,[&#x27;Username/password&#x27;,&#x27;Operator PIN&#x27;,&#x27;Session expiry&#x27;,&#x27;Device registration&#x27;,&#x27;Revoked-device denial&#x27;,&#x27;Role and permission checks&#x27;]]
+    ]},
+    {id:&#x27;portal&#x27;,name:&#x27;Customer Portal &amp; Intake&#x27;,flow:&#x27;Wi-Fi QR -&gt; service selection -&gt; customer details -&gt; files -&gt; analysis -&gt; consent -&gt; order ID -&gt; tracking&#x27;,groups:[
+      [&#x27;Landing&#x27;,[&#x27;Service-selection first&#x27;,&#x27;Order tracking at top&#x27;,&#x27;Company-specific QR&#x27;,&#x27;Responsive phone/tablet view&#x27;,&#x27;Unique request ID&#x27;]],
+      [&#x27;Customer data&#x27;,[&#x27;Name&#x27;,&#x27;Phone&#x27;,&#x27;Email&#x27;,&#x27;Address&#x27;,&#x27;Existing-party match&#x27;,&#x27;Automatic party create/reuse&#x27;]],
+      [&#x27;Service request&#x27;,[&#x27;Organization service catalog&#x27;,&#x27;Service-specific forms&#x27;,&#x27;Computer-only brand/model/serial/quantity&#x27;,&#x27;Description and remarks&#x27;,&#x27;Required-field validation&#x27;,&#x27;Return cursor to missing field&#x27;]],
+      [&#x27;Uploads&#x27;,[&#x27;Multiple files&#x27;,&#x27;Original metadata&#x27;,&#x27;Preview before submit&#x27;,&#x27;Remove selected file&#x27;,&#x27;ZIP operator download&#x27;,&#x27;No customer output download&#x27;,&#x27;Retention policy&#x27;]],
+      [&#x27;PDF analyzer&#x27;,[&#x27;Page count&#x27;,&#x27;Colour-page detection&#x27;,&#x27;Black-and-white count&#x27;,&#x27;Selected print pages&#x27;,&#x27;Colour/BW confirmation&#x27;,&#x27;Analysis status and errors&#x27;]],
+      [&#x27;Tracking&#x27;,[&#x27;Order ID lookup&#x27;,&#x27;Same-network status&#x27;,&#x27;Quotation display&#x27;,&#x27;Approval/decline&#x27;,&#x27;Job stage updates&#x27;,&#x27;Output preview only&#x27;]]
+    ]},
+    {id:&#x27;jobs&#x27;,name:&#x27;Job Order &amp; Production&#x27;,flow:&#x27;Intake/counter -&gt; estimate -&gt; approval -&gt; assignment -&gt; operations -&gt; quality -&gt; delivery -&gt; invoice link&#x27;,groups:[
+      [&#x27;Intake sources&#x27;,[&#x27;Customer QR request&#x27;,&#x27;Owner counter entry&#x27;,&#x27;Operator-created job when permitted&#x27;,&#x27;Offline draft job&#x27;,&#x27;Existing invoice linked to job&#x27;]],
+      [&#x27;Job record&#x27;,[&#x27;Unique job ID&#x27;,&#x27;Customer and device details&#x27;,&#x27;Service and category&#x27;,&#x27;Requirements&#x27;,&#x27;Requests and remarks&#x27;,&#x27;Promised delivery&#x27;,&#x27;Priority&#x27;,&#x27;Barcode/QR ticket&#x27;]],
+      [&#x27;Commercial approval&#x27;,[&#x27;Estimate lines&#x27;,&#x27;Quotation revisions&#x27;,&#x27;Additions&#x27;,&#x27;Customer consent&#x27;,&#x27;Approval timestamps&#x27;,&#x27;Full audit history&#x27;]],
+      [&#x27;Production control&#x27;,[&#x27;Owner assignment&#x27;,&#x27;Department/service board&#x27;,&#x27;Operator response&#x27;,&#x27;Stages and operations&#x27;,&#x27;Start/stop time&#x27;,&#x27;Pending reason&#x27;,&#x27;Internal notes&#x27;,&#x27;File-name record&#x27;]],
+      [&#x27;Completion&#x27;,[&#x27;Work description&#x27;,&#x27;Quality review&#x27;,&#x27;Output preview&#x27;,&#x27;Customer confirmation&#x27;,&#x27;Delivery record&#x27;,&#x27;Payment status&#x27;,&#x27;Linked final invoice&#x27;,&#x27;Locked completion&#x27;]],
+      [&#x27;Retention&#x27;,[&#x27;One-week post-completion files&#x27;,&#x27;Owner archive override&#x27;,&#x27;Important repeat-order archive&#x27;,&#x27;Physical deletion audit&#x27;,&#x27;Metadata retained&#x27;]]
+    ]},
+    {id:&#x27;sales&#x27;,name:&#x27;Sales Documents&#x27;,flow:&#x27;Select company -&gt; party/address -&gt; items -&gt; tax -&gt; save -&gt; preview -&gt; ledger/stock -&gt; history&#x27;,groups:[
+      [&#x27;Sale invoice&#x27;,[&#x27;Cash or credit&#x27;,&#x27;Split payments&#x27;,&#x27;Party snapshot&#x27;,&#x27;Billing/delivery address&#x27;,&#x27;PO reference&#x27;,&#x27;Due date&#x27;,&#x27;Stock issue&#x27;,&#x27;Accounting post&#x27;]],
+      [&#x27;Project printing invoice&#x27;,[&#x27;Print/service detail&#x27;,&#x27;File metadata&#x27;,&#x27;Production link&#x27;,&#x27;Cost and margin&#x27;,&#x27;Job reference&#x27;]],
+      [&#x27;Quotation&#x27;,[&#x27;Customer-specific wording&#x27;,&#x27;No payment status&#x27;,&#x27;Customizable prepared-by/signature fields&#x27;,&#x27;Tax breakup&#x27;,&#x27;Convert/duplicate&#x27;]],
+      [&#x27;Delivery challan&#x27;,[&#x27;Party and delivery address&#x27;,&#x27;Serial-number delivery&#x27;,&#x27;Job or warranty link&#x27;,&#x27;No financial posting until conversion&#x27;]],
+      [&#x27;Proforma invoice&#x27;,[&#x27;Advance commercial document&#x27;,&#x27;No final stock/payment posting&#x27;,&#x27;Conversion to invoice&#x27;]],
+      [&#x27;All document actions&#x27;,[&#x27;View/preview&#x27;,&#x27;Edit with reason&#x27;,&#x27;Delete/cancel with reason&#x27;,&#x27;Duplicate with new number&#x27;,&#x27;Search all years&#x27;,&#x27;Print/PDF&#x27;]]
+    ]},
+    {id:&#x27;payments&#x27;,name:&#x27;Receipts, Payments &amp; Vouchers&#x27;,flow:&#x27;Party/mode/account -&gt; amount -&gt; allocation -&gt; ledger post -&gt; edit/reverse audit&#x27;,groups:[
+      [&#x27;Payment received&#x27;,[&#x27;Customer receipt&#x27;,&#x27;Cash/bank/UPI/personal account&#x27;,&#x27;Bill allocation&#x27;,&#x27;Unallocated advance&#x27;,&#x27;Excess amount to party ledger&#x27;,&#x27;Receipt preview&#x27;]],
+      [&#x27;Payment voucher&#x27;,[&#x27;Supplier/expense payment&#x27;,&#x27;Cash or bank account&#x27;,&#x27;Reference and narration&#x27;,&#x27;Saved-voucher editing&#x27;,&#x27;Payables settlement&#x27;]],
+      [&#x27;Corrections&#x27;,[&#x27;Owner edit&#x27;,&#x27;Reason required&#x27;,&#x27;Voucher number retained&#x27;,&#x27;Journal lines rebuilt&#x27;,&#x27;Allocation recalculated&#x27;,&#x27;Old/new audit snapshots&#x27;]],
+      [&#x27;Deletion&#x27;,[&#x27;User sees Delete&#x27;,&#x27;Financial reversal internally&#x27;,&#x27;Original number retained&#x27;,&#x27;No hard ledger deletion&#x27;,&#x27;Locked-year protection&#x27;]]
+    ]},
+    {id:&#x27;procurement&#x27;,name:&#x27;Purchases, Expenses &amp; Notes&#x27;,flow:&#x27;Source document -&gt; validation -&gt; ledger/stock posting -&gt; correction or safe cancellation&#x27;,groups:[
+      [&#x27;Purchase order&#x27;,[&#x27;Supplier&#x27;,&#x27;Expected date&#x27;,&#x27;Items and rates&#x27;,&#x27;GST and total&#x27;,&#x27;Open status&#x27;,&#x27;Convert to purchase&#x27;,&#x27;Converted lock&#x27;]],
+      [&#x27;Purchase bill&#x27;,[&#x27;Supplier invoice&#x27;,&#x27;Credit/cash/bank&#x27;,&#x27;Input GST&#x27;,&#x27;Stock receipt&#x27;,&#x27;Accounts payable&#x27;,&#x27;Edit replaces stock and ledger&#x27;]],
+      [&#x27;Expense voucher&#x27;,[&#x27;Expense account&#x27;,&#x27;Payee&#x27;,&#x27;Cash/bank&#x27;,&#x27;Input GST&#x27;,&#x27;Reference&#x27;,&#x27;Edit replaces ledger&#x27;]],
+      [&#x27;Credit note&#x27;,[&#x27;Customer return&#x27;,&#x27;Sales reversal&#x27;,&#x27;Output GST reversal&#x27;,&#x27;Stock comes in&#x27;,&#x27;Original invoice link&#x27;]],
+      [&#x27;Debit note&#x27;,[&#x27;Vendor return&#x27;,&#x27;Purchase reversal&#x27;,&#x27;Input GST reversal&#x27;,&#x27;Stock goes out&#x27;,&#x27;Original purchase link&#x27;]],
+      [&#x27;Universal actions&#x27;,[&#x27;Edit owner-only&#x27;,&#x27;Delete owner-only&#x27;,&#x27;Mandatory reason&#x27;,&#x27;Duplicate to company/date&#x27;,&#x27;Immutable number&#x27;,&#x27;Audit trail&#x27;]]
+    ]},
+    {id:&#x27;inventory&#x27;,name:&#x27;Inventory &amp; Materials&#x27;,flow:&#x27;Opening stock + purchases + returns - sales - consumption = live stock&#x27;,groups:[
+      [&#x27;Stock movements&#x27;,[&#x27;Source type and ID&#x27;,&#x27;Reference number&#x27;,&#x27;Date&#x27;,&#x27;Quantity in/out&#x27;,&#x27;Rate&#x27;,&#x27;Item linkage&#x27;]],
+      [&#x27;Job consumption&#x27;,[&#x27;Job-specific material issue&#x27;,&#x27;Operator and timestamp&#x27;,&#x27;Quantity/unit/rate&#x27;,&#x27;Billing stock linkage&#x27;,&#x27;Cost visibility&#x27;]],
+      [&#x27;Controls&#x27;,[&#x27;Negative-stock policy&#x27;,&#x27;Low-stock warning&#x27;,&#x27;Reorder level&#x27;,&#x27;Serial/model tracking&#x27;,&#x27;Organization isolation&#x27;]],
+      [&#x27;Integrity&#x27;,[&#x27;Edit replaces source movements&#x27;,&#x27;Delete removes source movements&#x27;,&#x27;No duplicate source posting&#x27;,&#x27;Stock audit report&#x27;]]
+    ]},
+    {id:&#x27;accounting&#x27;,name:&#x27;Accounting &amp; Ledgers&#x27;,flow:&#x27;Business event -&gt; balanced journal -&gt; ledgers -&gt; trial balance -&gt; P&amp;L/balance sheet/GST&#x27;,groups:[
+      [&#x27;Chart of accounts&#x27;,[&#x27;Assets&#x27;,&#x27;Liabilities&#x27;,&#x27;Equity&#x27;,&#x27;Income&#x27;,&#x27;Expenses&#x27;,&#x27;System and custom ledgers&#x27;]],
+      [&#x27;Automatic journals&#x27;,[&#x27;Sales&#x27;,&#x27;Purchases&#x27;,&#x27;Payments&#x27;,&#x27;Expenses&#x27;,&#x27;Credit/debit notes&#x27;,&#x27;Round-off&#x27;,&#x27;GST input/output&#x27;]],
+      [&#x27;Manual journal&#x27;,[&#x27;Multiple balanced lines&#x27;,&#x27;Account and party dimensions&#x27;,&#x27;Voucher type&#x27;,&#x27;Narration&#x27;,&#x27;Edit/delete reason&#x27;,&#x27;Owner only&#x27;]],
+      [&#x27;Ledgers&#x27;,[&#x27;Party receivable/payable&#x27;,&#x27;Cash&#x27;,&#x27;Bank&#x27;,&#x27;Personal collection account&#x27;,&#x27;Advance balances&#x27;,&#x27;Running balance&#x27;]],
+      [&#x27;Reports&#x27;,[&#x27;Trial balance&#x27;,&#x27;Profit and loss&#x27;,&#x27;Balance sheet&#x27;,&#x27;Day book&#x27;,&#x27;Cash/bank&#x27;,&#x27;Receivables/payables&#x27;,&#x27;GST summary&#x27;,&#x27;Registers&#x27;]],
+      [&#x27;Period control&#x27;,[&#x27;Financial-year lock&#x27;,&#x27;Closing process&#x27;,&#x27;No edits in locked year&#x27;,&#x27;Number sequence preserved&#x27;]]
+    ]},
+    {id:&#x27;warranty&#x27;,name:&#x27;Warranty Replacement&#x27;,flow:&#x27;Customer/product intake -&gt; warranty check -&gt; challan -&gt; service centre -&gt; RMA/courier -&gt; replacement -&gt; delivery&#x27;,groups:[
+      [&#x27;Customer handling&#x27;,[&#x27;Existing customer&#x27;,&#x27;Common customer 1-3&#x27;,&#x27;Walk-in detail columns&#x27;,&#x27;Phone and address snapshot&#x27;,&#x27;Original sale lookup&#x27;]],
+      [&#x27;Product record&#x27;,[&#x27;Product&#x27;,&#x27;Serial number&#x27;,&#x27;Quantity&#x27;,&#x27;Warranty status&#x27;,&#x27;Fault description&#x27;,&#x27;Company/category&#x27;]],
+      [&#x27;Outbound&#x27;,[&#x27;Designated vendor/service centre&#x27;,&#x27;Delivery challan link&#x27;,&#x27;Courier vendor&#x27;,&#x27;Tracking number&#x27;,&#x27;Dispatch date&#x27;]],
+      [&#x27;Follow-up&#x27;,[&#x27;RMA number&#x27;,&#x27;Acknowledgement&#x27;,&#x27;Follow-up date&#x27;,&#x27;Status timeline&#x27;,&#x27;Resolution notes&#x27;]],
+      [&#x27;Closure&#x27;,[&#x27;Replacement/repair result&#x27;,&#x27;Customer delivery&#x27;,&#x27;Linked document&#x27;,&#x27;Closed timestamp&#x27;,&#x27;Audit history&#x27;]]
+    ]},
+    {id:&#x27;worklog&#x27;,name:&#x27;Operator Daily Work Log&#x27;,flow:&#x27;Login/activity -&gt; job and miscellaneous entries -&gt; durations -&gt; daily submit -&gt; owner review/reopen&#x27;,groups:[
+      [&#x27;Automatic activity&#x27;,[&#x27;Job events&#x27;,&#x27;Bill events allowed to operator&#x27;,&#x27;Start/end times&#x27;,&#x27;Pending work&#x27;,&#x27;File names only&#x27;]],
+      [&#x27;Manual activity&#x27;,[&#x27;Miscellaneous work&#x27;,&#x27;Task description&#x27;,&#x27;Duration&#x27;,&#x27;Notes&#x27;,&#x27;Related job optional&#x27;]],
+      [&#x27;Daily submission&#x27;,[&#x27;Operator/date uniqueness&#x27;,&#x27;Completed and pending summary&#x27;,&#x27;Submit once&#x27;,&#x27;Owner review&#x27;,&#x27;Review note&#x27;,&#x27;Reopen with reason&#x27;]],
+      [&#x27;Responsibility&#x27;,[&#x27;Assigned-job visibility&#x27;,&#x27;Completion accountability&#x27;,&#x27;No unrelated owner bill visibility&#x27;,&#x27;No transaction deletion&#x27;]]
+    ]},
+    {id:&#x27;offline&#x27;,name:&#x27;Network, Offline &amp; Sync&#x27;,flow:&#x27;Device identity -&gt; local draft/transaction -&gt; queue -&gt; server recovery -&gt; idempotent sync -&gt; conflict review&#x27;,groups:[
+      [&#x27;Main/server mode&#x27;,[&#x27;Central authoritative database&#x27;,&#x27;Customer portal host&#x27;,&#x27;LAN IP and QR&#x27;,&#x27;Windows service/autostart&#x27;,&#x27;Health status&#x27;]],
+      [&#x27;Client mode&#x27;,[&#x27;Automatic server discovery&#x27;,&#x27;Main IP fallback&#x27;,&#x27;Original computer name&#x27;,&#x27;MAC reference&#x27;,&#x27;Unique device ID&#x27;,&#x27;Top status indicator&#x27;]],
+      [&#x27;Standalone work&#x27;,[&#x27;Controlled offline jobs&#x27;,&#x27;Controlled offline financial drafts&#x27;,&#x27;Device-local numbering/idempotency&#x27;,&#x27;No repeated blocking popup&#x27;,&#x27;Timed local continuation&#x27;]],
+      [&#x27;Synchronization&#x27;,[&#x27;Registered device enforcement&#x27;,&#x27;Idempotency keys&#x27;,&#x27;Retry with backoff&#x27;,&#x27;Pending queue&#x27;,&#x27;Server acknowledgements&#x27;,&#x27;No duplicate posting&#x27;]],
+      [&#x27;Conflict safety&#x27;,[&#x27;Version/base snapshot&#x27;,&#x27;Main/incoming comparison&#x27;,&#x27;Owner resolution screen&#x27;,&#x27;Keep-main or replay decision&#x27;,&#x27;Permanent audit&#x27;]],
+      [&#x27;Limitations&#x27;,[&#x27;Customer QR follows active host&#x27;,&#x27;Final posting depends on policy&#x27;,&#x27;No unsafe shared database&#x27;,&#x27;Two-main protocol stopped&#x27;]]
+    ]},
+    {id:&#x27;security&#x27;,name:&#x27;Security &amp; Audit&#x27;,flow:&#x27;Authenticate -&gt; authorize role/org/device -&gt; validate input -&gt; transact -&gt; audit -&gt; monitor&#x27;,groups:[
+      [&#x27;Application security&#x27;,[&#x27;Password/PIN hashing&#x27;,&#x27;JWT/session control&#x27;,&#x27;Rate limiting&#x27;,&#x27;CORS policy&#x27;,&#x27;Security headers&#x27;,&#x27;Input length/format validation&#x27;]],
+      [&#x27;Authorization&#x27;,[&#x27;Organization access&#x27;,&#x27;Fine-grained permissions&#x27;,&#x27;Owner-only corrections/deletes&#x27;,&#x27;Operator ownership rules&#x27;,&#x27;Registered-device checks&#x27;]],
+      [&#x27;Data integrity&#x27;,[&#x27;SQLite transactions&#x27;,&#x27;Unique constraints&#x27;,&#x27;Foreign references&#x27;,&#x27;Idempotency&#x27;,&#x27;Locked periods&#x27;,&#x27;Immutable numbers&#x27;]],
+      [&#x27;Audit&#x27;,[&#x27;User and organization&#x27;,&#x27;Action/table/record&#x27;,&#x27;Old and new JSON&#x27;,&#x27;Reason&#x27;,&#x27;IP address&#x27;,&#x27;Timestamp&#x27;]],
+      [&#x27;DSC direction&#x27;,[&#x27;Legacy DSC removed/replanned&#x27;,&#x27;External bridge architecture spec&#x27;,&#x27;Token renewal every three years&#x27;,&#x27;No Nitro dependency&#x27;]]
+    ]},
+    {id:&#x27;backup&#x27;,name:&#x27;Storage, Backup &amp; Deployment&#x27;,flow:&#x27;Live data -&gt; scheduled backup -&gt; second drive -&gt; verification -&gt; restore test -&gt; controlled upgrade&#x27;,groups:[
+      [&#x27;Storage separation&#x27;,[&#x27;Accounting database&#x27;,&#x27;Job/order records&#x27;,&#x27;Attachment directory&#x27;,&#x27;Configuration directory&#x27;,&#x27;No direct shared-database coupling&#x27;]],
+      [&#x27;Backup contents&#x27;,[&#x27;All organizations&#x27;,&#x27;Accounting masters&#x27;,&#x27;Transactions and journals&#x27;,&#x27;Jobs and catalogs&#x27;,&#x27;Users/settings&#x27;,&#x27;Audit logs&#x27;,&#x27;Attachment metadata&#x27;]],
+      [&#x27;Backup policy&#x27;,[&#x27;Primary data drive&#x27;,&#x27;Secondary hard-disk destination&#x27;,&#x27;Automatic schedule&#x27;,&#x27;Encrypted export&#x27;,&#x27;Retention&#x27;,&#x27;Restore validation&#x27;]],
+      [&#x27;Attachments&#x27;,[&#x27;Not permanently backed up by default&#x27;,&#x27;Active-work storage&#x27;,&#x27;One-week cleanup&#x27;,&#x27;Archive option&#x27;,&#x27;File name and metadata retained&#x27;]],
+      [&#x27;Deployment&#x27;,[&#x27;Windows 10/11 main build&#x27;,&#x27;Win7 build frozen&#x27;,&#x27;Installer and ZIP&#x27;,&#x27;SHA-256 verification&#x27;,&#x27;Pre-upgrade recovery copy&#x27;,&#x27;No installer before tests&#x27;]],
+      [&#x27;Autostart&#x27;,[&#x27;Application/service on Windows boot&#x27;,&#x27;Hidden server process&#x27;,&#x27;LAN availability&#x27;,&#x27;Diagnostics endpoint&#x27;]]
+    ]},
+    {id:&#x27;quality&#x27;,name:&#x27;Diagnostics, Tests &amp; Capacity&#x27;,flow:&#x27;Unit/integration/security/responsive/load -&gt; report -&gt; signed-off installer&#x27;,groups:[
+      [&#x27;Diagnostics&#x27;,[&#x27;Health endpoint&#x27;,&#x27;Database path/status&#x27;,&#x27;Main/client reachability&#x27;,&#x27;Queue and conflict counts&#x27;,&#x27;Version mismatch&#x27;,&#x27;Backup age&#x27;]],
+      [&#x27;Functional tests&#x27;,[&#x27;Every transaction&#x27;,&#x27;Accounting balance&#x27;,&#x27;Stock integrity&#x27;,&#x27;Party/address retention&#x27;,&#x27;Job lifecycle&#x27;,&#x27;Portal tracking&#x27;,&#x27;PDF analysis&#x27;]],
+      [&#x27;Security tests&#x27;,[&#x27;Authentication denial&#x27;,&#x27;Role denial&#x27;,&#x27;Organization isolation&#x27;,&#x27;Owner-only mutation&#x27;,&#x27;Reason enforcement&#x27;,&#x27;Device registration&#x27;]],
+      [&#x27;Scale tests&#x27;,[&#x27;10 client systems&#x27;,&#x27;Large transaction register&#x27;,&#x27;Concurrent numbering&#x27;,&#x27;300 portal uploads&#x27;,&#x27;100-200 active customers&#x27;,&#x27;Pagination and search&#x27;]],
+      [&#x27;Release gate&#x27;,[&#x27;Full test suite&#x27;,&#x27;Responsive Chrome tests&#x27;,&#x27;Backup round trip&#x27;,&#x27;Capacity report&#x27;,&#x27;Installer smoke test&#x27;,&#x27;Release-readiness report&#x27;]]
+    ]},
+    {id:&#x27;future&#x27;,name:&#x27;External &amp; Future Channels&#x27;,flow:&#x27;Stable API contract -&gt; authenticated clients -&gt; web/mobile channels -&gt; external statutory services&#x27;,groups:[
+      [&#x27;Billing API contract&#x27;,[&#x27;Organizations&#x27;,&#x27;Parties and addresses&#x27;,&#x27;Items/services&#x27;,&#x27;Stock movements&#x27;,&#x27;Invoices&#x27;,&#x27;Payments&#x27;,&#x27;Job references&#x27;]],
+      [&#x27;Future apps&#x27;,[&#x27;Android operator app&#x27;,&#x27;Customer public website&#x27;,&#x27;Internet-hosted deployment&#x27;,&#x27;Push/status notifications&#x27;,&#x27;Same IDs and permissions&#x27;]],
+      [&#x27;Statutory integrations&#x27;,[&#x27;GST e-invoice&#x27;,&#x27;E-way bill&#x27;,&#x27;Owner approval for payment corrections&#x27;,&#x27;Future DSC signing bridge&#x27;]],
+      [&#x27;Reliability foundation&#x27;,[&#x27;API-first modules&#x27;,&#x27;No shared DB clients&#x27;,&#x27;Pagination&#x27;,&#x27;Background workers&#x27;,&#x27;Object/file storage path&#x27;,&#x27;Observability&#x27;]]
+    ]}
+  ];
+  const svg = root.querySelector(&#x27;#tm-overview&#x27;);
+  const grid = root.querySelector(&#x27;#tm-grid&#x27;);
+  const selected = root.querySelector(&#x27;#tm-selected&#x27;);
+  const search = root.querySelector(&#x27;#tm-search&#x27;);
+  const domainSelect = root.querySelector(&#x27;#tm-domain&#x27;);
+  let selectedId = &#x27;jobs&#x27;;
+  let showAll = false;
+  const escHtml = value =&gt; String(value).replace(/[&amp;&lt;&gt;&quot;&#x27;]/g, ch =&gt; ({&#x27;&amp;&#x27;:&#x27;&amp;amp;&#x27;,&#x27;&lt;&#x27;:&#x27;&amp;lt;&#x27;,&#x27;&gt;&#x27;:&#x27;&amp;gt;&#x27;,&#x27;&quot;&#x27;:&#x27;&amp;quot;&#x27;,&quot;&#x27;&quot;:&#x27;&amp;#39;&#x27;}[ch]));
+  domains.forEach(domain =&gt; domainSelect.insertAdjacentHTML(&#x27;beforeend&#x27;, `&lt;option value=&quot;${domain.id}&quot;&gt;${escHtml(domain.name)}&lt;/option&gt;`));
+
+  function overview() {
+    const cx=600,cy=250,rx=490,ry=190;
+    const paths=[]; const nodes=[];
+    domains.forEach((domain,index)=&gt;{
+      const angle=(Math.PI*2*index/domains.length)-Math.PI/2;
+      const x=cx+Math.cos(angle)*rx,y=cy+Math.sin(angle)*ry;
+      const w=150,h=44,ax=x+(x&lt;cx?w/2:-w/2),ay=y;
+      paths.push(`&lt;path class=&quot;tm-link-shadow&quot; d=&quot;M${cx},${cy} Q${(cx+ax)/2},${(cy+ay)/2-18} ${ax},${ay}&quot;/&gt;&lt;path class=&quot;tm-link&quot; d=&quot;M${cx},${cy} Q${(cx+ax)/2},${(cy+ay)/2-18} ${ax},${ay}&quot;/&gt;`);
+      nodes.push(`&lt;g class=&quot;tm-node ${domain.id===selectedId?&#x27;is-selected&#x27;:&#x27;&#x27;}&quot; data-id=&quot;${domain.id}&quot; transform=&quot;translate(${x-w/2},${y-h/2})&quot; role=&quot;button&quot; aria-label=&quot;Open ${escHtml(domain.name)}&quot;&gt;
+        &lt;path class=&quot;tm-node-side&quot; d=&quot;M7 ${h} L${w+7} ${h} L${w+7} 7 L${w} 0 L${w} ${h-7} L0 ${h-7} Z&quot;/&gt;
+        &lt;rect class=&quot;tm-node-face&quot; width=&quot;${w}&quot; height=&quot;${h-7}&quot; rx=&quot;9&quot;/&gt;&lt;text x=&quot;${w/2}&quot; y=&quot;${h/2-2}&quot; text-anchor=&quot;middle&quot;&gt;${escHtml(domain.name.length&gt;23?domain.name.slice(0,22)+&#x27;…&#x27;:domain.name)}&lt;/text&gt;&lt;/g&gt;`);
+    });
+    svg.innerHTML=`&lt;g&gt;${paths.join(&#x27;&#x27;)}&lt;/g&gt;&lt;g transform=&quot;translate(500,205)&quot;&gt;&lt;path class=&quot;tm-hub-side&quot; d=&quot;M12 84 H212 V12 L200 0 V72 H0 Z&quot;/&gt;&lt;rect class=&quot;tm-hub-face&quot; width=&quot;200&quot; height=&quot;72&quot; rx=&quot;18&quot;/&gt;&lt;text x=&quot;100&quot; y=&quot;30&quot; text-anchor=&quot;middle&quot; fill=&quot;var(--primary-foreground)&quot;&gt;TARANGINI&lt;/text&gt;&lt;text x=&quot;100&quot; y=&quot;51&quot; text-anchor=&quot;middle&quot; fill=&quot;var(--primary-foreground)&quot;&gt;WORKFLOW SUITE&lt;/text&gt;&lt;/g&gt;${nodes.join(&#x27;&#x27;)}`;
+    svg.querySelectorAll(&#x27;.tm-node&#x27;).forEach(node=&gt;node.addEventListener(&#x27;click&#x27;,()=&gt;{selectedId=node.dataset.id;domainSelect.value=selectedId;render();}));
+  }
+  function highlight(text,term){if(!term)return escHtml(text);const safe=escHtml(text);const escaped=term.replace(/[.*+?^${}()|[\]\\]/g,&#x27;\\$&amp;&#x27;);return safe.replace(new RegExp(`(${escaped})`,&#x27;ig&#x27;),&#x27;&lt;mark&gt;$1&lt;/mark&gt;&#x27;);}
+  function card(domain,term){
+    const groups=domain.groups.map(group=&gt;`&lt;div class=&quot;tm-group&quot;&gt;&lt;div class=&quot;tm-group-title&quot;&gt;&lt;span class=&quot;tm-dot&quot;&gt;&lt;/span&gt;${highlight(group[0],term)}&lt;/div&gt;&lt;div class=&quot;tm-leaves&quot;&gt;${group[1].map(leaf=&gt;`&lt;span class=&quot;tm-leaf&quot;&gt;${highlight(leaf,term)}&lt;/span&gt;`).join(&#x27;&#x27;)}&lt;/div&gt;&lt;/div&gt;`).join(&#x27;&#x27;);
+    return `&lt;section class=&quot;tm-card&quot; data-domain=&quot;${domain.id}&quot;&gt;&lt;h3&gt;${highlight(domain.name,term)}&lt;/h3&gt;${groups}&lt;div class=&quot;tm-flow&quot;&gt;&lt;strong&gt;Flow:&lt;/strong&gt; ${highlight(domain.flow,term)}&lt;/div&gt;&lt;/section&gt;`;
+  }
+  function render(){
+    const term=search.value.trim().toLowerCase(); const filter=domainSelect.value;
+    const chosen=domains.find(d=&gt;d.id===selectedId)||domains[0];
+    selected.innerHTML=`&lt;strong&gt;${escHtml(chosen.name)}&lt;/strong&gt;&lt;div class=&quot;tm-selected-path&quot;&gt;${escHtml(chosen.flow)}&lt;/div&gt;`;
+    let visible=domains.filter(domain=&gt;filter===&#x27;all&#x27;||domain.id===filter);
+    if(term)visible=visible.filter(domain=&gt;JSON.stringify(domain).toLowerCase().includes(term));
+    if(!showAll&amp;&amp;!term&amp;&amp;filter===&#x27;all&#x27;) visible=visible.filter(domain=&gt;domain.id===selectedId);
+    grid.innerHTML=visible.length?visible.map(domain=&gt;card(domain,term)).join(&#x27;&#x27;):&#x27;&lt;div class=&quot;tm-empty&quot;&gt;No matching feature or process&lt;/div&gt;&#x27;;
+    root.querySelector(&#x27;#tm-expand&#x27;).textContent=showAll?&#x27;Show selected branch&#x27;:&#x27;Show all details&#x27;;
+    overview();
+  }
+  search.addEventListener(&#x27;input&#x27;,render);
+  domainSelect.addEventListener(&#x27;change&#x27;,()=&gt;{if(domainSelect.value!==&#x27;all&#x27;)selectedId=domainSelect.value;render();});
+  root.querySelector(&#x27;#tm-expand&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;{showAll=!showAll;domainSelect.value=&#x27;all&#x27;;render();});
+  root.querySelector(&#x27;#tm-reset&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;{search.value=&#x27;&#x27;;domainSelect.value=&#x27;all&#x27;;selectedId=&#x27;jobs&#x27;;showAll=false;render();});
+  render();
+})();
+&lt;/script&gt;
+
+&lt;script src=&quot;https://unpkg.com/@floating-ui/core@1.7.3/dist/floating-ui.core.umd.min.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;https://unpkg.com/@floating-ui/dom@1.7.4/dist/floating-ui.dom.umd.min.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+(() =&gt; {
+  if (window.FloatingUIDOM == null) {
+    return;
+  }
+  const { autoUpdate, computePosition, flip, offset, shift, size } =
+    window.FloatingUIDOM;
+  const tooltipPlacements = new Set([&quot;top&quot;, &quot;right&quot;, &quot;bottom&quot;, &quot;left&quot;]);
+  const tooltipId = `codex-visualization-tooltip-${
+    window.crypto?.randomUUID?.() ?? Date.now().toString(36)
+  }`;
+  const tooltipGap = 5;
+  const hoverDelay = 700;
+  const skipDelay = 300;
+  let activeTrigger = null;
+  let pendingTrigger = null;
+  let tooltip = null;
+  let openTimeout = null;
+  let autoUpdateCleanup = null;
+  let positionRequest = 0;
+  let skipDelayUntil = 0;
+
+  const getTrigger = (target) =&gt;
+    target?.nodeType === Node.ELEMENT_NODE
+      ? target.closest(&quot;[data-tooltip]&quot;)
+      : null;
+  const containsTarget = (trigger, target) =&gt;
+    target?.nodeType != null &amp;&amp; trigger.contains(target);
+  const getContent = (trigger) =&gt;
+    trigger.getAttribute(&quot;data-tooltip&quot;)?.trim() ?? &quot;&quot;;
+  const getPlacement = (trigger) =&gt; {
+    const placement = trigger.getAttribute(&quot;data-tooltip-placement&quot;);
+    return tooltipPlacements.has(placement) ? placement : &quot;top&quot;;
+  };
+  const getTooltip = () =&gt; {
+    if (tooltip == null) {
+      tooltip = document.createElement(&quot;div&quot;);
+      tooltip.id = tooltipId;
+      tooltip.className = &quot;tooltip&quot;;
+      tooltip.setAttribute(&quot;role&quot;, &quot;tooltip&quot;);
+    }
+    return tooltip;
+  };
+  const setDescribedBy = (trigger, described) =&gt; {
+    const ids = new Set(
+      (trigger.getAttribute(&quot;aria-describedby&quot;) ?? &quot;&quot;)
+        .split(/\s+/)
+        .filter(Boolean),
+    );
+    if (described) {
+      ids.add(tooltipId);
+    } else {
+      ids.delete(tooltipId);
+    }
+    if (ids.size === 0) {
+      trigger.removeAttribute(&quot;aria-describedby&quot;);
+    } else {
+      trigger.setAttribute(&quot;aria-describedby&quot;, [...ids].join(&quot; &quot;));
+    }
+  };
+  const clearOpenTimeout = () =&gt; {
+    if (openTimeout != null) {
+      window.clearTimeout(openTimeout);
+      openTimeout = null;
+    }
+    pendingTrigger = null;
+  };
+  const closeTooltip = (activateSkipDelay = true) =&gt; {
+    clearOpenTimeout();
+    positionRequest += 1;
+    autoUpdateCleanup?.();
+    autoUpdateCleanup = null;
+    if (activeTrigger == null) {
+      return;
+    }
+    setDescribedBy(activeTrigger, false);
+    activeTrigger = null;
+    tooltip?.remove();
+    if (activateSkipDelay) {
+      skipDelayUntil = Date.now() + skipDelay;
+    }
+  };
+  const updatePosition = (trigger, floating) =&gt; {
+    const request = ++positionRequest;
+    void computePosition(trigger, floating, {
+      middleware: [
+        offset(tooltipGap),
+        flip({ padding: tooltipGap }),
+        shift({ padding: tooltipGap }),
+        size({
+          padding: tooltipGap,
+          apply({ availableHeight, availableWidth, elements }) {
+            elements.floating.style.setProperty(
+              &quot;--tooltip-available-width&quot;,
+              `${Math.max(0, availableWidth)}px`,
+            );
+            elements.floating.style.setProperty(
+              &quot;--tooltip-available-height&quot;,
+              `${Math.max(0, availableHeight)}px`,
+            );
+          },
+        }),
+      ],
+      placement: getPlacement(trigger),
+      strategy: &quot;fixed&quot;,
+    })
+      .then(({ x, y }) =&gt; {
+        if (activeTrigger !== trigger || request !== positionRequest) {
+          return;
+        }
+        const scale = window.devicePixelRatio || 1;
+        floating.style.transform = `translate(${Math.round(x * scale) / scale}px, ${Math.round(y * scale) / scale}px)`;
+        floating.style.visibility = &quot;visible&quot;;
+      })
+      .catch(() =&gt; {
+        if (activeTrigger === trigger &amp;&amp; request === positionRequest) {
+          closeTooltip(false);
+        }
+      });
+  };
+  const openTooltip = (trigger) =&gt; {
+    const content = getContent(trigger);
+    if (!trigger.isConnected || content.length === 0) {
+      return;
+    }
+    clearOpenTimeout();
+    if (activeTrigger === trigger) {
+      return;
+    }
+    closeTooltip();
+    const floating = getTooltip();
+    floating.textContent = content;
+    floating.style.visibility = &quot;hidden&quot;;
+    floating.style.transform = &quot;translate(0, 0)&quot;;
+    document.body.appendChild(floating);
+    activeTrigger = trigger;
+    setDescribedBy(trigger, true);
+    autoUpdateCleanup = autoUpdate(trigger, floating, () =&gt; {
+      updatePosition(trigger, floating);
+    });
+  };
+  const requestOpen = (trigger, immediate = false) =&gt; {
+    if (
+      getContent(trigger).length === 0 ||
+      activeTrigger === trigger ||
+      pendingTrigger === trigger
+    ) {
+      return;
+    }
+    clearOpenTimeout();
+    pendingTrigger = trigger;
+    const delay =
+      immediate || activeTrigger != null || Date.now() &lt; skipDelayUntil
+        ? 0
+        : hoverDelay;
+    if (delay === 0) {
+      openTooltip(trigger);
+      return;
+    }
+    openTimeout = window.setTimeout(() =&gt; {
+      openTimeout = null;
+      pendingTrigger = null;
+      openTooltip(trigger);
+    }, delay);
+  };
+  const handlePointerOpen = (event) =&gt; {
+    if (event.pointerType === &quot;touch&quot;) {
+      return;
+    }
+    const trigger = getTrigger(event.target);
+    if (trigger == null || containsTarget(trigger, event.relatedTarget)) {
+      return;
+    }
+    requestOpen(trigger);
+  };
+  const handleLeave = (event) =&gt; {
+    const trigger = getTrigger(event.target);
+    if (trigger == null || containsTarget(trigger, event.relatedTarget)) {
+      return;
+    }
+    if (activeTrigger === trigger || pendingTrigger === trigger) {
+      closeTooltip();
+    }
+  };
+  const handleFocusIn = (event) =&gt; {
+    const trigger = getTrigger(event.target);
+    if (trigger?.matches(&quot;:focus-visible&quot;)) {
+      requestOpen(trigger, true);
+    }
+  };
+  const handleKeyDown = (event) =&gt; {
+    if (event.key === &quot;Escape&quot;) {
+      closeTooltip();
+    }
+  };
+  const handleContextMenu = (event) =&gt; {
+    const trigger = getTrigger(event.target);
+    if (activeTrigger === trigger || pendingTrigger === trigger) {
+      closeTooltip();
+    }
+  };
+  const destroy = () =&gt; {
+    closeTooltip(false);
+    document.removeEventListener(&quot;pointerover&quot;, handlePointerOpen);
+    document.removeEventListener(&quot;pointerout&quot;, handleLeave);
+    document.removeEventListener(&quot;focusin&quot;, handleFocusIn);
+    document.removeEventListener(&quot;focusout&quot;, handleLeave);
+    document.removeEventListener(&quot;keydown&quot;, handleKeyDown);
+    document.removeEventListener(&quot;contextmenu&quot;, handleContextMenu);
+    tooltip = null;
+  };
+
+  document.addEventListener(&quot;pointerover&quot;, handlePointerOpen);
+  document.addEventListener(&quot;pointerout&quot;, handleLeave);
+  document.addEventListener(&quot;focusin&quot;, handleFocusIn);
+  document.addEventListener(&quot;focusout&quot;, handleLeave);
+  document.addEventListener(&quot;keydown&quot;, handleKeyDown);
+  document.addEventListener(&quot;contextmenu&quot;, handleContextMenu);
+  window.addEventListener(&quot;pagehide&quot;, destroy, { once: true });
+})();
+&lt;/script&gt;
+&lt;script id=&quot;codex-visualization-lucide&quot; async src=&quot;https://unpkg.com/lucide@1.17.0/dist/umd/lucide.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+(() =&gt; {
+  const initialize = () =&gt; {
+    globalThis.lucide?.createIcons({ attrs: { width: 16, height: 16 } });
+  };
+  if (globalThis.lucide != null) {
+    initialize();
+    return;
+  }
+  document
+    .getElementById(&quot;codex-visualization-lucide&quot;)
+    ?.addEventListener(&quot;load&quot;, initialize, { once: true });
+})();
+&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+"></iframe>
+</body>
+</html>

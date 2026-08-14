@@ -1,0 +1,109 @@
+{
+  "tested_at": "2026-07-15T20:59:18.313Z",
+  "scope": "10 lakh records in each of 8 primary transaction categories, simultaneously",
+  "primary_transactions": 8000000,
+  "journal_lines": 2000000,
+  "total_transaction_rows": 10000000,
+  "counts": {
+    "bills": 1000000,
+    "payments": 1000000,
+    "purchases": 1000000,
+    "expenses": 1000000,
+    "notes": 1000000,
+    "purchase_orders": 1000000,
+    "bank_rows": 1000000,
+    "journals": 1000000
+  },
+  "insertion_seconds_by_type": {
+    "bills": 123.17,
+    "payments": 19.61,
+    "purchases": 13.91,
+    "expenses": 12.92,
+    "notes": 12.98,
+    "purchase_orders": 13.13,
+    "bank_rows": 12.11,
+    "journals": 14.27,
+    "journal_lines": 12.16,
+    "database_save": 0
+  },
+  "total_seconds": 357.83,
+  "database_size_mb": 1974.45,
+  "integrity": "ok",
+  "integrity_check_seconds": 80.48,
+  "memory_mb": {
+    "rss": 135.31,
+    "heapTotal": 71.98,
+    "heapUsed": 18.55,
+    "external": 2.1,
+    "arrayBuffers": 0.14
+  },
+  "queries": {
+    "invoice_exact_search": {
+      "milliseconds": 0.13,
+      "rows": 1,
+      "first": {
+        "id": 1000000,
+        "bill_number": "MIL/SB/2026-27/999999"
+      }
+    },
+    "invoice_text_search": {
+      "milliseconds": 150.51,
+      "rows": 1,
+      "first": {
+        "id": 1000000,
+        "bill_number": "MIL/SB/2026-27/999999"
+      }
+    },
+    "monthly_sales": {
+      "milliseconds": 10343.24,
+      "rows": 9,
+      "first": {
+        "substr(bill_date,1,7)": "2026-04",
+        "SUM(grand_total)": 13111098
+      }
+    },
+    "party_balance_inputs": {
+      "milliseconds": 9518.22,
+      "rows": 1,
+      "first": {
+        "party_id": 2,
+        "SUM(grand_total)": 118000000
+      }
+    },
+    "payment_summary": {
+      "milliseconds": 1432.14,
+      "rows": 4,
+      "first": {
+        "type": "paid",
+        "mode": "account",
+        "COUNT(*)": 166666,
+        "SUM(amount)": 19666588
+      }
+    },
+    "expense_summary": {
+      "milliseconds": 1328.03,
+      "rows": 1,
+      "first": {
+        "account_id": 749,
+        "COUNT(*)": 1000000,
+        "SUM(amount)": 50000000
+      }
+    },
+    "journal_trial_input": {
+      "milliseconds": 2444.51,
+      "rows": 2,
+      "first": {
+        "account_id": 736,
+        "SUM(jl.debit)": 50000000,
+        "SUM(jl.credit)": 0
+      }
+    },
+    "bank_exact_search": {
+      "milliseconds": 0.17,
+      "rows": 1,
+      "first": {
+        "id": 999999
+      }
+    }
+  }
+}
