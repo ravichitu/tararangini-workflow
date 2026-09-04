@@ -1,6 +1,6 @@
 {
   "name": "tarangini-workflow-suite",
-  "version": "1.1.23",
+  "version": "1.2.3",
   "description": "Tarangini Workflow Suite with billing, production workflow, and customer portal",
   "author": "Tarangini",
   "main": "electron/main.js",
@@ -38,23 +38,30 @@
     "test:backup": "node tests/backup-roundtrip.integration.js",
     "test:deployment": "node tests/deployment-maintenance.integration.js",
     "test:attachments": "node tests/attachment-pipeline.integration.js",
+    "test:attachment-security": "node tests/attachment-security.regression.js",
     "test:advanced-upgrades": "node tests/advanced-upgrades.integration.js",
     "test:quotation-flow": "node tests/quotation-dc-invoice.integration.js",
     "test:tax-inclusive": "node tests/tax-inclusive-transactions.integration.js",
     "test:operator-log": "node tests/operator-daily-log.integration.js",
     "test:transaction-reset": "node tests/transaction-reset-regression.integration.js",
     "test:dashboard-ui": "node tests/dashboard-ui.integration.js",
+    "test:sale-input-layout": "node tests/sale-input-layout.regression.js",
+    "test:job-detail-sync-refresh": "node tests/job-detail-sync-refresh.regression.js",
+    "test:job-new-sync-draft": "node tests/job-new-sync-draft.regression.js",
+    "test:web-invoice-batch": "node tests/web-invoice-batch.integration.js",
+    "test:web-update": "node tests/web-update.regression.js",
+    "test:packaged-update": "node tests/packaged-update-payload.regression.js",
     "record:transactions": "node tools/record-transaction-demos.js",
-  "test:review": "npm run test:security && npm run test:security-hardening && npm run test:operator-log && npm run test:transaction-reset && npm run test:dashboard-ui && npm run test:internal-notes && npm run test:pagination && npm run test:backup && npm run test:deployment && npm run test:attachments && npm run test:tax-inclusive && npm run test:device-identity && npm run test:device-registration && npm run test:fixed-document-notes && npm run test:duplicate-exact && npm run test:offline-storage-integrity && npm run test:offline-replica && npm run test:offline-financial-drafts && npm run test:local-portal && node tests/new-features.integration.js && npm run test:transaction-profiles && npm run test:advanced-upgrades && npm run test:user-admin && npm run test:jobs && npm run test:offline-sync && npm run test:v2.3 && npm run test:responsive-web && npm run test:responsive"
+    "test:review": "npm run test:security && npm run test:security-hardening && npm run test:operator-log && npm run test:transaction-reset && npm run test:dashboard-ui && npm run test:sale-input-layout && npm run test:job-detail-sync-refresh && npm run test:job-new-sync-draft && npm run test:web-invoice-batch && npm run test:web-update && npm run test:internal-notes && npm run test:pagination && npm run test:backup && npm run test:deployment && npm run test:attachments && npm run test:attachment-security && npm run test:tax-inclusive && npm run test:device-identity && npm run test:device-registration && npm run test:fixed-document-notes && npm run test:duplicate-exact && npm run test:offline-storage-integrity && npm run test:offline-replica && npm run test:offline-financial-drafts && npm run test:local-portal && node tests/new-features.integration.js && npm run test:transaction-profiles && npm run test:advanced-upgrades && npm run test:user-admin && npm run test:jobs && npm run test:offline-sync && npm run test:v2.3 && npm run test:responsive-web && npm run test:responsive"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "busboy": "^1.6.0",
     "compression": "^1.7.4",
     "cors": "^2.8.5",
+    "electron-updater": "^6.8.9",
     "express": "^4.18.2",
     "express-rate-limit": "^7.1.5",
-    "image-size": "^2.0.2",
     "jsonwebtoken": "^9.0.2",
     "nodemailer": "^9.0.1",
     "pdf-lib": "^1.17.1",
@@ -70,6 +77,16 @@
     "appId": "in.tarangini.workflow",
     "productName": "Tarangini Workflow Suite",
     "asar": true,
+    "electronUpdaterCompatibility": ">= 2.16",
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "ravichitu",
+        "repo": "tarangini-suite-updates",
+        "private": false,
+        "releaseType": "release"
+      }
+    ],
     "files": [
       "electron/**/*",
       "public/**/*",
@@ -83,6 +100,24 @@
     "directories": {
       "output": "dist"
     },
+    "extraResources": [
+      {
+        "from": "tools/run-web-invoice-batch.cmd",
+        "to": "Run Web Invoice Batch.cmd"
+      },
+      {
+        "from": "tools/run-web-invoice-batch.ps1",
+        "to": "run-web-invoice-batch.ps1"
+      },
+      {
+        "from": "tools/run-web-invoice-batch-store-main.cmd",
+        "to": "Run Web Invoice Batch - Store Main.cmd"
+      },
+      {
+        "from": "docs/WEB_INVOICE_BATCH_CREATOR.md",
+        "to": "WEB_INVOICE_BATCH_CREATOR.md"
+      }
+    ],
     "win": {
       "icon": "assets/tarangini.ico",
       "signAndEditExecutable": false,

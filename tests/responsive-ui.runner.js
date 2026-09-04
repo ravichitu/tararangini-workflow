@@ -95,7 +95,7 @@ app.whenReady().then(async () => {
       await delay(150);
       const pages = {
         pos: 'Fast POS Counter',
-        sale: 'Sale Bill Details',
+        sale: 'New Sale Bill',
         'invoice-corrections': 'Correction Audit History',
         shifts: 'Shift History',
         'operator-log': 'Owner & Operator Daily Log',

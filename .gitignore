@@ -1,27 +1,43 @@
 # Installed dependencies
 node_modules/
 
-# Build intermediates (final release packages are kept separately)
-dist/win-unpacked/
-dist/builder-debug.yml
+# Packaged installers and build intermediates are release artifacts, never source.
+dist/
+release-artifacts/
+release-output-*/
+release-publish-*/
 
-# Generated test databases and browser captures
+# All local business data, credential material, and backup archives stay outside Git.
+database/
+.quotation-dc-invoice-test/
+.release-server-probe/
+*.db
+*.sqlite
+*.sqlite3
+*.tbe
+.jwt-secret
+.automatic-backup-key
+*.pfx
+*.p12
+*.pem
+*.key
+.env
+.env.*
+!.env.example
+
+# Generated test data, reports, and browser captures
 .manual-test-data*/
 .responsive-test-data/
 .mobile-visual-data/
-output/manual-*-render/
-output/manual-render-final/
-output/responsive/
-output/responsive-chrome/
+.backup-debug/
+.playwright-cli/
+output/
+manual_render/
 
-dist/
 # Document rendering caches
-manual_render/final-pages/
-manual_render/word-pages/
 tmp/
 
 # Runtime and language caches
 *.log
 *.pyc
 __pycache__/
-

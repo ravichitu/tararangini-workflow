@@ -1,0 +1,40 @@
+name: Publish Signed Tarangini Release
+
+on:
+  push:
+    tags: ['v*.*.*']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    runs-on: windows-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run test:review
+      - name: Require protected release secrets
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ secrets.TARANGINI_UPDATES_TOKEN }}
+          CSC_LINK: ${{ secrets.TARANGINI_CODE_SIGNING_CERTIFICATE }}
+          CSC_KEY_PASSWORD: ${{ secrets.TARANGINI_CODE_SIGNING_PASSWORD }}
+        run: |
+          $required = 'GH_TOKEN', 'CSC_LINK', 'CSC_KEY_PASSWORD'
+          $missing = $required | Where-Object { [string]::IsNullOrWhiteSpace([Environment]::GetEnvironmentVariable($_)) }
+          if ($missing) { throw "Release blocked. Configure GitHub secrets: $($missing -join ', ')." }
+      - name: Build, sign, and publish update files
+        env:
+          GH_TOKEN: ${{ secrets.TARANGINI_UPDATES_TOKEN }}
+          CSC_LINK: ${{ secrets.TARANGINI_CODE_SIGNING_CERTIFICATE }}
+          CSC_KEY_PASSWORD: ${{ secrets.TARANGINI_CODE_SIGNING_PASSWORD }}
+        run: npm run dist -- --publish always

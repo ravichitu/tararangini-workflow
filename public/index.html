@@ -11,7 +11,7 @@
 <meta name="apple-mobile-web-app-title" content="Tarangini">
 <link rel="manifest" href="/manifest.webmanifest">
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=1.1.10-catalog-owner-log-2">
+  <link rel="stylesheet" href="style.css?v=1.2.3-sale-focus-ui">
 </head>
 <body>
 
@@ -210,6 +210,8 @@
   <div id="main">
     <div id="topbar">
       <button class="mobile-menu-button" onclick="toggleMobileSidebar()" aria-label="Open navigation">&#9776;</button>
+      <button id="transaction-focus-menu" class="transaction-focus-menu-button" type="button"
+        onclick="toggleTransactionSidebar()" aria-label="Show navigation" aria-expanded="false">&#9776; Show menu</button>
       <div class="topbar-title" id="page-title">Dashboard</div>
       <div class="topbar-chips">
         <button id="install-mobile-app" class="chip install-app-chip" style="display:none" type="button">Install App</button>
@@ -291,6 +293,6 @@
 <!-- TOAST -->
 <div id="toast-container"></div>
 
-<script src="app-2.4.0.js?v=1.1.10-catalog-owner-log-2"></script>
+  <script src="app-2.4.0.js?v=1.2.3-sale-focus-ui"></script>
 </body>
 </html>

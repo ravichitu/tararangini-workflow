@@ -331,14 +331,14 @@ async function request(method, route, body, token, expected = 200, extraHeaders 
     const addition = await request('POST', `/jobs/${created.id}/additions`, {
       reason: 'Protective cover required',
       attachments: [{
-        file_name: 'cover-damage.jpg',
-        mime_type: 'image/jpeg',
-        content_base64: Buffer.from('evidence image bytes').toString('base64')
+        file_name: 'cover-damage.png',
+        mime_type: 'image/png',
+        content_base64: pngBase64
       }]
     }, operator.token);
     const additionEvidence = await request('GET', `/jobs/${created.id}`, undefined, operator.token);
     assert.ok(additionEvidence.attachments.some(file =>
-      file.entity_type === 'ADDITION' && file.file_name === 'cover-damage.jpg'));
+      file.entity_type === 'ADDITION' && file.file_name === 'cover-damage.png'));
     await request('PUT', `/jobs/additions/${addition.id}/price`, {
       customer_description: 'Protective cover',
       quantity: 2,

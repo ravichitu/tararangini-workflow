@@ -993,3 +993,46 @@ Recorded warranty service-center scenario:
 - Delivery Challans retain internal rates for later invoicing but do not post stock; Sale invoices post accounting and stock as before.
 - Added linked-document visibility to the full bill response and Create DC / Invoice actions in the bill list and preview.
 - Added focused integration coverage for partial quantities, over-allocation rejection, invoice conversion and linked-document history.
+
+## Payment Receipt Reliability Findings - 2026-08-16
+
+Validated in the isolated `TRANSACTION QA - TEST DATA` company only:
+
+- Created and linked 50 test Payment Received entries for sale invoices `TRA-SB/26/0001` through `TRA-SB/26/0050`.
+- Verified the intended alternating posting pattern: odd invoice numbers to Cash in Hand and even invoice numbers to Bank / UPI.
+- Corrected one QA receipt through the owner correction flow after discovering that a new form visually showed Cash while retaining the prior form's Account mode in memory.
+
+Source corrections recorded for the next application update:
+
+- Reset a new payment form's in-memory mode to Cash so it cannot inherit the preceding receipt/voucher mode.
+- Populate the saved-receipt preview with its number, party, date and amount instead of displaying `Saved`, `Not specified` and `-`.
+- Offer only invoices with a positive outstanding balance in the receipt allocation list and allocate the remaining balance, not the original invoice total.
+- Replace the Electron-incompatible browser deletion prompt with an in-app, mandatory-reason dialog for owner receipt reversals.
+
+Deployment note:
+
+- The currently running installed application predates these source corrections. Its Delete action cannot collect the mandatory reason because Electron suppresses the browser prompt, so requested reversals for QA references `QA-PR-0035` and `QA-PR-0048` remain pending until this corrected build is installed. No direct database deletion was performed.
+
+Verification note:
+
+- `node --check public/app-2.4.0.js` and `git diff --check` passed.
+- `npm run test:advanced-upgrades` could not begin because its standalone test server did not become reachable. No assertions ran, and the live installed application was not interrupted to start a competing server.
+
+## Version 1.1.25 Web Invoice Batch Creator
+
+- Added an installed-app launcher for controlled invoice batch checks from a client desktop.
+- The runner authenticates using the selected Tarangini role and creates invoices through the normal API, retaining organization access, bill numbering, accounting, audit and stock rules.
+- It is dry-run by default, requires explicit `--commit` for writes, uses a reusable batch ID to avoid duplicate invoices on rerun, and verifies each invoice through the role's own API view.
+- The Windows launcher asks for the password/PIN securely and writes a JSON audit report without storing the credential or session token.
+- The role test covers operator creation, rerun idempotency, dry-run non-writing behavior, role ownership and secret-free reports.
+
+## Version 1.1.26 Store Main Batch Preset
+
+- Added `Run Web Invoice Batch - Store Main.cmd` for the configured Main System at `192.168.0.104`.
+- The preset supplies `operator1` and organization `1`, starts in dry-run mode, and accepts later arguments such as `--count 50 --batch-id QA-STORE-001 --commit`.
+
+## Version 1.1.27 Batch Error Visibility
+
+- The Windows launcher now passes the report path explicitly to the packaged application instead of relying only on inherited environment variables.
+- On failure, it shows both the report file path and the first reported server-side error in the command window.
+- Command-line parse failures now also produce a safe JSON failure report when a report path was supplied.

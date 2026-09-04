@@ -6,6 +6,7 @@ const { spawn } = require('child_process');
 const root = path.resolve(__dirname, '..');
 const dataDir = path.join(root, '.duplicate-exact-test');
 const port = 3215;
+const today = new Date().toISOString().slice(0, 10);
 fs.rmSync(dataDir, { recursive: true, force: true });
 
 const server = spawn(process.execPath, ['server.js'], {
@@ -60,13 +61,13 @@ async function waitForServer() {
       last_sale_price: 120
     }, owner.token);
     const created = await request('POST', '/bills', {
-      org_id: org.id, format: 'QUOT', bill_date: '2026-07-20', party_id: party.id,
+      org_id: org.id, format: 'QUOT', bill_date: today, party_id: party.id,
       payment_mode: 'credit', credit_days: 30, delivery_address: 'Delivery Desk, Kakinada',
       delivery_info: {
         recipient_name: 'Jaya', recipient_phone: '9000000001',
-        transport_name: 'Tarangini Courier', tracking_id: 'TRACK-EXACT-1', dispatch_date: '2026-07-21'
+        transport_name: 'Tarangini Courier', tracking_id: 'TRACK-EXACT-1', dispatch_date: today
       },
-      po_number: 'PO-EXACT-001', po_date: '2026-07-19', description: 'Keep every quotation value',
+      po_number: 'PO-EXACT-001', po_date: today, description: 'Keep every quotation value',
       swipe_charge: 3.5, tax_inclusive: false,
       items: [{
         item_id: item.id, item_name: 'Exact Copy Service', item_description: 'Colour print and binding',

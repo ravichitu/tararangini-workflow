@@ -1,10 +1,112 @@
 const path = require('path');
 const { PDFDocument } = require('pdf-lib');
-const { imageSize } = require('image-size');
 const {
   CUSTOMER_UPLOAD_LIMIT_MB,
   STAFF_UPLOAD_LIMIT_MB
 } = require('../config/deployment-profile');
+
+const SAFE_IMAGE_MIME_TYPES = new Set([
+  'image/jpeg',
+  'image/png',
+  'image/webp',
+  'image/gif'
+]);
+
+function imagePayloadMatchesMime(bytes, mimeType) {
+  const value = Buffer.isBuffer(bytes) ? bytes : Buffer.from(bytes || []);
+  if (mimeType === 'image/jpeg') {
+    return value.length >= 3 && value[0] === 0xff && value[1] === 0xd8 && value[2] === 0xff;
+  }
+  if (mimeType === 'image/png') {
+    return value.length >= 8 && value.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]));
+  }
+  if (mimeType === 'image/gif') {
+    return value.length >= 6 && ['GIF87a', 'GIF89a'].includes(value.subarray(0, 6).toString('ascii'));
+  }
+  if (mimeType === 'image/webp') {
+    return value.length >= 12 && value.subarray(0, 4).toString('ascii') === 'RIFF' && value.subarray(8, 12).toString('ascii') === 'WEBP';
+  }
+  return false;
+}
+
+function readUInt16BE(bytes, offset) {
+  return (bytes[offset] << 8) | bytes[offset + 1];
+}
+
+function readUInt24LE(bytes, offset) {
+  return bytes[offset] | (bytes[offset + 1] << 8) | (bytes[offset + 2] << 16);
+}
+
+function readUInt32BE(bytes, offset) {
+  return ((bytes[offset] * 0x1000000) + (bytes[offset + 1] << 16) + (bytes[offset + 2] << 8) + bytes[offset + 3]) >>> 0;
+}
+
+function jpegDimensions(bytes) {
+  let offset = 2;
+  while (offset + 3 < bytes.length) {
+    while (offset < bytes.length && bytes[offset] === 0xff) offset += 1;
+    const marker = bytes[offset++];
+    if (marker === 0xd9 || marker === 0xda) return null;
+    if (marker === 0x01 || (marker >= 0xd0 && marker <= 0xd7)) continue;
+    if (offset + 1 >= bytes.length) return null;
+    const length = readUInt16BE(bytes, offset);
+    if (length < 2 || offset + length > bytes.length) return null;
+    const sof = (marker >= 0xc0 && marker <= 0xc3) || (marker >= 0xc5 && marker <= 0xc7) ||
+      (marker >= 0xc9 && marker <= 0xcb) || (marker >= 0xcd && marker <= 0xcf);
+    if (sof && length >= 7) {
+      const height = readUInt16BE(bytes, offset + 3);
+      const width = readUInt16BE(bytes, offset + 5);
+      return width && height ? { width, height, type: 'jpg' } : null;
+    }
+    offset += length;
+  }
+  return null;
+}
+
+function webpDimensions(bytes) {
+  const chunk = bytes.subarray(12, 16).toString('ascii');
+  if (chunk === 'VP8X' && bytes.length >= 30) {
+    return {
+      width: readUInt24LE(bytes, 24) + 1,
+      height: readUInt24LE(bytes, 27) + 1,
+      type: 'webp'
+    };
+  }
+  if (chunk === 'VP8 ' && bytes.length >= 30 && bytes[23] === 0x9d && bytes[24] === 0x01 && bytes[25] === 0x2a) {
+    return {
+      width: (bytes[26] | (bytes[27] << 8)) & 0x3fff,
+      height: (bytes[28] | (bytes[29] << 8)) & 0x3fff,
+      type: 'webp'
+    };
+  }
+  if (chunk === 'VP8L' && bytes.length >= 25 && bytes[20] === 0x2f) {
+    return {
+      width: 1 + bytes[21] + ((bytes[22] & 0x3f) << 8),
+      height: 1 + ((bytes[22] >> 6) | (bytes[23] << 2) | ((bytes[24] & 0x0f) << 10)),
+      type: 'webp'
+    };
+  }
+  return null;
+}
+
+// Parse only the formats accepted at upload time. Each parser advances through a bounded buffer.
+function imageDimensions(bytes, mimeType) {
+  const value = Buffer.isBuffer(bytes) ? bytes : Buffer.from(bytes || []);
+  if (!imagePayloadMatchesMime(value, mimeType)) return null;
+  if (mimeType === 'image/png' && value.length >= 24 && value.subarray(12, 16).toString('ascii') === 'IHDR') {
+    const width = readUInt32BE(value, 16);
+    const height = readUInt32BE(value, 20);
+    return width && height ? { width, height, type: 'png' } : null;
+  }
+  if (mimeType === 'image/gif' && value.length >= 10) {
+    const width = value[6] | (value[7] << 8);
+    const height = value[8] | (value[9] << 8);
+    return width && height ? { width, height, type: 'gif' } : null;
+  }
+  if (mimeType === 'image/jpeg') return jpegDimensions(value);
+  if (mimeType === 'image/webp') return webpDimensions(value);
+  return null;
+}
 
 function roughlyEqual(a, b, tolerance = 12) {
   return Math.abs(Number(a || 0) - Number(b || 0)) <= tolerance;
@@ -151,9 +253,21 @@ async function analyzeAttachment({ fileName, mimeType, bytes }) {
     mime_type: normalizedMime,
     byte_size: bytes.length
   };
-  if (normalizedMime.startsWith('image/')) {
+  if (SAFE_IMAGE_MIME_TYPES.has(normalizedMime)) {
+    if (!imagePayloadMatchesMime(bytes, normalizedMime)) {
+      return {
+        mimeType: normalizedMime,
+        pixelWidth: null,
+        pixelHeight: null,
+        pdfPageCount: null,
+        analysisStatus: 'FAILED',
+        analysisError: 'Image content does not match its declared safe file type.',
+        metadata
+      };
+    }
     try {
-      const image = imageSize(bytes);
+      const image = imageDimensions(bytes, normalizedMime);
+      if (!image) throw new Error('Image dimensions could not be read safely');
       return {
         mimeType: normalizedMime,
         pixelWidth: image.width || null,
@@ -179,6 +293,17 @@ async function analyzeAttachment({ fileName, mimeType, bytes }) {
         metadata
       };
     }
+  }
+  if (normalizedMime.startsWith('image/')) {
+    return {
+      mimeType: normalizedMime,
+      pixelWidth: null,
+      pixelHeight: null,
+      pdfPageCount: null,
+      analysisStatus: 'FAILED',
+      analysisError: 'This image format is not supported for analysis.',
+      metadata
+    };
   }
   if (normalizedMime === 'application/pdf') {
     try {
@@ -258,9 +383,12 @@ function validateAttachmentInput({ bytes, mimeType, uploadOrigin }) {
     if (!allowed.has(normalized)) {
       throw new Error('Customer portal supports PDF, JPG, PNG, and WebP files only');
     }
+    if (SAFE_IMAGE_MIME_TYPES.has(normalized) && !imagePayloadMatchesMime(bytes, normalized)) {
+      throw new Error('Image content does not match its declared file type');
+    }
     return;
   }
-  const allowed = normalized.startsWith('image/') || [
+  const allowed = SAFE_IMAGE_MIME_TYPES.has(normalized) || [
     'application/pdf',
     'application/msword',
     'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
@@ -268,11 +396,17 @@ function validateAttachmentInput({ bytes, mimeType, uploadOrigin }) {
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
   ].includes(normalized);
   if (!allowed) throw new Error('Unsupported attachment type');
+  if (SAFE_IMAGE_MIME_TYPES.has(normalized) && !imagePayloadMatchesMime(bytes, normalized)) {
+    throw new Error('Image content does not match its declared file type');
+  }
 }
 
 module.exports = {
   analyzeAttachment,
   normalizeCustomerPdfPrintRequest,
   validateAttachmentInput,
-  normalizeMimeType
+  normalizeMimeType,
+  imagePayloadMatchesMime,
+  imageDimensions,
+  SAFE_IMAGE_MIME_TYPES
 };

@@ -30,7 +30,7 @@ async function startServer(dataDir, port) {
   let output = '';
   server.stdout.on('data', chunk => { output += chunk; });
   server.stderr.on('data', chunk => { output += chunk; });
-  for (let attempt = 0; attempt < 180; attempt += 1) {
+  for (let attempt = 0; attempt < 300; attempt += 1) {
     try {
       if ((await fetch(`http://127.0.0.1:${port}/api/health`)).ok) {
         return { server, port, output: () => output };

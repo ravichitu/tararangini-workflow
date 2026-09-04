@@ -111,7 +111,8 @@ document.addEventListener('click', async event => {
 });
 if ('serviceWorker' in navigator && location.protocol !== 'file:') {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/service-worker.js').catch(error => {
+    // A versioned worker URL prevents an older offline shell from keeping a new desktop build on stale assets.
+    navigator.serviceWorker.register('/service-worker.js?v=1.2.3').catch(error => {
       console.error('Mobile app foundation registration failed:', error);
     });
   });
@@ -129,7 +130,9 @@ let OFFLINE_STATUS = null;
 let offlineStatusTimer = null;
 const DRAFT_PAGES = new Set([
   'sale','project-printing','quotation','challan','proforma','payment-received','payment-voucher',
-  'purchase','expense','notes','journal-entry','pos','returns','purchase-orders','warranty-replacements','settings'
+  'purchase','expense','notes','journal-entry','pos','returns','purchase-orders','warranty-replacements','settings',
+  // A remote status update must not rebuild a job form that an owner is completing.
+  'job-new'
 ]);
 let transactionDraftTimer = null;
 let transactionDraftHeartbeat = null;
@@ -641,16 +644,26 @@ function fmtN(n) { return parseFloat(n || 0).toLocaleString('en-IN', { minimumFr
 function fmtDate(d) { if (!d) return '—'; const dt = new Date(d); return dt.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }); }
 function today() { return new Date().toISOString().split('T')[0]; }
 function esc(s) { return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function multilineHtml(value) { return esc(value).replace(/\r\n|\r|\n/g, '<br>'); }
 function capitalizeEntryWords(value) {
-  return String(value || '').replace(/\S+/g, word => word.charAt(0).toUpperCase() + word.slice(1));
+  return String(value || '').replace(/\S+/g, word => {
+    if (/^[A-Z0-9][A-Z0-9./&+()-]*$/.test(word) || /\d/.test(word)) return word;
+    return word.replace(/(^|[-'(])([a-z])/g, (_, prefix, letter) => `${prefix}${letter.toUpperCase()}`);
+  });
 }
 function capitalizeEntryField(input) {
   if (input?.value) input.value = capitalizeEntryWords(input.value);
 }
+function shouldCapitalizeEntryField(input) {
+  if (!input || !['INPUT', 'TEXTAREA'].includes(input.tagName)) return false;
+  if (['email', 'password', 'date', 'datetime-local', 'number', 'tel', 'hidden'].includes(String(input.type || '').toLowerCase())) return false;
+  const identity = `${input.id || ''} ${input.name || ''} ${input.placeholder || ''}`.toLowerCase();
+  if (/(email|gstin|gst|pan|hsn|serial|tracking|utr|invoice|bill.?no|voucher.?no|code|phone|password|reference|consignment|\blr\b)/.test(identity)) return false;
+  return /(name|address|description|remark|narration|recipient|courier|transport|customer|party|city|district|state|note)/.test(identity) ||
+    /^item-name-/.test(input.id || '') || /^item-description-/.test(input.id || '');
+}
 document.addEventListener('focusout', event => {
-  const id = event.target?.id || '';
-  if (id === 'pm-name' || id === 'pm-regname' || id === 'im-name' || id === 'bf-party-search' ||
-      id === 'pay-party-search' || id.startsWith('item-name-')) capitalizeEntryField(event.target);
+  if (shouldCapitalizeEntryField(event.target)) capitalizeEntryField(event.target);
 });
 
 const SCRIPT_LOADS = {};
@@ -689,6 +702,55 @@ function toast(msg, type = 'success') {
   el.innerHTML = `<span>${icons[type] || ''}</span><span>${msg}</span>`;
   document.getElementById('toast-container').appendChild(el);
   setTimeout(() => el.remove(), 3500);
+}
+
+let greetingFlashTimer = null;
+
+function greetingMessageForNow(date = new Date()) {
+  const hour = date.getHours();
+  if (hour < 12) return { label: 'Good morning', detail: 'Start with your most important work.' };
+  if (hour < 17) return { label: 'Good afternoon', detail: 'Here is your business pulse for today.' };
+  return { label: 'Good evening', detail: 'A clear view before you wrap up.' };
+}
+
+function greetingName(user = APP_STATE?.user) {
+  const name = String(user?.name || user?.username || 'there').trim();
+  return name.split(/\s+/)[0] || 'there';
+}
+
+function dashboardGreetingMarkup() {
+  const greeting = greetingMessageForNow();
+  return `<div class="dashboard-greeting"><strong>${esc(greeting.label)}, ${esc(greetingName())}.</strong><span>${esc(greeting.detail)}</span></div>`;
+}
+
+function showGreetingFlash(mode = 'welcome', name = greetingName()) {
+  document.getElementById('greeting-flash')?.remove();
+  if (greetingFlashTimer) clearTimeout(greetingFlashTimer);
+
+  const greeting = greetingMessageForNow();
+  const isSignoff = mode === 'signoff';
+  const title = isSignoff ? `Signing off, ${name}.` : `${greeting.label}, ${name}.`;
+  const detail = isSignoff
+    ? 'Your session is being secured. See you soon.'
+    : greeting.detail;
+  const flash = document.createElement('div');
+  flash.id = 'greeting-flash';
+  flash.className = `greeting-flash ${isSignoff ? 'signoff' : 'welcome'}`;
+  flash.setAttribute('role', 'status');
+  flash.setAttribute('aria-live', 'polite');
+  flash.innerHTML = `<div class="greeting-flash-mark" aria-hidden="true"></div><div><span class="greeting-flash-kicker">${isSignoff ? 'SESSION SECURED' : 'TARANGINI WISHES'}</span><strong>${esc(title)}</strong><span>${esc(detail)}</span></div>`;
+  document.body.appendChild(flash);
+  // Show synchronously so this remains visible on slower or legacy Electron renderers.
+  flash.classList.add('is-visible');
+
+  return new Promise(resolve => {
+    greetingFlashTimer = setTimeout(() => {
+      flash.classList.remove('is-visible');
+      setTimeout(() => flash.remove(), 180);
+      greetingFlashTimer = null;
+      resolve();
+    }, isSignoff ? 850 : 3600);
+  });
 }
 
 async function openDesktopNetworkSetup() {
@@ -950,6 +1012,7 @@ async function doLogin() {
     storageSet('user', JSON.stringify(data.user));
     errEl.style.display = 'none';
     initApp();
+    showGreetingFlash('welcome');
   } catch(e) {
     errEl.textContent = e.message;
     errEl.style.display = 'block';
@@ -989,6 +1052,7 @@ async function changeMyPin() {
 }
 
 async function doLogout() {
+  await showGreetingFlash('signoff');
   try { await api('POST', '/auth/logout'); } catch(e) {}
   storageRemove('token');
   storageRemove('user');
@@ -1241,6 +1305,29 @@ function toggleMobileSidebar(force) {
   sidebar.classList.toggle('mobile-open', force === undefined ? !sidebar.classList.contains('mobile-open') : Boolean(force));
 }
 
+const TRANSACTION_FOCUS_PAGES = new Set([
+  'sale', 'project-printing', 'quotation', 'challan', 'proforma', 'pos',
+  'payment-received', 'payment-voucher', 'purchase-orders', 'journal-entry',
+  'purchase', 'expense', 'notes'
+]);
+
+function setTransactionFocusMode(page) {
+  const focused = TRANSACTION_FOCUS_PAGES.has(page);
+  document.body.classList.toggle('transaction-focus-mode', focused);
+  document.body.classList.remove('transaction-sidebar-open');
+  const button = document.getElementById('transaction-focus-menu');
+  if (button) button.setAttribute('aria-expanded', 'false');
+}
+
+function toggleTransactionSidebar(force) {
+  const opening = force === undefined
+    ? !document.body.classList.contains('transaction-sidebar-open')
+    : Boolean(force);
+  document.body.classList.toggle('transaction-sidebar-open', opening);
+  const button = document.getElementById('transaction-focus-menu');
+  if (button) button.setAttribute('aria-expanded', String(opening));
+}
+
 async function loadOrgs() {
   const selectedId = APP_STATE.currentOrg?.id;
   APP_STATE.orgs = await api('GET', '/orgs');
@@ -1441,6 +1528,7 @@ function navigate(page, options = {}) {
   }
   APP_STATE.currentPage = page;
   if (!options.keepEditingBill) APP_STATE.editingBill = null;
+  setTransactionFocusMode(page);
   toggleMobileSidebar(false);
 
   document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
@@ -1464,7 +1552,7 @@ function navigate(page, options = {}) {
     'scheduled-reports': 'Scheduled Reports', diagnostics: 'Data Diagnostics',
     'invoice-corrections': 'Invoice Corrections', 'update-manager': 'Update Manager',
     'offline-sync': 'Offline Billing Sync', backup: 'Backup & Restore', settings: 'Settings',
-    help: 'Help & FAQ', jobs: 'Job Workflow', 'job-new': 'New Job Order',
+    help: 'Help & FAQ', jobs: 'Job Workflow', 'job-new': 'New Job Order', 'job-detail': 'Job Detail',
     'operator-log': 'Owner & Operator Daily Log',
     'warranty-replacements': 'Warranty Replacements',
     'job-catalog': 'Service Catalog', 'job-whatsapp': 'Open WhatsApp', 'job-services': 'Service Boards'
@@ -1492,6 +1580,9 @@ function navigate(page, options = {}) {
     'invoice-corrections': renderInvoiceCorrections, 'update-manager': renderUpdateManager,
     'offline-sync': renderOfflineSync, backup: renderBackup, settings: renderSettings,
     help: renderHelp, jobs: renderJobs, 'job-new': renderNewJob,
+    // Sync refreshes navigate to the current page. Reopen the selected job instead
+    // of falling through to the generic "Coming soon" screen.
+    'job-detail': () => ACTIVE_JOB_ID ? openJob(ACTIVE_JOB_ID) : renderJobs(),
     'operator-log': renderOperatorDailyLog,
     'warranty-replacements': renderWarrantyReplacements,
     'job-catalog': renderJobCatalog, 'job-whatsapp': renderJobWhatsApp, 'job-services': renderJobServiceBoards
@@ -1544,6 +1635,7 @@ async function renderDashboard() {
     <section class="dashboard-hero">
       <div>
         <div class="dashboard-eyebrow">${esc(APP_STATE.currentOrg?.display_name || APP_STATE.currentOrg?.name || 'Company')} | FY ${esc(APP_STATE.currentFY)}</div>
+        ${dashboardGreetingMarkup()}
         <h2>Business at a glance</h2>
         <p>Live sales, collection, stock and customer activity for the selected company.</p>
       </div>
@@ -1711,7 +1803,7 @@ async function renderOperatorWorkspaceDashboard() {
       ? await api('GET', `/operator-logs?org_id=${APP_STATE.currentOrg.id}&date=${date}`)
       : null;
     document.getElementById('content').innerHTML = `
-      <div class="operator-log-header"><div><h2>My Work Desk</h2><p>${esc(APP_STATE.currentOrg.display_name)} | ${date}</p></div>
+      <div class="operator-log-header"><div>${dashboardGreetingMarkup()}<h2>My Work Desk</h2><p>${esc(APP_STATE.currentOrg.display_name)} | ${date}</p></div>
         <span class="status-badge status-${String(daily?.log?.status || 'ACTIVE').toLowerCase()}">${esc(daily?.log?.status || 'ACTIVE')}</span>
       </div>
       ${daily ? `<div class="operator-kpis"><div><span>My events today</span><strong>${daily.totals.event_count}</strong></div><div><span>Jobs touched</span><strong>${daily.totals.jobs_touched}</strong></div><div><span>Miscellaneous</span><strong>${daily.totals.manual_count}</strong></div><div><span>Pending</span><strong>${daily.totals.pending_count}</strong></div><div><span>Recorded time</span><strong>${operatorLogDuration(daily.totals.duration_minutes)}</strong></div></div>` : ''}
@@ -1822,82 +1914,75 @@ async function renderBillForm(format, existingBill) {
   const showPO = format !== 'DC';
   const showTax = format !== 'DC';
   const isDC = format === 'DC';
+  const isSale = format === 'SALE';
   const documentNote = fixedDocumentNote(org, format);
+  const paymentModeControls = `
+    <div class="toggle-group sale-payment-toggle" id="bf-paymode" aria-label="Payment mode">
+      <button type="button" class="toggle-btn ${payMode==='cash'?'active':''}" onclick="setPayMode('cash',this)">Cash</button>
+      <button type="button" class="toggle-btn ${['account','bank','upi','card'].includes(payMode)?'active':''}" onclick="setPayMode('account',this)">UPI / Bank</button>
+      <button type="button" class="toggle-btn ${payMode==='credit'?'active':''}" onclick="setPayMode('credit',this)">Credit</button>
+    </div>`;
+  const taxTypeControls = showTax && gstType === 'regular' ? `
+    <div class="form-group">
+      <label>Tax Type</label>
+      <div class="toggle-group" id="bf-taxtype">
+        <button type="button" class="toggle-btn ${taxInclusive?'':'active'}" onclick="setTaxInclusive(false,this)">+ GST</button>
+        <button type="button" class="toggle-btn ${taxInclusive?'active':''}" onclick="setTaxInclusive(true,this)">Incl. GST</button>
+      </div>
+    </div>` : '<div></div>';
+  const splitPaymentControls = `
+    <div id="bf-split-panel" class="sale-split-panel" style="${payMode==='split'?'':'display:none'}">
+      ${['cash','bank','upi','card'].map(mode => `<div class="form-group"><label>${mode.toUpperCase()}</label>
+        <input type="number" min="0" step="0.01" id="bf-split-${mode}" value="0" oninput="updateBillSplitBalance()"></div>`).join('')}
+      <div id="bf-split-balance" class="security-setting-note"></div>
+    </div>`;
+  const standardBillHeader = `
+    <div class="voucher-access-bar">
+      <div class="form-group">
+        <label>Voucher Company</label>
+        <select id="voucher-org" onchange="switchVoucherCompany(this.value,'bill','${format}')" ${existingBill ? 'disabled' : ''}>${voucherCompanyOptions(org.id)}</select>
+        ${existingBill ? '<small class="muted">Saved transactions stay in their original company.</small>' : '<small class="muted">Move this unsaved draft to another company. Number, tax and masters refresh automatically.</small>'}
+      </div>
+      <div class="form-group"><label>${docLabels.number}</label><input type="text" id="bf-billno" value="${esc(nextNum)}" readonly></div>
+      <div class="voucher-company-summary"><span>Company</span><strong>${esc(org.display_name)}</strong></div>
+    </div>
+    <div class="card">
+      <div class="section-title"><span>${docLabels.details}</span></div>
+      <div class="form-row cols-4">
+        <div class="form-group"><label>Date <span class="req">*</span></label><input type="date" id="bf-date" value="${existingBill?.bill_date || today()}" onchange="refreshBillVoucherNumber('${format}')"></div>
+        ${showPO ? `<div class="form-group"><label>PO Number <span style="color:var(--text3)">(opt)</span></label><input type="text" id="bf-pono" placeholder="Purchase order no" value="${esc(billFormData.po_number||'')}"></div>
+        <div class="form-group"><label>PO Date</label><input type="date" id="bf-podate" value="${billFormData.po_date||''}"></div>` : '<div></div>'}
+        <div></div>
+      </div>
+      <div class="form-row cols-4">
+        <div class="form-group" style="display:none"><label>Payment Mode</label>${paymentModeControls}</div>
+        <div class="form-group" style="display:none"><label>Credit Days</label><input type="number" id="bf-creditdays" value="${billFormData.credit_days||''}"></div>
+        ${taxTypeControls}
+        <div class="form-group"><label>GST Type: <strong style="color:var(--gold)">${gstType === 'composition' ? 'Composition (Bill of Supply)' : 'Regular (18%)'}</strong></label><input type="text" value="${esc(org.display_name)}" readonly></div>
+      </div>
+      ${splitPaymentControls}
+    </div>`;
+  const saleBillHeader = `
+    <section class="sale-command-surface">
+      <div class="sale-command-primary">
+        <div class="sale-command-title"><span>Transaction Entry</span><h2>${existingBill ? 'Edit Sale Bill' : 'New Sale Bill'}</h2></div>
+        <div class="sale-command-payment"><label>Payment</label>${paymentModeControls}</div>
+        <button type="button" class="btn sale-more-button" onclick="openSaleMoreDetails()"><kbd>F4</kbd> More details</button>
+      </div>
+      <div class="sale-document-meta">
+        <div class="form-group"><label>Date</label><input type="date" id="bf-date" value="${existingBill?.bill_date || today()}" onchange="refreshBillVoucherNumber('${format}')"></div>
+        <div class="form-group"><label>${docLabels.number}</label><input type="text" id="bf-billno" value="${esc(nextNum)}" readonly></div>
+        <div class="form-group"><label>Company</label><select id="voucher-org" onchange="switchVoucherCompany(this.value,'bill','${format}')" ${existingBill ? 'disabled' : ''}>${voucherCompanyOptions(org.id)}</select></div>
+      </div>
+    </section>`;
 
   // Topbar action buttons
   document.getElementById('topbar-actions').innerHTML = `
     <button class="btn btn-secondary btn-sm" onclick="navigate('bills-list')">📑 Bills List</button>`;
 
   document.getElementById('content').innerHTML = `
-  <div class="bill-form">
-    <div class="voucher-access-bar">
-      <div class="form-group">
-        <label>Voucher Company</label>
-        <select id="voucher-org" onchange="switchVoucherCompany(this.value,'bill','${format}')" ${existingBill ? 'disabled' : ''}>
-          ${voucherCompanyOptions(org.id)}
-        </select>
-        ${existingBill ? '<small class="muted">Saved transactions stay in their original company.</small>' : '<small class="muted">Move this unsaved draft to another company. Number, tax and masters refresh automatically.</small>'}
-      </div>
-      <div class="form-group">
-        <label>${docLabels.number}</label>
-        <input type="text" id="bf-billno" value="${esc(nextNum)}" readonly>
-      </div>
-      <div class="voucher-company-summary">
-        <span>Company</span><strong>${esc(org.display_name)}</strong>
-      </div>
-    </div>
-    <!-- Header Info -->
-    <div class="card">
-      <div class="section-title">${docLabels.details}</div>
-      <div class="form-row cols-4">
-        <div class="form-group">
-          <label>Date <span class="req">*</span></label>
-          <input type="date" id="bf-date" value="${existingBill?.bill_date || today()}" onchange="refreshBillVoucherNumber('${format}')">
-        </div>
-        ${showPO ? `
-        <div class="form-group">
-          <label>PO Number <span style="color:var(--text3)">(opt)</span></label>
-          <input type="text" id="bf-pono" placeholder="Purchase order no" value="${esc(billFormData.po_number||'')}">
-        </div>
-        <div class="form-group">
-          <label>PO Date</label>
-          <input type="date" id="bf-podate" value="${billFormData.po_date||''}">
-        </div>` : '<div></div>'}
-        <div></div>
-      </div>
-      <div class="form-row cols-4">
-        <div class="form-group" ${format !== 'SALE' ? 'style="display:none"' : ''}>
-          <label>Payment Mode</label>
-          <div class="toggle-group" id="bf-paymode">
-            <button class="toggle-btn ${payMode==='cash'?'active':''}" onclick="setPayMode('cash',this)">Cash</button>
-            <button class="toggle-btn ${payMode==='credit'?'active':''}" onclick="setPayMode('credit',this)">Credit</button>
-            <button class="toggle-btn ${['account','bank','upi','card'].includes(payMode)?'active':''}" onclick="setPayMode('account',this)">Bank / UPI / Card</button>
-            <button class="toggle-btn ${payMode==='split'?'active':''}" onclick="setPayMode('split',this)">Split</button>
-          </div>
-        </div>
-        <div class="form-group" ${format !== 'SALE' ? 'style="display:none"' : ''}>
-          <label>Credit Days <span style="color:var(--text3)">(opt)</span></label>
-          <input type="number" id="bf-creditdays" placeholder="e.g. 30" value="${billFormData.credit_days||''}">
-        </div>
-        ${showTax && gstType === 'regular' ? `
-        <div class="form-group">
-          <label>Tax Type</label>
-          <div class="toggle-group" id="bf-taxtype">
-            <button class="toggle-btn ${taxInclusive?'':'active'}" onclick="setTaxInclusive(false,this)">+ GST</button>
-            <button class="toggle-btn ${taxInclusive?'active':''}" onclick="setTaxInclusive(true,this)">Incl. GST</button>
-          </div>
-        </div>` : '<div></div>'}
-        <div class="form-group">
-          <label>GST Type: <strong style="color:var(--gold)">${gstType === 'composition' ? 'Composition (Bill of Supply)' : 'Regular (18%)'}</strong></label>
-          <input type="text" value="${org.display_name}" readonly style="background:var(--surface3);font-size:12px">
-        </div>
-      </div>
-      <div id="bf-split-panel" class="form-row cols-4" style="${payMode==='split'?'':'display:none'}">
-        ${['cash','bank','upi','card'].map(mode => `<div class="form-group"><label>${mode.toUpperCase()}</label>
-          <input type="number" min="0" step="0.01" id="bf-split-${mode}" value="0" oninput="updateBillSplitBalance()"></div>`).join('')}
-        <div id="bf-split-balance" class="security-setting-note"></div>
-      </div>
-    </div>
+  <div class="bill-form${isSale ? ' bill-form-sale' : ''}">
+    ${isSale ? saleBillHeader : standardBillHeader}
 
     ${isDC ? `<div class="security-setting-note dc-accounting-note"><strong>Accounting treatment:</strong> A Delivery Challan records delivery only. It does not post customer debit, credit, tax, or payment entries. Create a Sale Invoice from this challan when the amount must appear in the party ledger.</div>` : ''}
 
@@ -1914,9 +1999,9 @@ async function renderBillForm(format, existingBill) {
     </div>` : ''}
 
     <!-- Party -->
-    <div class="card">
-      <div class="section-title">${docLabels.partyField.replace(' Name', '')} Details</div>
-      <div class="form-row cols-2">
+    <div class="card${isSale ? ' sale-input-card sale-party-card' : ''}">
+      <div class="section-title${isSale ? ' sale-input-section-title' : ''}"><span>${isSale ? 'Customer & Delivery' : `${docLabels.partyField.replace(' Name', '')} Details`}</span>${isSale ? '<small>Find an existing customer or enter a new one.</small>' : ''}</div>
+      <div class="form-row ${isSale ? 'cols-3 sale-customer-primary' : 'cols-2'}">
         <div class="form-group">
           <label>${docLabels.partyField} <span class="req">*</span></label>
           <div class="autocomplete-wrap">
@@ -1933,6 +2018,10 @@ async function renderBillForm(format, existingBill) {
             <div id="party-details-display"></div>
           </details>
         </div>
+        ${isSale ? `<div class="form-group sale-address-snapshot-group">
+          <label>Billing Address</label>
+          <div id="sale-billing-address-summary" class="sale-address-snapshot">${selectedParty ? esc([selectedParty.address, selectedParty.city, selectedParty.state].filter(Boolean).join(', ')) : 'Select a customer to load the billing address'}</div>
+        </div>` : ''}
         <div class="form-group">
           <label>Delivery Address <span style="color:var(--text3)">(opt)</span></label>
           <input type="text" id="bf-delivery-addr" placeholder="Delivery address if different" value="${esc(billFormData.delivery_address||'')}">
@@ -1948,31 +2037,32 @@ async function renderBillForm(format, existingBill) {
             <option value="">Use delivery/manual address</option>
           </select></div>
       </div>
-      <div class="form-row cols-3">
-        <div class="form-group"><label>Recipient Name</label><input id="bf-recipient-name" list="bf-recipient-name-list"><datalist id="bf-recipient-name-list">${deliveryOptionRows(deliverySuggestions.recipient_names)}</datalist></div>
-        <div class="form-group"><label>Recipient Phone</label><input id="bf-recipient-phone" list="bf-recipient-phone-list"><datalist id="bf-recipient-phone-list">${deliveryOptionRows(deliverySuggestions.recipient_phones)}</datalist></div>
-        <div class="form-group"><label>Courier / Transportation Name</label><input id="bf-transport-name" list="bf-transport-list"><datalist id="bf-transport-list">${deliveryOptionRows(deliverySuggestions.couriers)}</datalist></div>
-      </div>
-      <div class="form-row cols-2">
-        <div class="form-group"><label>Tracking ID / LR / Consignment No.</label><input id="bf-tracking-id" list="bf-tracking-list"><datalist id="bf-tracking-list">${deliveryOptionRows(deliverySuggestions.tracking_ids)}</datalist></div>
-        <div class="form-group"><label>Dispatch Date</label><input type="date" id="bf-dispatch-date" list="bf-dispatch-date-list"><datalist id="bf-dispatch-date-list">${deliveryOptionRows(deliverySuggestions.dispatch_dates)}</datalist></div>
-      </div>
-      <label class="security-setting-toggle">
-        <input type="checkbox" id="bf-digital-signature-required" ${dscRequired ? 'checked' : ''} onchange="toggleBillDscNote()">
-        <span><strong>Digital signature required for this invoice</strong>
-        <small>Use when this bill must be signed with a USB DSC token. The DSC password is not stored.</small></span>
-      </label>
-      <div class="form-group" id="bf-digital-signature-note-wrap" style="${dscRequired ? '' : 'display:none'}">
-        <label>Digital Signature Note</label>
-        <input id="bf-digital-signature-note" value="${esc(dscNote)}" placeholder="Digital signature required before issue">
-      </div>
+      ${!isSale ? `
+        <div class="form-row cols-3">
+          <div class="form-group"><label>Recipient Name</label><input id="bf-recipient-name" list="bf-recipient-name-list"><datalist id="bf-recipient-name-list">${deliveryOptionRows(deliverySuggestions.recipient_names)}</datalist></div>
+          <div class="form-group"><label>Recipient Phone</label><input id="bf-recipient-phone" list="bf-recipient-phone-list"><datalist id="bf-recipient-phone-list">${deliveryOptionRows(deliverySuggestions.recipient_phones)}</datalist></div>
+          <div class="form-group"><label>Courier / Transportation Name</label><input id="bf-transport-name" list="bf-transport-list"><datalist id="bf-transport-list">${deliveryOptionRows(deliverySuggestions.couriers)}</datalist></div>
+        </div>
+        <div class="form-row cols-2">
+          <div class="form-group"><label>Tracking ID / LR / Consignment No.</label><input id="bf-tracking-id" list="bf-tracking-list"><datalist id="bf-tracking-list">${deliveryOptionRows(deliverySuggestions.tracking_ids)}</datalist></div>
+          <div class="form-group"><label>Dispatch Date</label><input type="date" id="bf-dispatch-date" list="bf-dispatch-date-list"><datalist id="bf-dispatch-date-list">${deliveryOptionRows(deliverySuggestions.dispatch_dates)}</datalist></div>
+        </div>
+        <label class="security-setting-toggle">
+          <input type="checkbox" id="bf-digital-signature-required" ${dscRequired ? 'checked' : ''} onchange="toggleBillDscNote()">
+          <span><strong>Digital signature required for this invoice</strong>
+          <small>Use when this bill must be signed with a USB DSC token. The DSC password is not stored.</small></span>
+        </label>
+        <div class="form-group" id="bf-digital-signature-note-wrap" style="${dscRequired ? '' : 'display:none'}">
+          <label>Digital Signature Note</label>
+          <input id="bf-digital-signature-note" value="${esc(dscNote)}" placeholder="Digital signature required before issue">
+        </div>
+      ` : ''}
     </div>
 
     <!-- Items Table -->
-    <div class="card">
-      <div style="display:flex;justify-content:flex-end;gap:6px;margin-bottom:8px"><button class="btn btn-outline btn-sm" onclick="addItemRow()">+ Item</button><button class="btn btn-secondary btn-sm" onclick="addItemFromMaster()">From Master</button></div>
-      <div class="section-title">${isDC ? 'Items (Delivery Only — No Pricing)' : 'Items'}</div>
-      <div class="items-table-wrap">
+    <div class="card${isSale ? ' sale-input-card sale-items-card' : ''}">
+      <div class="sale-item-toolbar${isSale ? ' is-sale' : ''}"><div class="section-title${isSale ? ' sale-input-section-title' : ''}"><span>${isDC ? 'Items (Delivery Only — No Pricing)' : 'Items'}</span>${isSale ? '<small>Use the + beside an item for description or serial number.</small>' : ''}</div><div class="sale-item-actions"><button class="btn btn-outline btn-sm" onclick="addItemRow()">+ Item</button><button class="btn btn-secondary btn-sm" onclick="addItemFromMaster()">From Master</button></div></div>
+      <div class="items-table-wrap${isSale ? ' sale-item-workspace' : ''}">
         <div class="items-table-head" style="grid-template-columns:${isDC ? '32px 1fr 80px 70px 70px 90px 100px 36px' : gstType === 'regular' ? '32px 1fr 80px 70px 80px 90px 100px 90px 70px 36px' : '32px 1fr 80px 70px 80px 90px 90px 70px 36px'}">
           <span>#</span><span>Item Name</span><span>HSN</span><span>Qty</span><span>Unit</span>
           ${isDC ? '<span data-item-head="rate">Internal Rate</span><span data-item-head="amount">Internal Amount</span>' : `${gstType === 'regular'
@@ -1990,9 +2080,9 @@ async function renderBillForm(format, existingBill) {
 
     <!-- Totals & Footer -->
     ${!isDC ? `
-    <div class="bill-totals">
-      <div>
-        ${documentNote ? `<div class="security-setting-note" style="margin-bottom:10px"><strong>Fixed ${esc(docLabels.details.replace(' Details', ''))} Note</strong><br>${esc(documentNote)}</div>` : ''}
+    <div class="bill-totals${isSale ? ' sale-input-summary' : ''}">
+      <div class="sale-input-notes">
+        ${documentNote ? `<div class="security-setting-note" style="margin-bottom:10px"><strong>Fixed ${esc(docLabels.details.replace(' Details', ''))} Note</strong><br>${multilineHtml(documentNote)}</div>` : ''}
         <div class="form-group">
           <div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><label>Description (shown at bottom of invoice)</label><select class="input-compact" onchange="applyInvoiceDescriptionSuggestion(this)"><option value="">Previous description</option>${deliveryOptionRows(deliverySuggestions.descriptions, true)}</select></div>
           <textarea id="bf-description" rows="3" placeholder="Work details, delivery information or other description">${esc(billFormData.description||org.invoice_description||'')}</textarea>
@@ -2002,7 +2092,7 @@ async function renderBillForm(format, existingBill) {
           <input type="number" id="bf-swipe-charge" value="${billFormData.swipe_charge||0}" min="0" step="0.01" oninput="recalcTotals()">
         </div>
       </div>
-      <div class="totals-table card card-sm">
+      <div class="totals-table card card-sm${isSale ? ' sale-total-card' : ''}">
         <div class="totals-row"><span>Subtotal</span><span class="mono" id="tot-subtotal">₹0.00</span></div>
         <div class="totals-row"><span>Discount</span>
           <span><input type="number" id="bf-discount" placeholder="0" style="width:80px;text-align:right;padding:3px 6px"
@@ -2029,10 +2119,41 @@ async function renderBillForm(format, existingBill) {
     </label>
     <div class="amount-words" id="tot-words">Amount in words will appear here</div>` : ''}
 
-    <div class="bill-form-actions">
+    <div class="bill-form-actions${isSale ? ' sale-input-actions' : ''}">
       <button class="btn btn-success" onclick="saveBill('${format}')">💾 Save ${formatLabels[format]}</button>
       <button class="btn btn-secondary" onclick="navigate('bills-list')">Cancel</button>
     </div>
+    ${isSale ? `
+    <div id="sale-more-drawer" class="sale-more-overlay" role="dialog" aria-modal="true" aria-labelledby="sale-more-title" style="display:none" onclick="closeSaleMoreDetails()">
+      <aside class="sale-more-drawer" onclick="event.stopPropagation()">
+        <div class="sale-more-drawer-header"><div><span>Optional transaction fields</span><h3 id="sale-more-title">More Sale Details</h3></div><button type="button" class="btn-icon" onclick="closeSaleMoreDetails()" aria-label="Close more details">&#10005;</button></div>
+        <div class="sale-more-drawer-body">
+          <section><h4>Order and credit</h4><div class="form-row cols-2">
+            <div class="form-group"><label>PO Number</label><input type="text" id="bf-pono" placeholder="Purchase order no" value="${esc(billFormData.po_number||'')}"></div>
+            <div class="form-group"><label>PO Date</label><input type="date" id="bf-podate" value="${billFormData.po_date||''}"></div>
+            <div class="form-group"><label>Credit Days</label><input type="number" id="bf-creditdays" placeholder="e.g. 30" value="${billFormData.credit_days||''}"></div>
+            ${taxTypeControls}
+          </div></section>
+          <section><h4>Delivery and courier</h4><div class="form-row cols-2">
+            <div class="form-group"><label>Recipient Name</label><input id="bf-recipient-name" list="bf-recipient-name-list"><datalist id="bf-recipient-name-list">${deliveryOptionRows(deliverySuggestions.recipient_names)}</datalist></div>
+            <div class="form-group"><label>Recipient Phone</label><input id="bf-recipient-phone" list="bf-recipient-phone-list"><datalist id="bf-recipient-phone-list">${deliveryOptionRows(deliverySuggestions.recipient_phones)}</datalist></div>
+            <div class="form-group"><label>Courier / Transportation Name</label><input id="bf-transport-name" list="bf-transport-list"><datalist id="bf-transport-list">${deliveryOptionRows(deliverySuggestions.couriers)}</datalist></div>
+            <div class="form-group"><label>Tracking ID / LR / Consignment No.</label><input id="bf-tracking-id" list="bf-tracking-list"><datalist id="bf-tracking-list">${deliveryOptionRows(deliverySuggestions.tracking_ids)}</datalist></div>
+            <div class="form-group"><label>Dispatch Date</label><input type="date" id="bf-dispatch-date"></div>
+          </div></section>
+          <section><h4>Split and issue controls</h4>
+            <button type="button" id="sale-split-toggle" class="btn btn-outline btn-sm ${payMode==='split'?'active':''}" onclick="setPayMode('split',this)">Use split payment</button>
+            ${splitPaymentControls}
+            <label class="security-setting-toggle">
+              <input type="checkbox" id="bf-digital-signature-required" ${dscRequired ? 'checked' : ''} onchange="toggleBillDscNote()">
+              <span><strong>Digital signature required for this invoice</strong><small>The DSC password is never stored.</small></span>
+            </label>
+            <div class="form-group" id="bf-digital-signature-note-wrap" style="${dscRequired ? '' : 'display:none'}"><label>Digital Signature Note</label><input id="bf-digital-signature-note" value="${esc(dscNote)}" placeholder="Digital signature required before issue"></div>
+          </section>
+        </div>
+        <div class="sale-more-drawer-actions"><button type="button" class="btn btn-primary" onclick="closeSaleMoreDetails()">Apply details</button></div>
+      </aside>
+    </div>` : ''}
   </div>`;
 
   renderItemRows(isDC);
@@ -2377,12 +2498,38 @@ let taxInclusive = false;
 let activeBillFormat = 'SALE';
 function setPayMode(mode, btn) {
   payMode = mode;
-  document.querySelectorAll('#bf-paymode .toggle-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
+  document.querySelectorAll('#bf-paymode .toggle-btn, #sale-split-toggle').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
   const panel = document.getElementById('bf-split-panel');
   if (panel) panel.style.display = mode === 'split' && txShow(activeBillFormat, 'split_payment') ? '' : 'none';
   updateBillSplitBalance();
 }
+
+function openSaleMoreDetails() {
+  const drawer = document.getElementById('sale-more-drawer');
+  if (!drawer) return;
+  drawer.style.display = 'flex';
+  document.body.classList.add('sale-more-open');
+  drawer.querySelector('input:not([type="hidden"]), button')?.focus();
+}
+
+function closeSaleMoreDetails() {
+  const drawer = document.getElementById('sale-more-drawer');
+  if (!drawer) return;
+  drawer.style.display = 'none';
+  document.body.classList.remove('sale-more-open');
+  document.querySelector('.sale-more-button')?.focus();
+}
+
+document.addEventListener('keydown', event => {
+  if (event.key === 'F4' && activeBillFormat === 'SALE' && document.getElementById('sale-more-drawer')) {
+    event.preventDefault();
+    const drawer = document.getElementById('sale-more-drawer');
+    if (drawer.style.display === 'none') openSaleMoreDetails();
+    else closeSaleMoreDetails();
+  }
+  if (event.key === 'Escape' && document.body.classList.contains('sale-more-open')) closeSaleMoreDetails();
+});
 function setTaxInclusive(val, btn) {
   taxInclusive = val;
   document.querySelectorAll('#bf-taxtype .toggle-btn').forEach(b => b.classList.remove('active'));
@@ -2477,7 +2624,7 @@ function renderItemRow(item, i, isDC) {
     <input type="number" placeholder="GST%" value="${item.gst_rate||18}" id="item-gst-${i}"
       oninput="syncInvoiceRateRow(${i},taxInclusive?'inclusive':'base')" min="0" max="28" step="0.01" style="text-align:center">`;
   return `
-  <div class="item-row" id="item-row-${i}" style="grid-template-columns:${dc ? '32px 1fr 80px 70px 70px 90px 100px 36px' : regular ? '32px 1fr 80px 70px 80px 90px 100px 90px 70px 36px' : '32px 1fr 80px 70px 80px 90px 90px 70px 36px'}">
+  <div class="item-row${activeBillFormat === 'SALE' ? ' sale-item-row' : ''}" id="item-row-${i}" style="grid-template-columns:${dc ? '32px 1fr 80px 70px 70px 90px 100px 36px' : regular ? '32px 1fr 80px 70px 80px 90px 100px 90px 70px 36px' : '32px 1fr 80px 70px 80px 90px 90px 70px 36px'}">
     <span class="sno">${i + 1}</span>
     <div class="autocomplete-wrap">
       <div class="item-name-entry">
@@ -2554,10 +2701,9 @@ function syncAllInvoiceRateColumns(source) {
 
 function addItemRow() {
   billItems.push(emptyItem());
-  const isDC = document.querySelector('.items-table-head span:nth-child(6)')?.textContent === '';
   const container = document.getElementById('items-rows');
   const div = document.createElement('div');
-  div.innerHTML = renderItemRow(billItems[billItems.length - 1], billItems.length - 1, false);
+  div.innerHTML = renderItemRow(billItems[billItems.length - 1], billItems.length - 1, activeBillFormat === 'DC');
   container.appendChild(div.firstElementChild);
   applyBillControlVisibility(activeBillFormat);
   document.getElementById(`item-name-${billItems.length-1}`)?.focus();
@@ -2565,8 +2711,7 @@ function addItemRow() {
 
 function removeItemRow(i) {
   billItems.splice(i, 1);
-  const isDC = false;
-  renderItemRows(isDC);
+  renderItemRows(activeBillFormat === 'DC');
   recalcTotals();
 }
 
@@ -2687,6 +2832,8 @@ function clearBillPartySelection() {
     selected.innerHTML = '';
     selected.style.display = 'none';
   }
+  const billingSummary = document.getElementById('sale-billing-address-summary');
+  if (billingSummary) billingSummary.textContent = 'Select a customer to load the billing address';
   window.partyAddressBook = [];
   const addressRow = document.getElementById('bf-address-book-row');
   if (addressRow) addressRow.style.display = 'none';
@@ -2801,6 +2948,7 @@ async function loadPartyAddressesForBill(partyId, existingBill = {}) {
     const existingDeliveryId = Number(existingBill.delivery_address_id || 0);
     billing.value = addresses.some(address => Number(address.id) === existingBillingId) ? String(existingBillingId) : '';
     delivery.value = addresses.some(address => Number(address.id) === existingDeliveryId) ? String(existingDeliveryId) : '';
+    applySelectedPartyAddress('billing');
     if (delivery.value || !existingBill.id || !existingBill.delivery_address) {
       applySelectedPartyAddress('delivery');
     }
@@ -2820,11 +2968,15 @@ function formatPartyAddress(address) {
 }
 
 function applySelectedPartyAddress(kind) {
-  if (kind !== 'delivery') return;
-  const address = selectedPartyAddress('delivery');
-  const input = document.getElementById('bf-delivery-addr');
   const partyId = Number(document.getElementById('bf-party-id')?.value || 0);
   const party = APP_STATE.parties.find(row => Number(row.id) === partyId);
+  if (kind === 'billing') {
+    const summary = document.getElementById('sale-billing-address-summary');
+    if (summary) summary.textContent = formatPartyAddress(selectedPartyAddress('billing') || party) || 'No billing address recorded';
+    return;
+  }
+  const address = selectedPartyAddress('delivery');
+  const input = document.getElementById('bf-delivery-addr');
   if (input) input.value = formatPartyAddress(address || party);
 }
 
@@ -2849,6 +3001,8 @@ function showPartyDetails(p) {
     ${p.gstin ? `<span style="margin-left:12px;color:var(--gold)">GST: ${esc(p.gstin)} (${p.gst_type||''})</span>` : ''}
     ${p.phone ? `<span style="margin-left:12px;color:var(--text3)">Phone: ${esc(p.phone)}</span>` : ''}
     ${p.email ? `<span style="margin-left:12px;color:var(--text3)">Email: ${esc(p.email)}</span>` : ''}`;
+  const billingSummary = document.getElementById('sale-billing-address-summary');
+  if (billingSummary) billingSummary.textContent = formatPartyAddress(p) || 'No billing address recorded';
   if (detailsCollapse) detailsCollapse.style.display = '';
 }
 
@@ -3356,7 +3510,7 @@ function showBillPreview(bill) {
 
     <!-- NOTE FOOTER -->
     ${txPrint(txType, 'footer') && bill.note_footer ? `<div class="invoice-note">${esc(bill.note_footer)}</div>` : ''}
-    ${txPrint(txType, 'footer') && bill.description ? `<div class="invoice-note"><strong>Description:</strong> ${esc(bill.description)}</div>` : ''}
+    ${txPrint(txType, 'footer') && bill.description ? `<div class="invoice-note invoice-description"><strong>Description:</strong><br>${multilineHtml(bill.description)}</div>` : ''}
     ${txPrint(txType, 'operator') && (bill.created_by_name || bill.created_by_username) ? `<div class="invoice-note"><strong>Prepared By:</strong> ${esc(bill.created_by_name || bill.created_by_username)}</div>` : ''}
     ${txPrint(txType, 'digital_signature') && Number(bill.digital_signature_required || 0) ? `<div class="invoice-note"><strong>Digital Signature:</strong> ${esc(bill.digital_signature_note || 'Digital signature required before issue. Use the USB DSC token externally; Tarangini does not store DSC passwords.')}<br><strong>Status:</strong> ${bill.digital_signature_status === 'signed_in_app' ? `Signed${bill.digital_signature_signed_at ? ` on ${esc(fmtDate(bill.digital_signature_signed_at.slice(0, 10)))}` : ''}` : 'Pending DSC signing'}</div>` : ''}
 
@@ -3510,7 +3664,7 @@ function showProjectPrintingPreview(bill) {
       </div></div>
       <div class="invoice-words">Amount in Words: <strong>${esc(bill.total_in_words || '')}</strong></div>
       ${txPrint(txType, 'footer') && bill.note_footer ? `<div class="invoice-note">${esc(bill.note_footer)}</div>` : ''}
-      ${txPrint(txType, 'footer') && bill.description ? `<div class="invoice-note"><strong>Description:</strong> ${esc(bill.description)}</div>` : ''}
+      ${txPrint(txType, 'footer') && bill.description ? `<div class="invoice-note invoice-description"><strong>Description:</strong><br>${multilineHtml(bill.description)}</div>` : ''}
       ${txPrint(txType, 'operator') && (bill.created_by_name || bill.created_by_username) ? `<div class="invoice-note"><strong>Prepared By:</strong> ${esc(bill.created_by_name || bill.created_by_username)}</div>` : ''}
       <div class="invoice-footer">
         <div class="invoice-bank">${printOptions.bank_details && txPrint(txType, 'bank_details') && (bank?.bank_name || bank?.account_no) ? `
@@ -4477,6 +4631,8 @@ async function reviewInvoiceCorrection(id, decision) {
 async function renderPaymentForm(type) {
   const isVoucher = type === 'voucher';
   const paymentType = isVoucher ? 'paid' : 'received';
+  // A newly opened receipt/voucher must not inherit the mode from a prior form.
+  paymentMode2 = 'cash';
   const [payments, accounts] = await Promise.all([
     api('GET', `/payments?org_id=${APP_STATE.currentOrg.id}&type=${paymentType}&fy=${APP_STATE.currentFY}`),
     api('GET', `/accounting/accounts?org_id=${APP_STATE.currentOrg.id}`)
@@ -4618,7 +4774,12 @@ async function savePaymentCorrection(id, type) {
 
 async function reversePayment(id) {
   if (APP_STATE.user?.role !== 'owner') { toast('Only an owner can reverse a payment voucher', 'error'); return; }
-  const reason = window.prompt('Deletion reason (minimum 10 characters):', '');
+  const reason = await askModalInput(
+    'Delete Payment Receipt',
+    'Deletion reason (minimum 10 characters)',
+    '',
+    { okLabel: 'Delete Receipt', placeholder: 'Explain why this receipt is being reversed' }
+  );
   if (reason === null) return;
   if (reason.trim().length < 10) { toast('Deletion reason must be at least 10 characters', 'error'); return; }
   try {
@@ -4662,14 +4823,17 @@ async function selectPayParty(id, name) {
   try {
     const orgId = document.getElementById('voucher-org')?.value || APP_STATE.currentOrg.id;
     const bills = await api('GET', `/bills?org_id=${orgId}&party_id=${id}&format=SALE&status=saved`);
+    // The bills endpoint includes settlement information.  Only invoices with
+    // a balance can be allocated to this receipt; never offer a paid invoice.
+    const pendingBills = bills.filter(bill => Number(bill.outstanding || 0) > 0.01);
     const container = document.getElementById('linkable-bills');
-    if (!bills.length) { container.innerHTML = '<div style="color:var(--text3);font-size:12px">No pending bills</div>'; return; }
-    container.innerHTML = bills.map(b => `
+    if (!pendingBills.length) { container.innerHTML = '<div style="color:var(--text3);font-size:12px">No pending bills</div>'; return; }
+    container.innerHTML = pendingBills.map(b => `
       <label style="display:flex;align-items:center;gap:8px;padding:4px;font-size:12px;cursor:pointer">
-        <input type="checkbox" value="${b.id}" data-amount="${b.grand_total}">
+        <input type="checkbox" value="${b.id}" data-amount="${b.outstanding}">
         <span class="mono">${esc(b.bill_number)}</span>
         <span style="color:var(--text3)">${fmtDate(b.bill_date)}</span>
-        <span style="margin-left:auto;color:var(--gold)">${fmt(b.grand_total)}</span>
+        <span style="margin-left:auto;color:var(--gold)">Due: ${fmt(b.outstanding)}</span>
       </label>`).join('');
   } catch(e) {}
 }
@@ -4707,8 +4871,13 @@ async function savePayment(isVoucher) {
     toast('Payment saved!', 'success');
     clearTransactionDraft(APP_STATE.currentPage);
     openSavedTransactionHistory(isVoucher ? 'PV' : 'PR');
-    showTransactionPreview(isVoucher ? 'Payment Voucher' : 'Payment Receipt', result || {
-      amount, date: document.getElementById('pay-date').value,
+    // The API returns identifiers and settlement data, while the preview also
+    // needs the values just entered on this form.
+    showTransactionPreview(isVoucher ? 'Payment Voucher' : 'Payment Receipt', {
+      ...result,
+      number: result?.payment_number || result?.number,
+      amount,
+      date: document.getElementById('pay-date').value,
       party_name: document.getElementById('pay-party-search').value
     });
   } catch(e) { toast(e.message, 'error'); }
@@ -10842,8 +11011,17 @@ async function acceptShiftHandover(id) {
 }
 
 async function renderUpdateManager() {
-  const status = await api('GET', '/advanced/update-status');
+  const [status, desktopUpdate] = await Promise.all([
+    api('GET', '/advanced/update-status'),
+    window.taranginiDesktop?.getAppUpdateStatus?.().catch(() => null) || Promise.resolve(null)
+  ]);
   const unsafe = status.unsafe_clients || [];
+  const desktopUpdateLabel = desktopUpdate?.state === 'available' ? `Version ${desktopUpdate.availableVersion} is ready` :
+    desktopUpdate?.state === 'downloaded' ? `Version ${desktopUpdate.downloadedVersion} is verified and ready to install` :
+      desktopUpdate?.state === 'downloading' ? `Downloading ${Number(desktopUpdate.percent || 0).toFixed(0)}%` :
+        desktopUpdate?.state === 'up-to-date' ? 'This computer is up to date' :
+          desktopUpdate?.state === 'error' ? desktopUpdate.lastError :
+            desktopUpdate?.reason || 'Check the verified web release feed';
   document.getElementById('content').innerHTML = `
     <div class="page-header"><h2>Update Manager</h2>
       ${status.update_available ? '<button class="btn btn-primary" onclick="downloadVerifiedUpdate()">Download Verified Installer</button>' : ''}
@@ -10854,6 +11032,17 @@ async function renderUpdateManager() {
       <div class="stat-card ${status.upgrade_safe ? 'green' : 'red'}"><div class="stat-label">Upgrade Preflight</div>
         <div class="stat-value" style="font-size:18px">${status.upgrade_safe ? 'Safe' : 'Blocked'}</div></div>
     </div>
+    ${desktopUpdate ? `<div class="card" style="margin-top:16px">
+      <div class="section-title">Verified Web Updates</div>
+      <p class="security-setting-note">${esc(desktopUpdateLabel)}</p>
+      <p class="text-muted">Channel: stable. Downloads are checksum-verified. Installation is blocked on a client with unsynced or conflicted offline work.</p>
+      ${desktopUpdate.releaseNotes ? `<p class="text-muted">${esc(desktopUpdate.releaseNotes)}</p>` : ''}
+      <div class="form-actions">
+        <button class="btn btn-outline" onclick="checkWebAppUpdate()">Check Web Updates</button>
+        ${desktopUpdate.state === 'available' ? '<button class="btn btn-primary" onclick="downloadWebAppUpdate()">Download Verified Update</button>' : ''}
+        ${desktopUpdate.state === 'downloaded' ? '<button class="btn btn-success" onclick="installWebAppUpdate()">Restart and Install</button>' : ''}
+      </div>
+    </div>` : ''}
     ${status.package ? `<div class="card" style="margin-top:16px">
       <div class="section-title">Published LAN Package</div>
       <p><strong>${esc(status.package.file_name)}</strong></p>
@@ -10873,6 +11062,26 @@ async function renderUpdateManager() {
       <div class="form-group"><label>Release notes</label><textarea id="update-release-notes" rows="3"></textarea></div>
       <button class="btn btn-success" onclick="publishUpdatePackage()">Verify and Publish</button>
     </div>` : ''}`;
+}
+
+async function checkWebAppUpdate() {
+  try {
+    await window.taranginiDesktop?.checkAppUpdates?.();
+    await renderUpdateManager();
+  } catch (error) { toast(error.message, 'error'); }
+}
+
+async function downloadWebAppUpdate() {
+  try {
+    await window.taranginiDesktop?.downloadAppUpdate?.();
+    await renderUpdateManager();
+  } catch (error) { toast(error.message, 'error'); }
+}
+
+async function installWebAppUpdate() {
+  try {
+    await window.taranginiDesktop?.installAppUpdate?.();
+  } catch (error) { toast(error.message, 'error'); }
 }
 
 async function publishUpdatePackage() {
@@ -11532,7 +11741,13 @@ function numberToWords(n) {
 ensureAppState();
 if (APP_STATE.user) {
   api('GET', '/auth/me')
-    .then(u => { const state = ensureAppState(); state.user = u; storageSet('user', JSON.stringify(u)); initApp(); })
+    .then(u => {
+      const state = ensureAppState();
+      state.user = u;
+      storageSet('user', JSON.stringify(u));
+      initApp();
+      showGreetingFlash('welcome');
+    })
     .catch(() => {
       storageRemove('token');
       storageRemove('user');

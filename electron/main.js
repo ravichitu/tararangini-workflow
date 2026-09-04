@@ -5,14 +5,17 @@ const http = require('http');
 const https = require('https');
 const os = require('os');
 const childProcess = require('child_process');
+const { autoUpdater } = require('electron-updater');
 const { OfflineProxy } = require('./offline-proxy');
 const { getDeviceIdentity } = require('./device-identity');
+const { UpdateService } = require('./update-service');
 const EXPECTED_FRONTEND_ASSET = 'app-2.4.0.js';
 const SERVICE_NAME = 'TaranginiWorkflowMain';
 const FIREWALL_RULE_NAME = 'Tarangini Workflow Local Portal';
 const CLIENT_PORTAL_PORT = 3001;
 const isServiceMode = process.argv.includes('--tarangini-service') ||
   process.env.TARANGINI_WINDOWS_SERVICE === '1';
+const isWebInvoiceBatchMode = process.argv.includes('--web-invoice-batch');
 
 app.disableHardwareAcceleration();
 app.commandLine.appendSwitch('disable-gpu');
@@ -25,16 +28,17 @@ let offlineProxy = null;
 let tray = null;
 let allowQuit = false;
 let activeConfig = null;
+let updateService = null;
 
 function argValue(name) {
   const index = process.argv.indexOf(name);
   return index >= 0 ? process.argv[index + 1] || '' : '';
 }
 
-const hasSingleInstanceLock = isServiceMode || app.requestSingleInstanceLock();
+const hasSingleInstanceLock = isServiceMode || isWebInvoiceBatchMode || app.requestSingleInstanceLock();
 if (!hasSingleInstanceLock) {
   app.quit();
-} else if (!isServiceMode) {
+} else if (!isServiceMode && !isWebInvoiceBatchMode) {
   app.on('second-instance', () => {
     if (!mainWindow || mainWindow.isDestroyed()) return;
     if (mainWindow.isMinimized()) mainWindow.restore();
@@ -84,6 +88,40 @@ function showMainWindow() {
   mainWindow.show();
   if (mainWindow.isMinimized()) mainWindow.restore();
   mainWindow.focus();
+}
+
+function updateInstallSafety() {
+  if (!offlineProxy) return { safe: true };
+  const counts = offlineProxy.getStatus()?.counts || {};
+  const pending = Number(counts.pending || 0);
+  const conflicts = Number(counts.conflict || 0);
+  if (pending || conflicts) {
+    return {
+      safe: false,
+      reason: `Sync ${pending} pending item(s) and resolve ${conflicts} conflict(s) before installing this update.`
+    };
+  }
+  return { safe: true };
+}
+
+function getUpdateService() {
+  if (isServiceMode || isWebInvoiceBatchMode) return null;
+  if (!updateService) {
+    updateService = new UpdateService({
+      app,
+      autoUpdater,
+      dialog,
+      canInstall: updateInstallSafety
+    });
+  }
+  return updateService;
+}
+
+async function checkForWebUpdates() {
+  const service = getUpdateService();
+  if (!service) return { enabled: false, state: 'disabled', reason: 'Updates are unavailable in service mode.' };
+  service.start();
+  return service.checkNow();
 }
 
 function ensureTray() {
@@ -434,6 +472,22 @@ function buildMenu() {
           label: 'Main / Client System Setup',
           click: () => mainWindow.loadFile(path.join(__dirname, 'setup.html'))
         },
+        {
+          label: 'Check for Web Updates',
+          click: async () => {
+            try {
+              const status = await checkForWebUpdates();
+              const detail = status.state === 'available'
+                ? `Version ${status.availableVersion} is ready to download from the verified release feed.`
+                : status.state === 'up-to-date'
+                  ? 'This computer already has the latest published version.'
+                  : status.reason || status.lastError || 'Update check completed.';
+              await dialog.showMessageBox(mainWindow, { type: 'info', title: 'Tarangini Updates', message: 'Update check completed', detail });
+            } catch (error) {
+              await dialog.showMessageBox(mainWindow, { type: 'error', title: 'Update check failed', message: error.message });
+            }
+          }
+        },
         { type: 'separator' },
         { role: 'quit' }
       ]
@@ -491,6 +545,7 @@ function createWindow() {
     return { action: 'deny' };
   });
   const config = readConfig();
+  getUpdateService()?.start();
   if (config?.role === 'host' || config?.role === 'client') {
     openConfiguredApp(config);
   } else {
@@ -554,6 +609,23 @@ ipcMain.handle('retry-client-connection', async () => {
 ipcMain.handle('retry-offline-item', (_event, id) => offlineProxy
   ? offlineProxy.retryItem(id)
   : { role: 'host', online: true, counts: { pending: 0, synced: 0, conflict: 0 }, items: [] });
+ipcMain.handle('get-app-update-status', () => getUpdateService()?.snapshot() || {
+  enabled: false,
+  state: 'disabled',
+  reason: 'Updates are unavailable in service mode.'
+});
+ipcMain.handle('check-app-updates', () => checkForWebUpdates());
+ipcMain.handle('download-app-update', async () => {
+  const service = getUpdateService();
+  if (!service) throw new Error('Updates are unavailable in service mode.');
+  service.start();
+  return service.download();
+});
+ipcMain.handle('install-app-update', async () => {
+  const service = getUpdateService();
+  if (!service) throw new Error('Updates are unavailable in service mode.');
+  return service.install();
+});
 ipcMain.handle('windows-service-status', () => getWindowsServiceStatus());
 ipcMain.handle('windows-firewall-status', () => process.platform === 'win32'
   ? runFirewallScript('status')
@@ -592,6 +664,15 @@ ipcMain.handle('save-invoice-pdf', async (_event, suggestedName) => {
 
 if (hasSingleInstanceLock) {
   app.whenReady().then(() => {
+    if (isWebInvoiceBatchMode) {
+      const batchArgs = process.argv.slice(process.argv.indexOf('--web-invoice-batch') + 1);
+      return require(path.join(app.getAppPath(), 'tools', 'web-invoice-batch')).main(batchArgs)
+        .then(code => app.exit(code))
+        .catch(error => {
+          console.error(error.stack || error);
+          app.exit(1);
+        });
+    }
     if (isServiceMode) {
       openServiceMode().catch(error => {
         fs.mkdirSync(path.dirname(configPath()), { recursive: true });
@@ -611,6 +692,7 @@ if (hasSingleInstanceLock) {
 
 app.on('before-quit', () => {
   allowQuit = true;
+  updateService?.stop();
 });
 
 app.on('window-all-closed', () => {

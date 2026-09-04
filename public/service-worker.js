@@ -1,11 +1,11 @@
-const CACHE_NAME = 'tarangini-shell-customer-portal-1.1.10';
+const CACHE_NAME = 'tarangini-shell-customer-portal-1.2.3';
 const APP_SHELL = [
   '/',
   '/index.html',
   '/customer-intake.html',
   '/customer-job.html',
-  '/style.css?v=1.1.10-catalog-owner-log-2',
-  '/app-2.4.0.js?v=1.1.10-catalog-owner-log-2',
+  '/style.css?v=1.2.3-sale-focus-ui',
+  '/app-2.4.0.js?v=1.2.3-sale-focus-ui',
   '/tarangini.png',
   '/manifest.webmanifest'
 ];

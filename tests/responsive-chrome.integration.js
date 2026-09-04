@@ -634,7 +634,7 @@ async function stopProcess(child) {
       });
       for (const [page, expectedText] of Object.entries({
         pos: 'Fast POS Counter',
-        sale: 'Sale Bill Details',
+        sale: 'New Sale Bill',
         'invoice-corrections': 'Correction Audit History',
         shifts: 'Shift History',
         'update-manager': 'Current Version',
@@ -662,7 +662,7 @@ async function stopProcess(child) {
         if (viewport.width < 900 && state.menuDisplay === 'none') {
           errors.push(`${viewport.name}: mobile menu is hidden`);
         }
-        if (viewport.name === 'desktop' && ['stock', 'help', 'dashboard'].includes(page)) {
+        if (viewport.name === 'desktop' && ['sale', 'stock', 'help', 'dashboard'].includes(page)) {
           if (page === 'stock') {
             await cdp.evaluate(`{
               const content = document.getElementById('content');
@@ -676,6 +676,13 @@ async function stopProcess(child) {
             path.join(outputDir, `desktop-${page}.png`),
             Buffer.from(pageImage.data, 'base64')
           );
+          if (page === 'sale') {
+            await cdp.evaluate(`openSaleMoreDetails(); true`);
+            await new Promise(resolve => setTimeout(resolve, 220));
+            const drawerImage = await cdp.send('Page.captureScreenshot', { format: 'png', fromSurface: true });
+            fs.writeFileSync(path.join(outputDir, 'desktop-sale-f4.png'), Buffer.from(drawerImage.data, 'base64'));
+            await cdp.evaluate(`closeSaleMoreDetails(); true`);
+          }
           if (page === 'stock') {
             await cdp.evaluate(`{ document.getElementById('content').scrollTop = 0; true; }`);
           }

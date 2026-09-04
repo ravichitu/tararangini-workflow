@@ -44,6 +44,7 @@ function stopProcess(child) {
   server.stdout.on('data', chunk => { serverOutput += chunk; });
   server.stderr.on('data', chunk => { serverOutput += chunk; });
   let child;
+  let testTimeout;
 
   try {
     await waitForServer(server, () => serverOutput);
@@ -60,7 +61,9 @@ function stopProcess(child) {
     child.stderr.on('data', chunk => { electronOutput += chunk; });
     const code = await Promise.race([
       new Promise(resolve => child.once('exit', resolve)),
-      new Promise((_, reject) => setTimeout(() => reject(new Error('Responsive UI test timed out')), 90000))
+      new Promise((_, reject) => {
+        testTimeout = setTimeout(() => reject(new Error('Responsive UI test timed out')), 90000);
+      })
     ]);
     assert.strictEqual(code, 0, electronOutput);
     const result = JSON.parse(fs.readFileSync(resultFile, 'utf8'));
@@ -68,6 +71,7 @@ function stopProcess(child) {
     assert.strictEqual(result.checked, 18);
     console.log('Responsive UI integration tests passed');
   } finally {
+    if (testTimeout) clearTimeout(testTimeout);
     await stopProcess(child);
     await stopProcess(server);
     fs.rmSync(resultFile, { force: true });
